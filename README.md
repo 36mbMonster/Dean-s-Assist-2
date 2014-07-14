@@ -1,0 +1,3 @@
+Linux dependencies:
+
+ncurses5
