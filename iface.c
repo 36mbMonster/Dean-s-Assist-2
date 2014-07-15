@@ -126,18 +126,3 @@ void show_main_menu()
             free_item(menu_items[i]);
     endwin();
 }
-
-
-//Thanks to  Pradeep Padala
-//http://www.tldp.org/HOWTO/NCURSES-Programming-HOWTO/windows.html
-WINDOW *create_newwin(int height, int width, int starty, int startx)
-{	WINDOW *local_win;
-
-	local_win = newwin(height, width, starty, startx);
-	box(local_win, 0 , 0);		/* 0, 0 gives default characters
-                                 * for the vertical and horizontal
-                                 * lines        */
-
-	return local_win;
-}
-//sakura --title=$TITLE -e
