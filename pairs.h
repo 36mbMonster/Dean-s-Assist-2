@@ -1,3 +1,5 @@
+#pragma once
+
 char *main_menu_labels[] =
 {
     "Enter data for class schedules",
@@ -28,3 +30,14 @@ char * fac_menu_labels[] =
     " ",
     "Back"
 };
+
+char * reports_menu_labels[] =
+{
+    "test",
+    "test",
+    "test"
+};
+
+DMENU class_menu = {"Class Scheduling", class_menu_labels};
+DMENU fac_menu = {"Faculty", fac_menu_labels};
+DMENU reports_menu = {"Reports", reports_menu_labels};

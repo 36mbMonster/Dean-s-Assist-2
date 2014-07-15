@@ -1,4 +1,5 @@
 #include "iface.h"
+#include "util.h"
 
 /*
 char *options[] =
@@ -11,8 +12,10 @@ char *options[] =
     "Exit"
 };*/
 char **options;
+char * title;
 int row, col, wrow, wcol;
 WINDOW *win;
+DMENU this_menu;
 
 /*void init()
 {
@@ -29,7 +32,8 @@ WINDOW *win;
     keypad(win, TRUE);
 }*/
 
-void init(char *a_title, char **a_options)
+//void init(char *a_title, char **a_options)
+void init(DMENU menu)
 {
     initscr();
     start_color();
@@ -43,14 +47,14 @@ void init(char *a_title, char **a_options)
     getmaxyx(stdscr, wrow, wcol);
     keypad(win, TRUE);
 
-    options = a_options;
+    this_menu = menu;
+    options = menu.options;
+    title =  menu.label;
 
 }
 
 void show_main_menu()
 {
-    printf("%s%s",options[0],"\n");
-    printf("%s%s",options[1],"\n");
 
 
     ITEM **menu_items;
@@ -69,8 +73,6 @@ void show_main_menu()
     menu_items[num_choices] = (ITEM*)NULL;
     main_menu = new_menu((ITEM **)menu_items);
 
-    printf("%s", item_name(menu_items[6]));
-/*
     //Bind menu to window
     set_menu_win(main_menu, win);
     //derwin(number_of_lines, chars_wide, y, x)
@@ -84,7 +86,7 @@ void show_main_menu()
 
     //Draw title box & title
     wattron(win, COLOR_PAIR(1));
-    mvwprintw(win, 1, ((col-strlen("Dean's Assist 2"))/2)-1 , "Dean's Assist 2");
+    mvwprintw(win, 1, ((col-strlen(title))/2)-1 , title);
     wattroff(win, COLOR_PAIR(1));
 	mvwaddch(win, 2, 0, ACS_LTEE);
 	mvwhline(win, 2, 1, ACS_HLINE, col-7);
@@ -96,6 +98,7 @@ void show_main_menu()
     post_menu(main_menu);
     wrefresh(win);
 
+    int item_index = 0;
     while(loop == 1)
     {
 
@@ -103,12 +106,16 @@ void show_main_menu()
         {
             case KEY_DOWN:
                 menu_driver(main_menu, REQ_DOWN_ITEM);
+                item_index++;
                 break;
             case KEY_UP:
                 menu_driver(main_menu, REQ_UP_ITEM);
+                item_index--;
                 break;
             case '\n':
-                if(item_name(current_item(main_menu)) == "Exit")
+                init(this_menu.next_menus[item_index]);
+                show_main_menu();
+                if(!strcmp(item_name(current_item(main_menu)), "Exit") || !strcmp(item_name(current_item(main_menu)), "Back"))
                     loop = 0;
                 break;
         }
@@ -117,7 +124,7 @@ void show_main_menu()
     free_menu(main_menu);
     for(i = 0; i < num_choices; i++)
             free_item(menu_items[i]);
-    endwin();*/
+    endwin();
 }
 
 
@@ -133,3 +140,4 @@ WINDOW *create_newwin(int height, int width, int starty, int startx)
 
 	return local_win;
 }
+//sakura --title=$TITLE -e
