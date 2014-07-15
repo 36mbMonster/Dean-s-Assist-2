@@ -1,5 +1,6 @@
 #include "iface.h"
 
+/*
 char *options[] =
 {
     "Enter data for class schedules",
@@ -8,11 +9,12 @@ char *options[] =
     "About",
     " ",
     "Exit"
-};
+};*/
+char **options;
 int row, col, wrow, wcol;
 WINDOW *win;
 
-void init()
+/*void init()
 {
     initscr();
     start_color();
@@ -25,10 +27,32 @@ void init()
     win = newwin(row-5, col-5, 4, 4);
     getmaxyx(stdscr, wrow, wcol);
     keypad(win, TRUE);
+}*/
+
+void init(char *a_title, char **a_options)
+{
+    initscr();
+    start_color();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    getmaxyx(stdscr, row, col);
+    init_pair(1, COLOR_BLUE, COLOR_BLACK);
+
+    win = newwin(row-5, col-5, 4, 4);
+    getmaxyx(stdscr, wrow, wcol);
+    keypad(win, TRUE);
+
+    options = a_options;
+
 }
 
 void show_main_menu()
 {
+    printf("%s%s",options[0],"\n");
+    printf("%s%s",options[1],"\n");
+
+
     ITEM **menu_items;
     ITEM *current;
     MENU *main_menu;
@@ -45,6 +69,8 @@ void show_main_menu()
     menu_items[num_choices] = (ITEM*)NULL;
     main_menu = new_menu((ITEM **)menu_items);
 
+    printf("%s", item_name(menu_items[6]));
+/*
     //Bind menu to window
     set_menu_win(main_menu, win);
     //derwin(number_of_lines, chars_wide, y, x)
@@ -66,12 +92,13 @@ void show_main_menu()
     refresh();
 
 
-    //refresh();
+    refresh();
     post_menu(main_menu);
     wrefresh(win);
 
     while(loop == 1)
     {
+
         switch(getch())
         {
             case KEY_DOWN:
@@ -90,7 +117,7 @@ void show_main_menu()
     free_menu(main_menu);
     for(i = 0; i < num_choices; i++)
             free_item(menu_items[i]);
-    endwin();
+    endwin();*/
 }
 
 
