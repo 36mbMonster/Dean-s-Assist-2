@@ -37,7 +37,3 @@ char * reports_menu_labels[] =
     "test",
     "test"
 };
-
-DMENU class_menu = {"Class Scheduling", class_menu_labels};
-DMENU fac_menu = {"Faculty", fac_menu_labels};
-DMENU reports_menu = {"Reports", reports_menu_labels};

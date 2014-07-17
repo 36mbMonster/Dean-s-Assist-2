@@ -11,3 +11,4 @@
 void init();
 void init(DMENU menu);
 void show_main_menu();
+void free_dean_menu(MENU *main_menu, ITEM **menu_items, int num_choices);

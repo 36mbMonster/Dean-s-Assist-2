@@ -1,5 +1,4 @@
 #include "iface.h"
-#include "util.h"
 
 /*
 char *options[] =
@@ -113,16 +112,47 @@ void show_main_menu()
                 item_index--;
                 break;
             case '\n':
-                init(this_menu.next_menus[item_index]);
-                show_main_menu();
+                if(this_menu.type == MENU_IFACE)
+                {
+                    init(this_menu.next_menus[item_index]);
+                    show_main_menu();
+                }
+
+                if(this_menu.type == CLASS_FORM_IFACE)
+                {
+                    free_dean_menu(main_menu, menu_items, num_choices);
+                    init_form(this_menu.next_menus[item_index]);
+                    show_form();
+                }
+
                 if(!strcmp(item_name(current_item(main_menu)), "Exit") || !strcmp(item_name(current_item(main_menu)), "Back"))
                     loop = 0;
                 break;
         }
         wrefresh(win);
     }
+    free_dean_menu(main_menu, menu_items, num_choices);
+    endwin();
+}
+
+void free_dean_menu(MENU *main_menu, ITEM **menu_items, int num_choices)
+{
+    unpost_menu(main_menu);
     free_menu(main_menu);
+    int i = 0;
     for(i = 0; i < num_choices; i++)
             free_item(menu_items[i]);
-    endwin();
+}
+
+//Thanks to  Pradeep Padala
+//http://www.tldp.org/HOWTO/NCURSES-Programming-HOWTO/windows.html
+WINDOW *create_newwin(int height, int width, int starty, int startx)
+{	WINDOW *local_win;
+
+	local_win = newwin(height, width, starty, startx);
+	box(local_win, 0 , 0);		/* 0, 0 gives default characters
+                                 * for the vertical and horizontal
+                                 * lines        */
+
+	return local_win;
 }
