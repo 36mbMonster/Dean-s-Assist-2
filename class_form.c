@@ -1,5 +1,8 @@
 #include "class_form.h"
 
+#define DOWN_KEY 2
+#define UP_KEY 3
+
 char * title;
 int row, col, wrow, wcol;
 WINDOW *win;
@@ -10,16 +13,17 @@ FORM  *this_form;
 void init_form(DMENU menu)
 {
     initscr();
-    //start_color();
+    start_color();
     cbreak();
     noecho();
     keypad(stdscr, TRUE);
     getmaxyx(stdscr, row, col);
-    //init_pair(1, COLOR_BLUE, COLOR_BLACK);
+    init_pair(1, COLOR_BLUE, COLOR_BLACK);
 
     scale_form(this_form, &row, &col);
     win = newwin(row-5, col-5, 4, 4);
     getmaxyx(stdscr, wrow, wcol);
+    keypad(win, TRUE);
 
     field[0] = new_field(1, 10, 4, 18, 0, 0);
 	field[1] = new_field(1, 10, 6, 18, 0, 0);
@@ -35,7 +39,6 @@ void init_form(DMENU menu)
 void show_form()
 {
     this_form = new_form(field);
-    keypad(win, TRUE);
     set_form_win(this_form, win);
     set_form_sub(this_form, derwin(win, 7, 32, wrow/4, wcol/4));
 
@@ -43,35 +46,35 @@ void show_form()
     box(win, 0, 0);
 
     //Draw title box & title
-    //wattron(win, COLOR_PAIR(1));
-    //mvwprintw(win, 1, ((col-strlen(title))/2)-1 , title);
-    //wattroff(win, COLOR_PAIR(1));
+    wattron(win, COLOR_PAIR(1));
+    //mvwprintw(win, 1, (int)((col-strlen(title))/2)-1 , title);
+    wattroff(win, COLOR_PAIR(1));
 	mvwaddch(win, 2, 0, ACS_LTEE);
 	mvwhline(win, 2, 1, ACS_HLINE, col-7);
 	mvwaddch(win, 2, col-6, ACS_RTEE);
 	refresh();
 
     post_form(this_form);
+    //wrefresh(win);
+
+    mvwprintw(win, 10, 30, "Value 1:");
+	mvwprintw(win, 12, 30, "Value 2:");
     wrefresh(win);
 
-    mvprintw(14, 32, "Value 1:");
-	mvprintw(16, 32, "Value 2:");
-    //refresh();
-
-    int i, item_index = 0;
+    int item_index = 0;
     int loop = 1;
     char in;
-    while((in = getch()) && loop == 1)
+    while((in = wgetch(win)) != KEY_F(1))
     {
 
-        switch(getch())
+        switch(in)
         {
-            case KEY_DOWN:
+            case DOWN_KEY:
                 form_driver(this_form, REQ_NEXT_FIELD);
                 form_driver(this_form, REQ_END_LINE);
                 item_index++;
                 break;
-            case KEY_UP:
+            case UP_KEY:
                 form_driver(this_form, REQ_PREV_FIELD);
                 form_driver(this_form, REQ_END_LINE);
                 item_index--;
@@ -87,11 +90,8 @@ void show_form()
             default:
                 form_driver(this_form, in);
                 break;
-
         }
 
-        //wrefresh(win);
-        //refresh();
     }
 
     unpost_form(this_form);
