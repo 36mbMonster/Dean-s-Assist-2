@@ -1,7 +1,7 @@
-Linux dependencies:
+Linux, Windows and Mac OSX dependencies:
 
-ncurses5
+libgtk3.0-dev and codependencies
 
 Compiler options:
 
--lncurses -lmenu -lform
+`pkg-config --cflags gtk+-3.0` `pkg-config --libs gtk+-3.0`

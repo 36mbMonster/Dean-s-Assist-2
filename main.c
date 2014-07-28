@@ -1,30 +1,18 @@
+#include <gtk/gtk.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "iface.h"
-#include "pairs.h"
-
-int main()
+int main(int argc, char *argv[])
 {
-    //This is the next set of submenus that will be rendered after the main menu.
-    DMENU class_form = {"Add New Class", CLASS_FORM_IFACE};
+    GtkWidget *window;
 
-    DMENU next_from_class[] = {class_form};
-    DMENU class_menu = {"Class Scheduling", MENU_IFACE, class_menu_labels, next_from_class};
+    gtk_init(&argc, &argv);
 
-    DMENU fac_menu = {"Faculty", MENU_IFACE, fac_menu_labels};
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(window), "Test");
 
-    DMENU reports_menu = {"Reports", MENU_IFACE, reports_menu_labels};
+    g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-    DMENU next_from_main[] = {class_menu, fac_menu, reports_menu};
-    DMENU main_menu = {"Dean's Assist 2", MENU_IFACE, main_menu_labels, next_from_main};
-    //init();
-    //init("Dean's Assist 2", main_menu_labels);
-    //init(main_menu);
-    //show_main_menu();
-    init_form(class_form);
-    show_form();
+    gtk_widget_show(window);
+    gtk_main();
 
     return 0;
 }
