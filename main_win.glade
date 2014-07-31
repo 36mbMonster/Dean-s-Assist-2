@@ -61,11 +61,6 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-print</property>
   </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-add</property>
-  </object>
   <object class="GtkImage" id="image8">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -73,11 +68,43 @@
   </object>
   <object class="GtkListStore" id="liststore">
     <columns>
-      <!-- column-name dept -->
+      <!-- column-name Dept. -->
       <column type="gchararray"/>
-      <!-- column-name room -->
+      <!-- column-name Number -->
+      <column type="gchararray"/>
+      <!-- column-name Start -->
+      <column type="guint"/>
+      <!-- column-name End -->
+      <column type="guint"/>
+      <!-- column-name Days -->
+      <column type="gchararray"/>
+      <!-- column-name Sect. -->
+      <column type="guint"/>
+      <!-- column-name Bldg. -->
+      <column type="gchararray"/>
+      <!-- column-name Room -->
+      <column type="guint"/>
+      <!-- column-name Instructor -->
       <column type="gchararray"/>
     </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">af</col>
+        <col id="1" translatable="yes">0020</col>
+        <col id="2">0</col>
+        <col id="3">0</col>
+        <col id="4" translatable="yes">TTh</col>
+        <col id="5">0</col>
+        <col id="6" translatable="yes">bbc</col>
+        <col id="7">300</col>
+        <col id="8" translatable="yes">Chang, Chi</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-add</property>
   </object>
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
@@ -324,14 +351,54 @@
           <object class="GtkTreeView" id="treeview">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="margin_bottom">108</property>
             <property name="model">liststore</property>
             <property name="reorderable">True</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection" id="treeview-selection2"/>
             </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn1">
+                <property name="title" translatable="yes">Dept.</property>
+                <child>
+                  <object class="GtkCellRendererSpin" id="dept_spin">
+                    <property name="editable">True</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn2">
+                <property name="title" translatable="yes">Number</property>
+                <child>
+                  <object class="GtkCellRendererSpin" id="number_spin">
+                    <property name="editable">True</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="treeviewcolumn3">
+                <property name="title" translatable="yes">Start</property>
+                <child>
+                  <object class="GtkCellRendererSpin" id="start_spin">
+                    <property name="editable">True</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">2</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
