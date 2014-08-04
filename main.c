@@ -1,21 +1,27 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include <string.h>
+
 //function declarations
 void show_about_dialog();
+void show_adjust_columns_dialog();
+void hide_adjust_columns_dialog();
 
 int i = 0;
 
 GtkBuilder *builder;
 GtkWidget *window;
+GtkWidget *show_hide_columns_window;
 GtkAboutDialog *about_dialog;
 
 GtkWidget *treeview;
 GtkCellRenderer *renderer;
 GtkTreeViewColumn *columns[9];
 GtkListStore *store;
+GtkTreeSelection *selector;
 
 GObject *about_item;
+GObject *show_hide_columns_item;
 
 int main(int argc, char *argv[])
 {
@@ -27,16 +33,18 @@ int main(int argc, char *argv[])
 
 	//Load windows
 	window = GTK_WIDGET(gtk_builder_get_object(builder,"window"));
+	show_hide_columns_window = GTK_WIDGET(gtk_builder_get_object(builder,"adjust_columns_win"));
 	about_dialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(builder,"aboutdialog"));
 
 	//Load menu items
 	about_item = gtk_builder_get_object(builder, "about");
+	show_hide_columns_item = gtk_builder_get_object(builder, "show_hide_columns");
 
 	//Load other stuff
-	//treeview = gtk_builder_get_object(builder, "treeview");
 	treeview = gtk_tree_view_new();
+	selector = gtk_builder_get_object(builder, "treeview-selection");
 
-	//TEST TEST TEST TEST
+	//Get the columns from the builder and populate the column array.
 	renderer = gtk_cell_renderer_text_new();
 
 	for(i = 1; i < 10; i++)
@@ -61,6 +69,14 @@ int main(int argc, char *argv[])
 	//Connect signals
 	g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 	g_signal_connect(about_item, "activate", G_CALLBACK(show_about_dialog), NULL);
+	g_signal_connect(show_hide_columns_item, "activate", G_CALLBACK(show_adjust_columns_dialog), NULL);
+	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
+
+	//Connect column signals
+	//for(i = 1; i < 10; i++)
+	//{
+		g_signal_connect(selector, "changed", G_CALLBACK(show_about_dialog), NULL);
+	//}
 
     gtk_widget_show(window);
     gtk_main();
@@ -78,4 +94,14 @@ void show_about_dialog()
 	//gtk_widget_show_all( about_dialog );
 	gtk_dialog_run(GTK_DIALOG(about_dialog));
 	gtk_widget_hide(GTK_WIDGET(about_dialog));
+}
+
+void show_adjust_columns_dialog()
+{
+	gtk_widget_show_all(show_hide_columns_window);
+}
+
+void hide_adjust_columns_dialog()
+{
+	gtk_widget_hide(GTK_WIDGET(show_hide_columns_window));
 }
