@@ -15,12 +15,14 @@ GtkWidget *show_hide_columns_window;
 GtkAboutDialog *about_dialog;
 
 GtkWidget *treeview;
+GtkTreeModel *model;
 GtkCellRenderer *renderer;
 GtkTreeViewColumn *columns[9];
 GtkListStore *store;
 GtkTreeSelection *selector;
 
 GObject *about_item;
+GObject *quit_item;
 GObject *show_hide_columns_item;
 
 int main(int argc, char *argv[])
@@ -38,11 +40,13 @@ int main(int argc, char *argv[])
 
 	//Load menu items
 	about_item = gtk_builder_get_object(builder, "about");
+	quit_item = gtk_builder_get_object(builder, "quit");
 	show_hide_columns_item = gtk_builder_get_object(builder, "show_hide_columns");
 
 	//Load other stuff
 	treeview = gtk_tree_view_new();
 	selector = gtk_builder_get_object(builder, "treeview-selection");
+	model = gtk_builder_get_object(builder,);
 
 	//Get the columns from the builder and populate the column array.
 	renderer = gtk_cell_renderer_text_new();
@@ -69,14 +73,16 @@ int main(int argc, char *argv[])
 	//Connect signals
 	g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 	g_signal_connect(about_item, "activate", G_CALLBACK(show_about_dialog), NULL);
+	g_signal_connect(quit_item, "activate", G_CALLBACK(gtk_main_quit), NULL);
 	g_signal_connect(show_hide_columns_item, "activate", G_CALLBACK(show_adjust_columns_dialog), NULL);
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
 
 	//Connect column signals
 	//for(i = 1; i < 10; i++)
 	//{
-		g_signal_connect(selector, "changed", G_CALLBACK(show_about_dialog), NULL);
+	//	g_signal_connect(selector, "changed", G_CALLBACK(show_about_dialog), NULL);
 	//}
+	gtk_tree_model_get()
 
     gtk_widget_show(window);
     gtk_main();
