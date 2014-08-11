@@ -56,33 +56,6 @@
           </packing>
         </child>
         <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
           <object class="GtkCheckButton" id="checkbutton2">
             <property name="label" translatable="yes">Course Number</property>
             <property name="use_action_appearance">False</property>
@@ -295,30 +268,6 @@
       <!-- column-name Instructor -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">af</col>
-        <col id="1" translatable="yes">0020</col>
-        <col id="2">0</col>
-        <col id="3">0</col>
-        <col id="4" translatable="yes">TTh</col>
-        <col id="5">0</col>
-        <col id="6" translatable="yes">bbc</col>
-        <col id="7">300</col>
-        <col id="8" translatable="yes">Chang, Chi</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2">0</col>
-        <col id="3">0</col>
-        <col id="4" translatable="yes"/>
-        <col id="5">0</col>
-        <col id="6" translatable="yes"/>
-        <col id="7">0</col>
-        <col id="8" translatable="yes">Staff</col>
-      </row>
-    </data>
   </object>
   <object class="GtkWindow" id="window">
     <property name="can_focus">False</property>
@@ -496,7 +445,7 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem9">
+                      <object class="GtkImageMenuItem" id="delete">
                         <property name="label">gtk-delete</property>
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
