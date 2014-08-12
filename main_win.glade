@@ -7,7 +7,7 @@
     <property name="type_hint">dialog</property>
     <property name="program_name">Deans2</property>
     <property name="version">Pre Alpha</property>
-    <property name="copyright" translatable="yes">(C) Jonathan Vaccaro 2014</property>
+    <property name="copyright" translatable="yes">(C) Jonathan Vaccaro &amp; Alvin Ko 2014</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="aboutdialog-vbox1">
         <property name="can_focus">False</property>
