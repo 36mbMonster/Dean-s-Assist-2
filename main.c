@@ -55,6 +55,12 @@ int main(int argc, char *argv[])
 	builder = gtk_builder_new();
 	gtk_builder_add_from_file(builder, "main_win.glade", NULL);
 
+/**
+***************************************************************************
+*							  Initialization						  	  *
+***************************************************************************
+*/
+
 	//Load windows
 	window = GTK_WIDGET(gtk_builder_get_object(builder,"window"));
 	show_hide_columns_window = GTK_WIDGET(gtk_builder_get_object(builder,"adjust_columns_win"));
@@ -67,7 +73,7 @@ int main(int argc, char *argv[])
 	new_course_item = gtk_builder_get_object(builder, "new_course");
 	delete_row_item = gtk_builder_get_object(builder, "delete");
 
-	//Load other stuff
+	//Load tree and list related structures.
 	treeview = GTK_WIDGET(gtk_builder_get_object(builder, "treeview"));
 	selector = GTK_TREE_SELECTION(gtk_builder_get_object(builder, "treeview-selection"));
 	store = GTK_LIST_STORE(gtk_builder_get_object(builder,"liststore"));
@@ -75,40 +81,30 @@ int main(int argc, char *argv[])
 	//Set the tree model
 	path = gtk_tree_path_new_from_indices(1,-1);
 	model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeview));
-	//gtk_tree_view_set_model(GTK_TREE_VIEW(treeview), model);
 
 	//Get the columns from the builder and populate the column array.
 	dept_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"dept_spin"));
 
-    /*store = gtk_list_store_new( 1, G_TYPE_INT );
-    for( i = 1; i < 4; i++ )
-    {
-        GtkTreeIter parent_iter;
-
-        gtk_list_store_append( store, &parent_iter);
-        gtk_list_store_set( store, &parent_iter, 0, i, -1 );
-
-    }
-
-    path = gtk_tree_path_new_from_indices(1,-1);
-    filter = gtk_tree_model_filter_new(GTK_TREE_MODEL(store), path);*/
-
+	//Load the columns. They are all named "treeviewcolumn" followed by a number as defined in the glade file.
+	//This makes it easy to load them all through a loop.
 	for(i = 1; i < 10; i++)
 	{
 		char test[20] = "treeviewcolumn";
 		char buffer[2];
+
+		//Append the column's number to the end of the string.
 		sprintf(buffer, "%d", i);
 		strcat(test,buffer);
 
 		columns[i-1] = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(builder, test));
 	}
 
-	//column = gtk_tree_view_column_new_with_attributes("List Items",renderer, "text", 0, NULL);
-	//gtk_tree_view_column_set_visible (columns[0],FALSE);
-  	//gtk_tree_view_append_column(GTK_TREE_VIEW(treeview), columns[4]);
 
-  	//store = gtk_list_store_new(1, G_TYPE_STRING);
-  	//gtk_tree_view_set_model(GTK_TREE_VIEW(treeview),GTK_TREE_MODEL(store));
+/**
+***************************************************************************
+*							  Connect Signals						  	  *
+***************************************************************************
+*/
 
 	//Connect signals
 	g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
@@ -120,13 +116,10 @@ int main(int argc, char *argv[])
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
 
 
-	//Connect column signals
-	//for(i = 1; i < 10; i++)
-	//{
-		g_signal_connect(dept_text, "edited", G_CALLBACK(get_string_from_form), NULL);
-	//}
-	//gtk_tree_model_get()
+	//Connect column signals.
+	g_signal_connect(dept_text, "edited", G_CALLBACK(get_string_from_form), NULL);
 
+	//Show the window and start gtk.
     gtk_widget_show(window);
     gtk_main();
 
@@ -155,6 +148,8 @@ void hide_adjust_columns_dialog()
 	gtk_widget_hide(GTK_WIDGET(show_hide_columns_window));
 }
 
+//Get user input from the cell and update the row
+//Does not work.
 char *get_string_from_form()
 {
 	gchar *data;
@@ -170,6 +165,8 @@ char *get_string_from_form()
 	return data;
 }
 
+//Deletes course section from the semester.
+//Does not work.
 void delete_row()
 {
 	//GtkTreeIter iter;
@@ -178,7 +175,8 @@ void delete_row()
 	//gtk_tree_model_row_deleted(model, path);
 }
 
-//Adds a new row to the list.
+//Adds a new course or section to the list.
+//WORKS!!
 void new_row()
 {
 
