@@ -22,16 +22,30 @@ GtkTreeModel *model;
 GtkTreeModel *filter;
 GtkTreePath *path;
 GtkTreeIter iter;
-GtkCellRenderer *renderer;
 GtkTreeViewColumn *columns[9];
 GtkListStore *store;
 GtkTreeSelection *selector;
+
+GtkCellRendererText *dept_text;
 
 GObject *about_item;
 GObject *quit_item;
 GObject *show_hide_columns_item;
 GObject *new_course_item;
 GObject *delete_row_item;
+
+enum
+{
+	COL_DEPT,
+	COL_NUMBER,
+	COL_START,
+	COL_END,
+	COL_DAYS,
+	COL_SECT,
+	COL_BLDG,
+	COL_ROOM,
+	COL_INSTR
+};
 
 int main(int argc, char *argv[])
 {
@@ -64,7 +78,7 @@ int main(int argc, char *argv[])
 	//gtk_tree_view_set_model(GTK_TREE_VIEW(treeview), model);
 
 	//Get the columns from the builder and populate the column array.
-	renderer = gtk_cell_renderer_text_new();
+	dept_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"dept_spin"));
 
     /*store = gtk_list_store_new( 1, G_TYPE_INT );
     for( i = 1; i < 4; i++ )
@@ -109,7 +123,7 @@ int main(int argc, char *argv[])
 	//Connect column signals
 	//for(i = 1; i < 10; i++)
 	//{
-		g_signal_connect(selector, "changed", G_CALLBACK(get_string_from_form), NULL);
+		g_signal_connect(dept_text, "edited", G_CALLBACK(get_string_from_form), NULL);
 	//}
 	//gtk_tree_model_get()
 
@@ -144,13 +158,15 @@ void hide_adjust_columns_dialog()
 char *get_string_from_form()
 {
 	gchar *data;
-	GtkTreeIter iter;
-	gtk_tree_model_get_iter(model, &iter, path);
-	//gtk_tree_store_append( GTK_TREE_STORE(store), &iter, NULL );
 
-	gtk_tree_model_get(model, &iter, &data);
+	gtk_tree_model_get(model, &iter,
+	COL_DEPT, &data,
+	-1);
 
-	printf("%s",data);
+	gtk_list_store_set(store, &iter,
+	COL_DEPT, data,
+	-1);
+
 	return data;
 }
 
@@ -165,18 +181,6 @@ void delete_row()
 //Adds a new row to the list.
 void new_row()
 {
-	enum
-	{
-		COL_DEPT,
-		COL_NUMBER,
-		COL_START,
-		COL_END,
-		COL_DAYS,
-		COL_SECT,
-		COL_BLDG,
-		COL_ROOM,
-		COL_INSTR
-	};
 
 	gtk_tree_model_get_iter(model, &iter, path);
 
