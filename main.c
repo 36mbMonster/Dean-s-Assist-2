@@ -17,7 +17,7 @@ GtkWidget *window;
 GtkWidget *show_hide_columns_window;
 GtkAboutDialog *about_dialog;
 
-GtkWidget*treeview;
+GtkWidget *treeview;
 GtkTreeModel *model;
 GtkTreeModel *filter;
 GtkTreePath *path;
@@ -162,17 +162,16 @@ char *get_string_from_form()
 	COL_DEPT, data,
 	-1);
 
+
+
 	return data;
 }
 
 //Deletes course section from the semester.
-//Does not work.
+//WORKS!!
 void delete_row()
 {
-	//GtkTreeIter iter;
-	//gtk_tree_model_get_iter(model, &iter, path);
-
-	//gtk_tree_model_row_deleted(model, path);
+	gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
 }
 
 //Adds a new course or section to the list.
