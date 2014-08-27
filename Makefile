@@ -6,13 +6,14 @@ CFLAGS := -g -Wall $(GTK)
 
 TARGET = deans2
 
-all: $(TARGET)
+all:
 	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
 
-Debug: $(TARGET)
+Debug:
 	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
 
-deans2: $(TARGET)
+deans2:
+	mkdir -vp bin/Debug
 	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
 
 clean:
