@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 //function declarations
@@ -26,7 +27,16 @@ GtkTreeViewColumn *columns[9];
 GtkListStore *store;
 GtkTreeSelection *selector;
 
+//Cell text renderers
 GtkCellRendererText *dept_text;
+GtkCellRendererText *number_text;
+GtkCellRendererText *start_text;
+GtkCellRendererText *end_text;
+GtkCellRendererText *days_text;
+GtkCellRendererText *sect_text;
+GtkCellRendererText *bldg_text;
+GtkCellRendererText *room_text;
+GtkCellRendererText *instructor_text;
 
 GObject *about_item;
 GObject *quit_item;
@@ -83,7 +93,15 @@ int main(int argc, char *argv[])
 	model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeview));
 
 	//Get the columns from the builder and populate the column array.
-	dept_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"dept_spin"));
+	dept_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"dept_text"));
+	number_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"number_text"));
+	start_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"start_text"));
+	end_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"end_text"));
+	days_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"days_text"));
+	sect_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"sect_text"));
+	bldg_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"bldg_text"));
+	room_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"room_text"));
+	instructor_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"instructor_text"));
 
 	//Load the columns. They are all named "treeviewcolumn" followed by a number as defined in the glade file.
 	//This makes it easy to load them all through a loop.
@@ -118,9 +136,25 @@ int main(int argc, char *argv[])
 
 	//Connect column signals.
 	g_signal_connect(dept_text, "edited", G_CALLBACK(cell_edited), NULL);
+	g_signal_connect(number_text, "edited", G_CALLBACK(cell_edited), NULL);
+	g_signal_connect(start_text, "edited", G_CALLBACK(cell_edited), NULL);
+	g_signal_connect(end_text, "edited", G_CALLBACK(cell_edited), NULL);
+	g_signal_connect(days_text, "edited", G_CALLBACK(cell_edited), NULL);
+	g_signal_connect(sect_text, "edited", G_CALLBACK(cell_edited), NULL);
+	g_signal_connect(bldg_text, "edited", G_CALLBACK(cell_edited), NULL);
+	g_signal_connect(room_text, "edited", G_CALLBACK(cell_edited), NULL);
+	g_signal_connect(instructor_text, "edited", G_CALLBACK(cell_edited), NULL);
 
 	//Point columns to cell renderers
 	g_object_set_data (G_OBJECT (dept_text), "column", GINT_TO_POINTER (COL_DEPT));
+	g_object_set_data (G_OBJECT (number_text), "column", GINT_TO_POINTER (COL_NUMBER));
+	g_object_set_data (G_OBJECT (start_text), "column", GINT_TO_POINTER (COL_START));
+	g_object_set_data (G_OBJECT (end_text), "column", GINT_TO_POINTER (COL_END));
+	g_object_set_data (G_OBJECT (days_text), "column", GINT_TO_POINTER (COL_DAYS));
+	g_object_set_data (G_OBJECT (sect_text), "column", GINT_TO_POINTER (COL_SECT));
+	g_object_set_data (G_OBJECT (bldg_text), "column", GINT_TO_POINTER (COL_BLDG));
+	g_object_set_data (G_OBJECT (room_text), "column", GINT_TO_POINTER (COL_ROOM));
+	g_object_set_data (G_OBJECT (instructor_text), "column", GINT_TO_POINTER (COL_INSTR));
 
 	//Show the window and start gtk.
     gtk_widget_show(window);
@@ -164,30 +198,36 @@ void cell_edited(GtkCellRendererText *renderer,
 
 	gtk_tree_model_get_iter (model, &iter, path);
 
-	if(column == COL_DEPT)
+	switch(column)
 	{
-		gint u;
-		gchar *old_entry;
+		case COL_DEPT:
+		{
+			//gint u;
+			gchar *old_entry;
 
-		gtk_tree_model_get(model, &iter, column, &old_entry, -1);
-		g_free(old_entry);
+			gtk_tree_model_get(model, &iter, column, &old_entry, -1);
+			g_free(old_entry);
 
-		u = gtk_tree_path_get_indices(path)[0];
-		//g_free(g_array_index(art));
+			//u = gtk_tree_path_get_indices(path)[0];
+			//g_free(g_array_index(art));
 
-		gtk_list_store_set(store, &iter,
-		COL_DEPT, new_text,
-		-1);
+			gtk_list_store_set(store, &iter,
+								COL_DEPT, new_text,
+								-1);
 
+		}
+		break;
+		case COL_NUMBER:
+		{
+			int u = atoi(new_text);
+			gtk_list_store_set(store, &iter,
+								COL_NUMBER, new_text,
+								-1);
+		}
+		break;
 	}
-	gtk_tree_path_free(path);
-	//gtk_tree_model_get(model, &iter,
-	//COL_DEPT, &data,
-	//-1);
 
-	//gtk_list_store_set(store, &iter,
-	//COL_DEPT, data,
-	//-1);
+	gtk_tree_path_free(path);
 
 }
 
@@ -195,7 +235,7 @@ void cell_edited(GtkCellRendererText *renderer,
 //WORKS!!
 void delete_row()
 {
-//	gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
+	gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
 }
 
 //Adds a new course or section to the list.
