@@ -8,7 +8,7 @@ void show_adjust_columns_dialog();
 void hide_adjust_columns_dialog();
 void delete_row();
 void new_row();
-char *get_string_from_form();
+void cell_edited();
 
 int i = 0;
 
@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
 	store = GTK_LIST_STORE(gtk_builder_get_object(builder,"liststore"));
 
 	//Set the tree model
-	path = gtk_tree_path_new_from_indices(1,-1);
+	//path = gtk_tree_path_new_from_indices(1,-1);
 	model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeview));
 
 	//Get the columns from the builder and populate the column array.
@@ -117,7 +117,10 @@ int main(int argc, char *argv[])
 
 
 	//Connect column signals.
-	g_signal_connect(dept_text, "edited", G_CALLBACK(get_string_from_form), NULL);
+	g_signal_connect(dept_text, "edited", G_CALLBACK(cell_edited), NULL);
+
+	//Point columns to cell renderers
+	g_object_set_data (G_OBJECT (dept_text), "column", GINT_TO_POINTER (COL_DEPT));
 
 	//Show the window and start gtk.
     gtk_widget_show(window);
@@ -149,29 +152,50 @@ void hide_adjust_columns_dialog()
 }
 
 //Get user input from the cell and update the row
-//Does not work.
-char *get_string_from_form()
+//WORKS!!
+void cell_edited(GtkCellRendererText *renderer,
+				const gchar         *path_string,
+             	const gchar         *new_text,
+             	gpointer             data)
 {
-	gchar *data;
 
-	gtk_tree_model_get(model, &iter,
-	COL_DEPT, &data,
-	-1);
+	gint column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (renderer), "column"));
+	path = gtk_tree_path_new_from_string (path_string);
 
-	gtk_list_store_set(store, &iter,
-	COL_DEPT, data,
-	-1);
+	gtk_tree_model_get_iter (model, &iter, path);
 
+	if(column == COL_DEPT)
+	{
+		gint u;
+		gchar *old_entry;
 
+		gtk_tree_model_get(model, &iter, column, &old_entry, -1);
+		g_free(old_entry);
 
-	return data;
+		u = gtk_tree_path_get_indices(path)[0];
+		//g_free(g_array_index(art));
+
+		gtk_list_store_set(store, &iter,
+		COL_DEPT, new_text,
+		-1);
+
+	}
+	gtk_tree_path_free(path);
+	//gtk_tree_model_get(model, &iter,
+	//COL_DEPT, &data,
+	//-1);
+
+	//gtk_list_store_set(store, &iter,
+	//COL_DEPT, data,
+	//-1);
+
 }
 
 //Deletes course section from the semester.
 //WORKS!!
 void delete_row()
 {
-	gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
+//	gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
 }
 
 //Adds a new course or section to the list.
