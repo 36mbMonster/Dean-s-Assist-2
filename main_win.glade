@@ -543,7 +543,7 @@
                 <property name="clickable">True</property>
                 <property name="reorderable">True</property>
                 <child>
-                  <object class="GtkCellRendererText" id="dept_spin">
+                  <object class="GtkCellRendererText" id="dept_text">
                     <property name="editable">True</property>
                   </object>
                   <attributes>
@@ -558,7 +558,7 @@
                 <property name="clickable">True</property>
                 <property name="reorderable">True</property>
                 <child>
-                  <object class="GtkCellRendererText" id="number_spin">
+                  <object class="GtkCellRendererText" id="number_text">
                     <property name="editable">True</property>
                   </object>
                   <attributes>
@@ -573,7 +573,7 @@
                 <property name="clickable">True</property>
                 <property name="reorderable">True</property>
                 <child>
-                  <object class="GtkCellRendererText" id="start_spin">
+                  <object class="GtkCellRendererText" id="start_text">
                     <property name="editable">True</property>
                   </object>
                   <attributes>
@@ -588,7 +588,7 @@
                 <property name="clickable">True</property>
                 <property name="reorderable">True</property>
                 <child>
-                  <object class="GtkCellRendererText" id="end_spin">
+                  <object class="GtkCellRendererText" id="end_text">
                     <property name="editable">True</property>
                   </object>
                   <attributes>
@@ -603,7 +603,7 @@
                 <property name="clickable">True</property>
                 <property name="reorderable">True</property>
                 <child>
-                  <object class="GtkCellRendererText" id="days_spin">
+                  <object class="GtkCellRendererText" id="days_text">
                     <property name="editable">True</property>
                   </object>
                   <attributes>
@@ -618,7 +618,7 @@
                 <property name="clickable">True</property>
                 <property name="reorderable">True</property>
                 <child>
-                  <object class="GtkCellRendererText" id="sect_spin">
+                  <object class="GtkCellRendererText" id="sect_text">
                     <property name="editable">True</property>
                   </object>
                   <attributes>
@@ -633,7 +633,7 @@
                 <property name="clickable">True</property>
                 <property name="reorderable">True</property>
                 <child>
-                  <object class="GtkCellRendererText" id="bldg_spin">
+                  <object class="GtkCellRendererText" id="bldg_text">
                     <property name="editable">True</property>
                   </object>
                   <attributes>
