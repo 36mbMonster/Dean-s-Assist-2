@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "util.c"
 //function declarations
 void show_about_dialog();
 void show_adjust_columns_dialog();
@@ -219,6 +220,8 @@ void cell_edited(GtkCellRendererText *renderer,
 		break;
 		case COL_NUMBER:
 		{
+		    if(is_int(new_text))
+                printf("%s\n","error"); //temporary. Put a message box with an error message here.
 			int u = atoi(new_text);
 			gtk_list_store_set(store, &iter,
 								COL_NUMBER, new_text,
