@@ -8,6 +8,7 @@
 void show_about_dialog();
 void show_adjust_columns_dialog();
 void hide_adjust_columns_dialog();
+void hide_error_dialog();
 void delete_row();
 void new_row();
 void cell_edited();
@@ -18,6 +19,8 @@ GtkBuilder *builder;
 GtkWidget *window;
 GtkWidget *show_hide_columns_window;
 GtkAboutDialog *about_dialog;
+GtkMessageDialog *error_dialog;
+GtkButton *okay_button;
 
 GtkWidget *treeview;
 GtkTreeModel *model;
@@ -76,6 +79,8 @@ int main(int argc, char *argv[])
 	window = GTK_WIDGET(gtk_builder_get_object(builder,"window"));
 	show_hide_columns_window = GTK_WIDGET(gtk_builder_get_object(builder,"adjust_columns_win"));
 	about_dialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(builder,"aboutdialog"));
+	error_dialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(builder,"error_dialog"));
+	okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"ok"));
 
 	//Load menu items
 	about_item = gtk_builder_get_object(builder, "about");
@@ -133,6 +138,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(show_hide_columns_item, "activate", G_CALLBACK(show_adjust_columns_dialog), NULL);
 	g_signal_connect(delete_row_item, "activate", G_CALLBACK(delete_row), NULL);
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
+	g_signal_connect(okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
 
 
 	//Connect column signals.
@@ -186,6 +192,11 @@ void hide_adjust_columns_dialog()
 	gtk_widget_hide(GTK_WIDGET(show_hide_columns_window));
 }
 
+void hide_error_dialog()
+{
+	gtk_widget_hide(GTK_WIDGET(error_dialog));
+}
+
 //Get user input from the cell and update the row
 //WORKS!!
 void cell_edited(GtkCellRendererText *renderer,
@@ -220,8 +231,12 @@ void cell_edited(GtkCellRendererText *renderer,
 		break;
 		case COL_NUMBER:
 		{
-		    if(is_int(new_text))
-                printf("%s\n","error"); //temporary. Put a message box with an error message here.
+		    if(is_int(new_text))//Do better error checking than this. Actually look at the string and check the length and the characters.
+		    {
+		    	gtk_message_dialog_format_secondary_markup(error_dialog, "%s", COURSE_NUMBER_ERROR);
+				gtk_dialog_run(GTK_DIALOG(error_dialog));
+		    }
+
 			int u = atoi(new_text);
 			gtk_list_store_set(store, &iter,
 								COL_NUMBER, new_text,
