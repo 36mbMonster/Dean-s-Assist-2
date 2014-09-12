@@ -236,11 +236,50 @@ void cell_edited(GtkCellRendererText *renderer,
 		    	gtk_message_dialog_format_secondary_markup(error_dialog, "%s", COURSE_NUMBER_ERROR);
 				gtk_dialog_run(GTK_DIALOG(error_dialog));
 
-                int u = atoi(new_text);
+		    }
+		    else
+		    {
                 gtk_list_store_set(store, &iter,
 								COL_NUMBER, new_text,
 								-1);
 		    }
+
+		}
+		break;
+		case COL_START:
+		{
+			if(!is_int(new_text) )
+			{
+		    	gtk_message_dialog_format_secondary_markup(error_dialog, "%s", INVALID_TIME_ERROR);
+				gtk_dialog_run(GTK_DIALOG(error_dialog));
+			}
+			else
+			{
+				gint entry = atoi(new_text);
+                gtk_list_store_set(store, &iter,
+								COL_START, entry,
+								-1);
+			}
+		}
+		break;
+		case COL_END:
+		{
+			if(!is_int(new_text) )
+			{
+		    	gtk_message_dialog_format_secondary_markup(error_dialog, "%s", INVALID_TIME_ERROR);
+				gtk_dialog_run(GTK_DIALOG(error_dialog));
+			}
+			else
+			{
+				gint entry = atoi(new_text);
+                gtk_list_store_set(store, &iter,
+								COL_END, entry,
+								-1);
+			}
+		}
+		break;
+		case COL_DAYS:
+		{
 
 		}
 		break;

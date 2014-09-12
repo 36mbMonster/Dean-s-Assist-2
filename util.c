@@ -6,6 +6,7 @@ int is_int(const gchar *str);
 int is_valid_course_num(const gchar *str);
 
 const char *COURSE_NUMBER_ERROR = "The entry was invalid. A course number can be two or three didgets with an optional letter at the end.";
+const char *INVALID_TIME_ERROR = "The entry was invalid. A time must be a four digit long integer.";
 
 int is_int(const gchar *str)
 {
@@ -13,9 +14,9 @@ int is_int(const gchar *str)
     strtol(str, &err, 10);
 
     if(! *err)
-        return 0;
+        return 1;
 
-    return 1;
+    return 0;
 }
 
 
@@ -28,7 +29,7 @@ int is_valid_course_num(const gchar *str)
     int length = strlen(str);
 
     //If cell is empty, return true
-    if( length == 1 && (str[0] == " " || str[0] == ""))
+    if( length == 0 || length == 1 && (str[0] == " " || str[0] == "") )
         return 1;
 
     //If string is between 1 and 4 characters, it may be valid.
@@ -49,5 +50,5 @@ int is_valid_course_num(const gchar *str)
 
         return 1;
     }
-    return 1;
+    return 0;
 }
