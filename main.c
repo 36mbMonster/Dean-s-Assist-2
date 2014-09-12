@@ -231,16 +231,17 @@ void cell_edited(GtkCellRendererText *renderer,
 		break;
 		case COL_NUMBER:
 		{
-		    if(is_int(new_text))//Do better error checking than this. Actually look at the string and check the length and the characters.
+		    if(!is_valid_course_num(new_text))
 		    {
 		    	gtk_message_dialog_format_secondary_markup(error_dialog, "%s", COURSE_NUMBER_ERROR);
 				gtk_dialog_run(GTK_DIALOG(error_dialog));
-		    }
 
-			int u = atoi(new_text);
-			gtk_list_store_set(store, &iter,
+                int u = atoi(new_text);
+                gtk_list_store_set(store, &iter,
 								COL_NUMBER, new_text,
 								-1);
+		    }
+
 		}
 		break;
 	}

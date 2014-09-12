@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="deans2" />
+		<Option makefile_is_custom="1" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/deans2" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="main.c &apos;pkg-config --cflags --libs gtk+-3.0&apos; -o bin/Debug/deans2" />
+					<Add directory="/usr/include/gtk-3.0/gdk" />
+					<Add directory="/usr/include/gtk-3.0/gtk" />
+				</Compiler>
+				<ResourceCompiler>
+					<Add directory="/usr/include/gtk-3.0/gdk" />
+					<Add directory="/usr/include/gtk-3.0/gtk" />
+				</ResourceCompiler>
+				<Linker>
+					<Add option="pkg-config --cflags --libs gtk+-3.0" />
+					<Add library="../../../../usr/include/gtk-3.0/gtk/gtk.h" />
+					<Add directory="/usr/include/gtk-3.0/gdk" />
+					<Add directory="/usr/include/gtk-3.0/gtk" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/deans2" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="`pkg-config --cflags gtk+-3.0` -o bin/Debug/deans2 main.c `pkg-config --libs gtk+-3.0`" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="main.c &apos;pkg-config --cflags --libs gtk+-3.0&apos; -o bin/Debug/deans2" />
+			<Add directory="/usr/include/gtk-3.0/gdk" />
+			<Add directory="/usr/include/gtk-3.0/gtk" />
+		</Compiler>
+		<ResourceCompiler>
+			<Add directory="/usr/include/gtk-3.0/gdk" />
+			<Add directory="/usr/include/gtk-3.0/gtk" />
+		</ResourceCompiler>
+		<Linker>
+			<Add option="pkg-config --cflags --libs gtk+-3.0" />
+			<Add directory="/usr/include/gtk-3.0/gdk" />
+			<Add directory="/usr/include/gtk-3.0/gtk" />
+		</Linker>
+		<Unit filename="MAKEFILE" />
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="util.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
