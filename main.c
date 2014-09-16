@@ -8,6 +8,7 @@
 void show_about_dialog();
 void show_adjust_columns_dialog();
 void hide_adjust_columns_dialog();
+void hide_set_days_dialog();
 void hide_error_dialog();
 void delete_row();
 void new_row();
@@ -18,9 +19,12 @@ int i = 0;
 GtkBuilder *builder;
 GtkWidget *window;
 GtkWidget *show_hide_columns_window;
+GtkWidget *set_days_window;
 GtkAboutDialog *about_dialog;
 GtkMessageDialog *error_dialog;
-GtkButton *okay_button;
+
+GtkButton *error_okay_button;
+GtkButton *days_okay_button;
 
 GtkWidget *treeview;
 GtkTreeModel *model;
@@ -78,9 +82,11 @@ int main(int argc, char *argv[])
 	//Load windows
 	window = GTK_WIDGET(gtk_builder_get_object(builder,"window"));
 	show_hide_columns_window = GTK_WIDGET(gtk_builder_get_object(builder,"adjust_columns_win"));
+	set_days_window = GTK_WIDGET(gtk_builder_get_object(builder,"set_days_win"));
 	about_dialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(builder,"aboutdialog"));
 	error_dialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(builder,"error_dialog"));
-	okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"ok"));
+	error_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"error_dialog_okay"));
+	days_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"set_days_okay"));
 
 	//Load menu items
 	about_item = gtk_builder_get_object(builder, "about");
@@ -138,15 +144,15 @@ int main(int argc, char *argv[])
 	g_signal_connect(show_hide_columns_item, "activate", G_CALLBACK(show_adjust_columns_dialog), NULL);
 	g_signal_connect(delete_row_item, "activate", G_CALLBACK(delete_row), NULL);
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
-	g_signal_connect(okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
-
+	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
+	g_signal_connect(days_okay_button, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
 
 	//Connect column signals.
 	g_signal_connect(dept_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(number_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(start_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(end_text, "edited", G_CALLBACK(cell_edited), NULL);
-	g_signal_connect(days_text, "edited", G_CALLBACK(cell_edited), NULL);
+	g_signal_connect(days_text, "editing-started", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(sect_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(bldg_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(room_text, "edited", G_CALLBACK(cell_edited), NULL);
@@ -190,6 +196,11 @@ void show_adjust_columns_dialog()
 void hide_adjust_columns_dialog()
 {
 	gtk_widget_hide(GTK_WIDGET(show_hide_columns_window));
+}
+
+void hide_set_days_dialog()
+{
+	gtk_widget_hide(GTK_WIDGET(set_days_window));
 }
 
 void hide_error_dialog()
@@ -280,9 +291,15 @@ void cell_edited(GtkCellRendererText *renderer,
 		break;
 		case COL_DAYS:
 		{
-
+			gtk_widget_show_all(set_days_window);
 		}
 		break;
+		case COL_INSTR:
+		{
+                gtk_list_store_set(store, &iter,
+								COL_INSTR, new_text,
+								-1);
+		}
 	}
 
 	gtk_tree_path_free(path);
