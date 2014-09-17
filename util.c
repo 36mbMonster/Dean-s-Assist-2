@@ -44,6 +44,9 @@ int is_valid_course_num(const gchar *str)
         //If the last character in the string is not a letter or a number, the string is invalid.
         if(!isalpha(str[length-1]) && !isdigit(str[length-1]))
             return 0;
+        //If the first character in the string is a letter, the string is invalid.
+        if(isalpha(str[0]))
+            return 0;
         //If the length is four, the final character MUST be a letter.
         if(length == 4 && !isalpha(str[length-1]))
             return 0;
