@@ -10,6 +10,7 @@ void show_adjust_columns_dialog();
 void hide_adjust_columns_dialog();
 void hide_set_days_dialog();
 void hide_error_dialog();
+void check_clicked();
 void delete_row();
 void new_row();
 void cell_edited();
@@ -34,6 +35,16 @@ GtkTreeIter iter;
 GtkTreeViewColumn *columns[9];
 GtkListStore *store;
 GtkTreeSelection *selector;
+
+//Check boxes
+GtkCheckButton *monday;
+GtkCheckButton *tuesday;
+GtkCheckButton *wednesdy;
+GtkCheckButton *thursday;
+GtkCheckButton *friday;
+
+int days[5];
+GtkCheckButton *checks[5];
 
 //Cell text renderers
 GtkCellRendererText *dept_text;
@@ -95,6 +106,13 @@ int main(int argc, char *argv[])
 	new_course_item = gtk_builder_get_object(builder, "new_course");
 	delete_row_item = gtk_builder_get_object(builder, "delete");
 
+    //Load check boxes
+    monday = gtk_builder_get_object(builder, "mo");
+    tuesday = gtk_builder_get_object(builder, "tu");
+    wednesdy = gtk_builder_get_object(builder, "we");
+    thursday = gtk_builder_get_object(builder, "th");
+    friday = gtk_builder_get_object(builder, "fr");
+
 	//Load tree and list related structures.
 	treeview = GTK_WIDGET(gtk_builder_get_object(builder, "treeview"));
 	selector = GTK_TREE_SELECTION(gtk_builder_get_object(builder, "treeview-selection"));
@@ -136,7 +154,7 @@ int main(int argc, char *argv[])
 ***************************************************************************
 */
 
-	//Connect signals
+	//Connect menu signals
 	g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 	g_signal_connect(about_item, "activate", G_CALLBACK(show_about_dialog), NULL);
 	g_signal_connect(quit_item, "activate", G_CALLBACK(gtk_main_quit), NULL);
@@ -146,6 +164,13 @@ int main(int argc, char *argv[])
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
 	g_signal_connect(days_okay_button, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
+
+    //Connect check button signals
+    g_signal_connect(monday, "clicked", G_CALLBACK(check_clicked), NULL);
+    g_signal_connect(tuesday, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
+    g_signal_connect(wednesdy, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
+    g_signal_connect(thursday, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
+    g_signal_connect(friday, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
 
 	//Connect column signals.
 	g_signal_connect(dept_text, "edited", G_CALLBACK(cell_edited), NULL);
@@ -172,6 +197,9 @@ int main(int argc, char *argv[])
 	//Show the window and start gtk.
     gtk_widget_show(window);
     gtk_main();
+
+    checks[0] = monday;
+    checks[1] = tuesday;
 
     return 0;
 }
@@ -200,12 +228,35 @@ void hide_adjust_columns_dialog()
 
 void hide_set_days_dialog()
 {
-	gtk_widget_hide(GTK_WIDGET(set_days_window));
+
+    gtk_widget_hide(GTK_WIDGET(set_days_window));
 }
 
 void hide_error_dialog()
 {
 	gtk_widget_hide(GTK_WIDGET(error_dialog));
+}
+
+void check_clicked(GtkCheckButton *check,
+                    const gchar         *path_string,
+                    gpointer             data)
+{
+	path = gtk_tree_path_new_from_string (path_string);
+	gtk_tree_model_get_iter (model, &iter, path);
+
+    char *label = gtk_button_get_label(GTK_BUTTON(check));
+    char *end = (char*)malloc(512);
+
+	for(i = 0; i < 5; i++)
+	{
+	    if(strcmp(label,"Monday") == 0)
+            strcat(end, "Mo");
+
+        gtk_list_store_set(store, &iter,
+                        COL_DAYS, end,
+                                    -1);
+	}
+
 }
 
 //Get user input from the cell and update the row
