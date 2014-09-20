@@ -36,15 +36,14 @@ GtkTreeViewColumn *columns[9];
 GtkListStore *store;
 GtkTreeSelection *selector;
 
+int days[5];
+
 //Check boxes
 GtkCheckButton *monday;
 GtkCheckButton *tuesday;
 GtkCheckButton *wednesdy;
 GtkCheckButton *thursday;
 GtkCheckButton *friday;
-
-int days[5];
-GtkCheckButton *checks[5];
 
 //Cell text renderers
 GtkCellRendererText *dept_text;
@@ -147,7 +146,6 @@ int main(int argc, char *argv[])
 		columns[i-1] = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(builder, test));
 	}
 
-
 /**
 ***************************************************************************
 *							  Connect Signals						  	  *
@@ -167,10 +165,10 @@ int main(int argc, char *argv[])
 
     //Connect check button signals
     g_signal_connect(monday, "clicked", G_CALLBACK(check_clicked), NULL);
-    g_signal_connect(tuesday, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
-    g_signal_connect(wednesdy, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
-    g_signal_connect(thursday, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
-    g_signal_connect(friday, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
+    g_signal_connect(tuesday, "clicked", G_CALLBACK(check_clicked), NULL);
+    g_signal_connect(wednesdy, "clicked", G_CALLBACK(check_clicked), NULL);
+    g_signal_connect(thursday, "clicked", G_CALLBACK(check_clicked), NULL);
+    g_signal_connect(friday, "clicked", G_CALLBACK(check_clicked), NULL);
 
 	//Connect column signals.
 	g_signal_connect(dept_text, "edited", G_CALLBACK(cell_edited), NULL);
@@ -198,8 +196,6 @@ int main(int argc, char *argv[])
     gtk_widget_show(window);
     gtk_main();
 
-    checks[0] = monday;
-    checks[1] = tuesday;
 
     return 0;
 }
@@ -228,6 +224,26 @@ void hide_adjust_columns_dialog()
 
 void hide_set_days_dialog()
 {
+	const char *mo = "Mo";
+	const char *tu = "Tu";
+	const char *we = "We";
+	const char *th = "Th";
+	const char *fr = "Fr";
+
+	char *labels[5] = {mo, tu, we, th, fr};
+	char out[11];
+	out[0] = '\0';
+
+	for(i = 0; i < 5; i++)
+	{
+		if(days[i] == 1)
+			strcat(out, labels[i]);
+
+	}
+
+	gtk_list_store_set(store, &iter,
+                        COL_DAYS, out,
+                                    -1);
 
     gtk_widget_hide(GTK_WIDGET(set_days_window));
 }
@@ -245,17 +261,21 @@ void check_clicked(GtkCheckButton *check,
 	gtk_tree_model_get_iter (model, &iter, path);
 
     char *label = gtk_button_get_label(GTK_BUTTON(check));
-    char *end = (char*)malloc(512);
 
-	for(i = 0; i < 5; i++)
-	{
-	    if(strcmp(label,"Monday") == 0)
-            strcat(end, "Mo");
+	if(strcmp(label,"Monday") == 0)
+		days[0] = days[0] ^ 1;
 
-        gtk_list_store_set(store, &iter,
-                        COL_DAYS, end,
-                                    -1);
-	}
+	if(strcmp(label,"Tuesday") == 0)
+		days[1] = days[1] ^ 1;
+
+	if(strcmp(label,"Wednesday") == 0)
+		days[2] = days[2] ^ 1;
+
+	if(strcmp(label,"Thursday") == 0)
+		days[3] = days[3] ^ 1;
+
+	if(strcmp(label,"Friday") == 0)
+		days[4] = days[4] ^ 1;
 
 }
 
