@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
 	show_hide_columns_window = GTK_WIDGET(gtk_builder_get_object(builder,"adjust_columns_win"));
 	set_days_window = GTK_WIDGET(gtk_builder_get_object(builder,"set_days_win"));
 	about_dialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(builder,"aboutdialog"));
-	error_dialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(builder,"error_dialog"));
+	error_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder,"error_dialog"));
 	error_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"error_dialog_okay"));
 	days_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"set_days_okay"));
 
@@ -106,11 +106,11 @@ int main(int argc, char *argv[])
 	delete_row_item = gtk_builder_get_object(builder, "delete");
 
     //Load check boxes
-    monday = gtk_builder_get_object(builder, "mo");
-    tuesday = gtk_builder_get_object(builder, "tu");
-    wednesdy = gtk_builder_get_object(builder, "we");
-    thursday = gtk_builder_get_object(builder, "th");
-    friday = gtk_builder_get_object(builder, "fr");
+    monday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "mo"));
+    tuesday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "tu"));
+    wednesdy = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "we"));
+    thursday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "th"));
+    friday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "fr"));
 
 	//Load tree and list related structures.
 	treeview = GTK_WIDGET(gtk_builder_get_object(builder, "treeview"));
@@ -230,7 +230,7 @@ void hide_set_days_dialog()
 	const char *th = "Th";
 	const char *fr = "Fr";
 
-	char *labels[5] = {mo, tu, we, th, fr};
+	const char *labels[5] = {mo, tu, we, th, fr};
 	char out[11];
 	out[0] = '\0';
 
@@ -260,7 +260,7 @@ void check_clicked(GtkCheckButton *check,
 	path = gtk_tree_path_new_from_string (path_string);
 	gtk_tree_model_get_iter (model, &iter, path);
 
-    char *label = gtk_button_get_label(GTK_BUTTON(check));
+    const char *label = gtk_button_get_label(GTK_BUTTON(check));
 
 	if(strcmp(label,"Monday") == 0)
 		days[0] = days[0] ^ 1;
