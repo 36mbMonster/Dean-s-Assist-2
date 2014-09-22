@@ -14,7 +14,7 @@ Debug:
 	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
 
 deans2:
-	mkdir -vp bin/Debug
+	mkdir -vp bin/Release
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
 
 clean:
