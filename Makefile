@@ -1,4 +1,9 @@
-CC = gcc
+ifeq ($(OS),Windows_NT)
+	CC = mingw32-gcc
+else
+	CC = gcc
+endif
+
 SHELL = bash
 
 GTK := $(shell pkg-config --cflags --libs gtk+-3.0)
@@ -18,5 +23,5 @@ deans2:
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
 
 clean:
-	rm Debug/$(TARGET)
-	rm Release/$(TARGET)
+	rm bin/Debug/$(TARGET)
+	rm bin/Release/$(TARGET)
