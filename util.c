@@ -24,12 +24,12 @@ int is_int(const gchar *str)
 //A valid course number is between 1 & 4 digits.
 //The last digit can be a number or a letter, unless the string is 4 digits.
 //If the string is 4 digits, the last one MUST be a letter.
-int is_valid_course_num(const gchar *str)
+int is_valid_course_num(const char *str)
 {
     int length = strlen(str);
 
     //If cell is empty, return true
-    if( length == 0 || length == 1 && (str[0] == " " || str[0] == "") )
+    if( (length == 0 || length == 1) && (str[0] == ' ' || str[0] == '\0') )
         return 1;
 
     //If string is between 1 and 4 characters, it may be valid.
