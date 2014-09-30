@@ -17,6 +17,7 @@ Linux:
 	2) make
 
 Windows:
+
 	1) Install dependencies
 	2) Download and install MinGW from the URL above
 	3) Update PATH
