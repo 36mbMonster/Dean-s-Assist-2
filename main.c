@@ -330,7 +330,7 @@ void cell_edited(GtkCellRendererText *renderer,
 		break;
 		case COL_START:
 		{
-			if(!is_int(new_text) )
+			if(!is_int(new_text) && new_text < 700 && new_text > 2200)
 			{
 		    	gtk_message_dialog_format_secondary_markup(error_dialog, "%s", INVALID_TIME_ERROR);
 				gtk_dialog_run(GTK_DIALOG(error_dialog));
