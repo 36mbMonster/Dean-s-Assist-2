@@ -16,10 +16,13 @@ all:
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
 
 Debug:
+	mkdir -vp bin/Debug
+	cp main_win.glade bin/Debug/main_win.glade
 	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
 
 deans2:
 	mkdir -vp bin/Release
+	cp main_win.glade bin/Release/main_win.glade
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
 
 clean:
