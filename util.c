@@ -6,7 +6,7 @@ int is_int(const gchar *str);
 int is_valid_course_num(const gchar *str);
 
 const char *COURSE_NUMBER_ERROR = "The entry was invalid. A course number can be two or three didgets with an optional letter at the end.";
-const char *INVALID_TIME_ERROR = "The entry was invalid. A time must be a four digit long integer.";
+const char *INVALID_TIME_ERROR = "The entry was invalid. A time must be an integer between 700 and 2200.";
 
 int is_int(const gchar *str)
 {
