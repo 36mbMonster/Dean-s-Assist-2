@@ -14,6 +14,7 @@ void check_clicked();
 void delete_row();
 void new_row();
 void cell_edited();
+void save_as();
 
 int i = 0;
 
@@ -21,6 +22,7 @@ GtkBuilder *builder;
 GtkWidget *window;
 GtkWidget *show_hide_columns_window;
 GtkWidget *set_days_window;
+GtkFileChooserDialog *file_dialog;
 GtkAboutDialog *about_dialog;
 GtkMessageDialog *error_dialog;
 
@@ -61,6 +63,7 @@ GObject *quit_item;
 GObject *show_hide_columns_item;
 GObject *new_course_item;
 GObject *delete_row_item;
+GObject *save_semester_as_item;
 
 enum
 {
@@ -93,6 +96,7 @@ int main(int argc, char *argv[])
 	window = GTK_WIDGET(gtk_builder_get_object(builder,"window"));
 	show_hide_columns_window = GTK_WIDGET(gtk_builder_get_object(builder,"adjust_columns_win"));
 	set_days_window = GTK_WIDGET(gtk_builder_get_object(builder,"set_days_win"));
+	file_dialog = GTK_FILE_CHOOSER_DIALOG(gtk_builder_get_object(builder, "filechooserdialog"));
 	about_dialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(builder,"aboutdialog"));
 	error_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder,"error_dialog"));
 	error_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"error_dialog_okay"));
@@ -104,6 +108,7 @@ int main(int argc, char *argv[])
 	show_hide_columns_item = gtk_builder_get_object(builder, "show_hide_columns");
 	new_course_item = gtk_builder_get_object(builder, "new_course");
 	delete_row_item = gtk_builder_get_object(builder, "delete");
+	save_semester_as_item = gtk_builder_get_object(builder, "save_semester_as");
 
     //Load check boxes
     monday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "mo"));
@@ -159,6 +164,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(new_course_item, "activate", G_CALLBACK(new_row), NULL);
 	g_signal_connect(show_hide_columns_item, "activate", G_CALLBACK(show_adjust_columns_dialog), NULL);
 	g_signal_connect(delete_row_item, "activate", G_CALLBACK(delete_row), NULL);
+	g_signal_connect(save_semester_as_item, "activate", G_CALLBACK(save_as), NULL);
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
 	g_signal_connect(days_okay_button, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
@@ -210,6 +216,11 @@ void show_about_dialog()
 	//gtk_widget_show_all( about_dialog );
 	gtk_dialog_run(GTK_DIALOG(about_dialog));
 	gtk_widget_hide(GTK_WIDGET(about_dialog));
+}
+
+void save_as()
+{
+	gtk_widget_show_all(GTK_WIDGET(file_dialog));
 }
 
 void show_adjust_columns_dialog()
