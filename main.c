@@ -382,6 +382,23 @@ void cell_edited(GtkCellRendererText *renderer,
 								COL_INSTR, new_text,
 								-1);
 		}
+		break;
+		case COL_ROOM:
+		{
+			if(is_int(new_text) && atoi(new_text) > -1)
+			{
+				gint entry = atoi(new_text);
+                gtk_list_store_set(store, &iter,
+								COL_ROOM, entry,
+								-1);
+			}
+			else
+			{
+				gtk_message_dialog_format_secondary_markup(error_dialog, "%s", INVALID_ROOM_ERROR);
+				gtk_dialog_run(GTK_DIALOG(error_dialog));
+			}
+		}
+		break;
 	}
 
 	gtk_tree_path_free(path);
