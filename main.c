@@ -15,6 +15,7 @@ void delete_row();
 void new_row();
 void cell_edited();
 void save_as();
+void generate_sections();
 
 int i = 0;
 
@@ -64,6 +65,7 @@ GObject *show_hide_columns_item;
 GObject *new_course_item;
 GObject *delete_row_item;
 GObject *save_semester_as_item;
+GObject *generate_sections_item;
 
 enum
 {
@@ -109,6 +111,7 @@ int main(int argc, char *argv[])
 	new_course_item = gtk_builder_get_object(builder, "new_course");
 	delete_row_item = gtk_builder_get_object(builder, "delete");
 	save_semester_as_item = gtk_builder_get_object(builder, "save_semester_as");
+	generate_sections_item = gtk_builder_get_object(builder, "generate_sections")
 
     //Load check boxes
     monday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "mo"));
@@ -168,6 +171,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
 	g_signal_connect(days_okay_button, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
+	g_signal_connect(generate_sections_item, "activate", G_CALLBACK(generate_sections), NULL);
 
     //Connect check button signals
     g_signal_connect(monday, "clicked", G_CALLBACK(check_clicked), NULL);
@@ -221,6 +225,11 @@ void show_about_dialog()
 void save_as()
 {
 	gtk_widget_show_all(GTK_WIDGET(file_dialog));
+}
+
+void generate_sections()
+{
+
 }
 
 void show_adjust_columns_dialog()
