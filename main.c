@@ -16,6 +16,7 @@ void new_row();
 void cell_edited();
 void save_as();
 void generate_sections();
+void change_digits();
 
 int i = 0;
 
@@ -26,9 +27,11 @@ GtkWidget *set_days_window;
 GtkFileChooserDialog *file_dialog;
 GtkAboutDialog *about_dialog;
 GtkMessageDialog *error_dialog;
+GtkMessageDialog *generate_sections_dialog;
 
 GtkButton *error_okay_button;
 GtkButton *days_okay_button;
+GtkSpinButton *spin_button;
 
 GtkWidget *treeview;
 GtkTreeModel *model;
@@ -103,6 +106,8 @@ int main(int argc, char *argv[])
 	error_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder,"error_dialog"));
 	error_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"error_dialog_okay"));
 	days_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"set_days_okay"));
+	spin_button = GTK_SPIN_BUTTON(gtk_builder_get_object(builder,"spinbutton"));
+	generate_sections_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder, "gensect_dialog"));
 
 	//Load menu items
 	about_item = gtk_builder_get_object(builder, "about");
@@ -111,7 +116,7 @@ int main(int argc, char *argv[])
 	new_course_item = gtk_builder_get_object(builder, "new_course");
 	delete_row_item = gtk_builder_get_object(builder, "delete");
 	save_semester_as_item = gtk_builder_get_object(builder, "save_semester_as");
-	generate_sections_item = gtk_builder_get_object(builder, "generate_sections")
+	generate_sections_item = gtk_builder_get_object(builder, "generate_sections");
 
     //Load check boxes
     monday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "mo"));
@@ -229,7 +234,8 @@ void save_as()
 
 void generate_sections()
 {
-
+	gtk_spin_button_set_range(spin_button, 0, 10);
+	gtk_dialog_run(GTK_DIALOG(generate_sections_dialog));
 }
 
 void show_adjust_columns_dialog()
