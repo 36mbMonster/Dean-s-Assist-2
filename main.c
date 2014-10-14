@@ -6,6 +6,7 @@
 #include "util.c"
 //function declarations
 void show_about_dialog();
+static void change_digits( GtkWidget *widget, GtkSpinButton *spin );
 void show_adjust_columns_dialog();
 void hide_adjust_columns_dialog();
 void hide_set_days_dialog();
@@ -176,6 +177,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
 	g_signal_connect(days_okay_button, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
+	g_signal_connect(spin_button, "change-value", G_CALLBACK(change_digits), NULL);
 	g_signal_connect(generate_sections_item, "activate", G_CALLBACK(generate_sections), NULL);
 
     //Connect check button signals
@@ -219,6 +221,13 @@ int main(int argc, char *argv[])
 *							Signal Functions						  	  *
 ***************************************************************************
 */
+
+static void change_digits( GtkWidget *widget,
+                           GtkSpinButton *spin )
+{
+  gtk_spin_button_set_digits (GTK_SPIN_BUTTON (spin_button),
+                              gtk_spin_button_get_value_as_int (spin));
+}
 
 void show_about_dialog()
 {
