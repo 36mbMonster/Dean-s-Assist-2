@@ -16,6 +16,7 @@ void delete_row();
 void new_row();
 void cell_edited();
 void save_as();
+void show_generate_sections();
 void generate_sections();
 void change_digits();
 
@@ -33,6 +34,8 @@ GtkMessageDialog *generate_sections_dialog;
 GtkButton *error_okay_button;
 GtkButton *days_okay_button;
 GtkSpinButton *spin_button;
+
+GtkAdjustment *spin_adjust;
 
 GtkWidget *treeview;
 GtkTreeModel *model;
@@ -160,6 +163,9 @@ int main(int argc, char *argv[])
 		columns[i-1] = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(builder, test));
 	}
 
+	spin_adjust = gtk_adjustment_new(0, 0, 15, 1, 2, 0);
+	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
+
 /**
 ***************************************************************************
 *							  Connect Signals						  	  *
@@ -225,8 +231,8 @@ int main(int argc, char *argv[])
 static void change_digits( GtkWidget *widget,
                            GtkSpinButton *spin )
 {
-  gtk_spin_button_set_digits (GTK_SPIN_BUTTON (spin_button),
-                              gtk_spin_button_get_value_as_int (spin));
+  //gtk_spin_button_set_digits (GTK_SPIN_BUTTON (spin_button),
+    //                          gtk_spin_button_get_value_as_int (spin));
 }
 
 void show_about_dialog()
@@ -241,7 +247,7 @@ void save_as()
 	gtk_widget_show_all(GTK_WIDGET(file_dialog));
 }
 
-void generate_sections()
+void show_generate_sections()
 {
 	gtk_spin_button_set_range(spin_button, 0, 10);
 	gtk_dialog_run(GTK_DIALOG(generate_sections_dialog));
@@ -287,6 +293,8 @@ void hide_error_dialog()
 {
 	gtk_widget_hide(GTK_WIDGET(error_dialog));
 }
+
+void generate
 
 void check_clicked(GtkCheckButton *check,
                     const gchar         *path_string,
