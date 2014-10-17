@@ -4,7 +4,9 @@
 #include <string.h>
 
 #include "util.c"
+
 //function declarations
+
 void show_about_dialog();
 static void change_digits( GtkWidget *widget, GtkSpinButton *spin );
 void show_adjust_columns_dialog();
@@ -22,6 +24,8 @@ void change_digits();
 
 int i = 0;
 
+//GTK Components
+
 GtkBuilder *builder;
 GtkWidget *window;
 GtkWidget *show_hide_columns_window;
@@ -33,6 +37,7 @@ GtkMessageDialog *generate_sections_dialog;
 
 GtkButton *error_okay_button;
 GtkButton *days_okay_button;
+GtkButton *sect_gen_okay_button;
 GtkSpinButton *spin_button;
 
 GtkAdjustment *spin_adjust;
@@ -108,9 +113,6 @@ int main(int argc, char *argv[])
 	file_dialog = GTK_FILE_CHOOSER_DIALOG(gtk_builder_get_object(builder, "filechooserdialog"));
 	about_dialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(builder,"aboutdialog"));
 	error_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder,"error_dialog"));
-	error_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"error_dialog_okay"));
-	days_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"set_days_okay"));
-	spin_button = GTK_SPIN_BUTTON(gtk_builder_get_object(builder,"spinbutton"));
 	generate_sections_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder, "gensect_dialog"));
 
 	//Load menu items
@@ -128,6 +130,12 @@ int main(int argc, char *argv[])
     wednesdy = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "we"));
     thursday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "th"));
     friday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "fr"));
+
+	//Load buttons
+	error_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"error_dialog_okay"));
+	days_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"set_days_okay"));
+	sect_gen_okay_button = GTK_BUTTON(gtk_builder_get_object(builder, "sect_gen_okay_button"));
+	spin_button = GTK_SPIN_BUTTON(gtk_builder_get_object(builder,"spinbutton"));
 
 	//Load tree and list related structures.
 	treeview = GTK_WIDGET(gtk_builder_get_object(builder, "treeview"));
@@ -181,12 +189,15 @@ int main(int argc, char *argv[])
 	g_signal_connect(delete_row_item, "activate", G_CALLBACK(delete_row), NULL);
 	g_signal_connect(save_semester_as_item, "activate", G_CALLBACK(save_as), NULL);
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
+	g_signal_connect(generate_sections_item, "activate", G_CALLBACK(show_generate_sections), NULL);
+
+	//Connect button signals
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
 	g_signal_connect(days_okay_button, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
+	g_signal_connect(sect_gen_okay_button, "clicked", G_CALLBACK(generate_sections), NULL);
 	g_signal_connect(spin_button, "change-value", G_CALLBACK(change_digits), NULL);
-	g_signal_connect(generate_sections_item, "activate", G_CALLBACK(generate_sections), NULL);
 
-    //Connect check button signals
+    //Connect check box signals
     g_signal_connect(monday, "clicked", G_CALLBACK(check_clicked), NULL);
     g_signal_connect(tuesday, "clicked", G_CALLBACK(check_clicked), NULL);
     g_signal_connect(wednesdy, "clicked", G_CALLBACK(check_clicked), NULL);
@@ -249,8 +260,7 @@ void save_as()
 
 void show_generate_sections()
 {
-	gtk_spin_button_set_range(spin_button, 0, 10);
-	gtk_dialog_run(GTK_DIALOG(generate_sections_dialog));
+	gtk_widget_show_all(GTK_WIDGET(generate_sections_dialog));
 }
 
 void show_adjust_columns_dialog()
@@ -294,7 +304,14 @@ void hide_error_dialog()
 	gtk_widget_hide(GTK_WIDGET(error_dialog));
 }
 
-void generate
+void generate_sections()
+{
+	int num_sections = gtk_spin_button_get_value_as_int(spin_button);
+	gtk_widget_hide(GTK_WIDGET(generate_sections_dialog));
+	printf("%d\n",num_sections);
+
+
+}
 
 void check_clicked(GtkCheckButton *check,
                     const gchar         *path_string,
