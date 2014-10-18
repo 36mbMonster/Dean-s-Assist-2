@@ -5,8 +5,7 @@
 
 #include "util.c"
 
-//function declarations
-
+//Function declarations
 void show_about_dialog();
 static void change_digits( GtkWidget *widget, GtkSpinButton *spin );
 void show_adjust_columns_dialog();
@@ -25,7 +24,6 @@ void change_digits();
 int i = 0;
 
 //GTK Components
-
 GtkBuilder *builder;
 GtkWidget *window;
 GtkWidget *show_hide_columns_window;
@@ -309,7 +307,6 @@ void generate_sections()
 	int num_sections = gtk_spin_button_get_value_as_int(spin_button);
 	gtk_widget_hide(GTK_WIDGET(generate_sections_dialog));
 	printf("%d\n",num_sections);
-
 
 }
 
