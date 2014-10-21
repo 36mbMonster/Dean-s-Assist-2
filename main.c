@@ -42,7 +42,6 @@ GtkAdjustment *spin_adjust;
 
 GtkWidget *treeview;
 GtkTreeModel *model;
-GtkTreeModel *filter;
 GtkTreePath *path;
 GtkTreeIter iter;
 GtkTreeViewColumn *columns[9];
@@ -305,8 +304,31 @@ void hide_error_dialog()
 void generate_sections()
 {
 	int num_sections = gtk_spin_button_get_value_as_int(spin_button);
+	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);
+	gtk_tree_selection_get_selected(selector, &model, &iter);
+
+	char *dept, *days, *bldg, *instr;
+	int num, start, end, sect, room;
+
+	gtk_tree_model_get(model, &iter,
+	COL_DEPT, &dept,
+	COL_NUMBER, &num,
+	COL_START, &start,
+	COL_END, &end,
+	COL_DAYS, &days,
+	COL_SECT, &sect,
+	COL_BLDG, &bldg,
+	COL_ROOM, &room,
+	COL_INSTR, &instr,
+	-1);
+
+	int i;
+	//for(i = 0; i < num_sections; i++)
+		//new_row();
+
 	gtk_widget_hide(GTK_WIDGET(generate_sections_dialog));
 	printf("%d\n",num_sections);
+	printf("Instructor: %s\n",instr);
 
 }
 
