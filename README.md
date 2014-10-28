@@ -2,6 +2,11 @@ Dependencies for all platforms:
 
 libgtk3.0-dev, sqlite3-dev and codependencies
 
+Dependency downloads:
+
+Gtk3+ (http://www.gtk.org/download/index.php)
+SQLite (http://www.sqlite.org/download.html)
+
 
 Extra dependencies for Windows:
 
