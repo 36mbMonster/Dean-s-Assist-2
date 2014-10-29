@@ -1,6 +1,6 @@
 Dependencies for all platforms:
 
-libgtk3.0-dev, sqlite3-dev and codependencies
+make, gcc, libgtk3.0-dev, sqlite3-dev and codependencies
 
 Dependency downloads:
 
@@ -25,6 +25,7 @@ Windows:
 
 	1) Install dependencies
 	2) Download and install MinGW from the URL above
+		- Be sure that MinGW-gcc and make are selected in the installation dialog before finalizing the installation.
 	3) Update PATH
 		- Properties of Computer -> Advanced Settings -> Environment Variables
 		- Select "Path" and click edit
