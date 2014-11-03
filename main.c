@@ -307,6 +307,9 @@ void generate_sections()
 	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);
 	gtk_tree_selection_get_selected(selector, &model, &iter);
 
+	if(selector == 0)
+		return;
+
 	char *dept, *days, *bldg, *instr;
 	int num, start, end, sect, room;
 
@@ -323,12 +326,27 @@ void generate_sections()
 	-1);
 
 	int i;
-	//for(i = 0; i < num_sections; i++)
-		//new_row();
+	for(i = 0; i < num_sections; i++)
+	{
+		gtk_list_store_insert_before(store, &iter, 0);
+
+		gtk_list_store_set(store, &iter,
+		COL_DEPT, dept,
+		COL_NUMBER, num,
+		COL_START, start,
+		COL_END, end,
+		COL_DAYS, days,
+		COL_SECT, i+2,
+		COL_BLDG, bldg,
+		COL_ROOM, room,
+		COL_INSTR, instr,
+		-1);
+
+		gtk_tree_model_iter_next(model, &iter);
+	}
+
 
 	gtk_widget_hide(GTK_WIDGET(generate_sections_dialog));
-	printf("%d\n",num_sections);
-	printf("Instructor: %s\n",instr);
 
 }
 
@@ -502,4 +520,7 @@ void new_row()
 	COL_ROOM, 0,
 	COL_INSTR, "",
 	-1);
+
+	//Increment the iterator. If this is not done, the program will crash upon certain instructions.
+	gtk_tree_model_iter_next(model, &iter);
 }
