@@ -279,16 +279,20 @@ void hide_set_days_dialog()
 	const char *fr = "Fr";
 
 	const char *labels[5] = {mo, tu, we, th, fr};
+	GtkToggleButton *buttons[5] = {GTK_TOGGLE_BUTTON(monday), GTK_TOGGLE_BUTTON(tuesday), GTK_TOGGLE_BUTTON(wednesdy), GTK_TOGGLE_BUTTON(thursday), GTK_TOGGLE_BUTTON(friday)};
 	char out[11];
 	out[0] = '\0';
 
 	for(i = 0; i < 5; i++)
 	{
 		if(days[i] == 1)
+		{
 			strcat(out, labels[i]);
-
+			gtk_toggle_button_set_active(buttons[i], 0);
+		}
+		days[i] = 0;
 	}
-
+	gtk_tree_selection_get_selected(selector, &model, &iter);
 	gtk_list_store_set(store, &iter,
                         COL_DAYS, out,
                                     -1);
@@ -358,6 +362,7 @@ void check_clicked(GtkCheckButton *check,
 	gtk_tree_model_get_iter (model, &iter, path);
 
     const char *label = gtk_button_get_label(GTK_BUTTON(check));
+
 
 	if(strcmp(label,"Monday") == 0)
 		days[0] = days[0] ^ 1;
