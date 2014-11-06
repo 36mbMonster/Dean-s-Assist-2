@@ -13,17 +13,15 @@ CFLAGS := -g -Wall $(GTK) $(SQLITE)
 TARGET = deans2
 
 all:
-	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
-
-Debug:
-	mkdir -vp bin/Debug
-	cp main_win.glade bin/Debug/main_win.glade
-	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
-
-deans2:
-	mkdir -vp bin/Release
+	mkdir bin/Release
 	cp main_win.glade bin/Release/main_win.glade
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
+
+
+Debug:
+	mkdir bin/Debug
+	cp main_win.glade bin/Debug/main_win.glade
+	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
 
 clean:
 	rm bin/Debug/$(TARGET)
