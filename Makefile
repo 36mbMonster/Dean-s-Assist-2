@@ -1,7 +1,11 @@
 ifeq ($(OS),Windows_NT)
 	CC = mingw32-gcc
+	BIN = "bin\"
+	DIRCHK = if exist bin rd /s /q bin
+	CPGLADE = cp main_win.glade bin/Release/main_win.glade
 else
 	CC = gcc
+	BIN = -vp bin/
 endif
 
 SHELL = bash
@@ -13,16 +17,21 @@ CFLAGS := -g -Wall $(GTK) $(SQLITE)
 TARGET = deans2
 
 all:
-	mkdir bin/Release
-	cp main_win.glade bin/Release/main_win.glade
+	$(DIRCHK)
+	mkdir $(BIN)Debug
+	mkdir $(BIN)Release
+	$(CPGLADE)
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
 
-
 Debug:
-	mkdir bin/Debug
-	cp main_win.glade bin/Debug/main_win.glade
+	mkdir $(BIN)Debug
+	$(CPGLADE)
 	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
 
+deans2:
+	mkdir $(BIN)Release
+	$(CPGLADE)
+	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
+
 clean:
-	rm bin/Debug/$(TARGET)
-	rm bin/Release/$(TARGET)
+	rm -rf bin
