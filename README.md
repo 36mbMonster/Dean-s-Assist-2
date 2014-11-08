@@ -1,15 +1,16 @@
-Dependencies for all platforms:
+##Dependencies for all platforms:
 
 make, gcc, libgtk3.0-dev, sqlite3-dev and codependencies
 
 Dependency downloads:
-*Gtk3+ (http://www.gtk.org/download/index.php) 
-*SQLite (http://www.sqlite.org/download.html)
+* [Gtk3+](http://www.gtk.org/download/win32.php) (Make sure to download the All-in-one package)
+* [SQLite](http://www.sqlite.org/download.html)
 
 
 Extra dependencies for Windows:
+* [MinGW32](http://www.mingw.org/)
 
-MinGW32 (http://www.mingw.org/)
+**The current version of this program was tested using 32-bit Gtk+ 3.6.4, SQLite 3 and MinGW32 1.0. Other versions of these libraries have not been tested and are not gaurenteed to work!**
 
 ##Installation Instructions  
 
