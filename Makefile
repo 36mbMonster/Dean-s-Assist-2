@@ -3,9 +3,11 @@ ifeq ($(OS),Windows_NT)
 	BIN = "bin\"
 	DIRCHK = if exist bin rd /s /q bin
 	CPGLADE = copy main_win.glade bin\Release
+	RM = rmdir bin
 else
 	CC = gcc
 	BIN = -vp bin/
+	RM = rm -rf bin
 endif
 
 SHELL = bash
@@ -34,4 +36,4 @@ deans2:
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
 
 clean:
-	rm -rf bin
+	$(RM)
