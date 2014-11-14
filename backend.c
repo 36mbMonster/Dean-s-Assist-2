@@ -17,19 +17,21 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 	return 0;
 }
 
-char *open_sqlite(char *name)
+
+//NOT DONE
+char *create_db(char *name)
 {
-	int error = sqlite3_open(name, &working_db)
+
+	int error = sqlite3_open(name, &working_db);
+	char *message;
+	char *sql;
+
 	if(error)
 	{
 		return sqlite3_errmsg(working_db);
 	}
 	return "";
-}
 
-//NOT DONE
-char *create_db()
-{
 	working_db =	"CREATE TABLE CoB_Sched("\
 					"Dept varchar(3),"\
 					"Num varchar(4),"\
@@ -40,9 +42,6 @@ char *create_db()
 					"Bldg char(3),"\
 					"Room tinyint,"\
 					"Inst varchar(255));";
-	int error;
-	char *message;
-	char *sql;
 
 	error = sqlite3_exec(working_db, sql, callback, 0, &message);
 
@@ -53,7 +52,19 @@ char *create_db()
 
 }
 
+void execute_sql(char *statement)
+{
+	char *message;
+	int error = sqlite3_exec(working_db, statement, callback, 0, &message);
+
+	if(error != SQLITE_OK)
+	{
+		printf("* * * * * SQL Error: %s\n",&message);
+		sqlite3_free(message);
+	}
+}
+
 void close_db()
 {
-	sqlite3_close(db);
+	sqlite3_close(working_db);
 }

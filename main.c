@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "util.c"
+#include "backend.c"
 
 //Function declarations
 void show_about_dialog();
@@ -20,6 +21,7 @@ void save_as();
 void show_generate_sections();
 void generate_sections();
 void change_digits();
+void write_to_db();
 
 int i = 0;
 
@@ -33,9 +35,12 @@ GtkAboutDialog *about_dialog;
 GtkMessageDialog *error_dialog;
 GtkMessageDialog *generate_sections_dialog;
 
+GtkEntry *save_entry;
+
 GtkButton *error_okay_button;
 GtkButton *days_okay_button;
 GtkButton *sect_gen_okay_button;
+GtkButton *file_chooser_okay;
 GtkSpinButton *spin_button;
 
 GtkAdjustment *spin_adjust;
@@ -112,6 +117,8 @@ int main(int argc, char *argv[])
 	error_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder,"error_dialog"));
 	generate_sections_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder, "gensect_dialog"));
 
+	save_entry = GTK_ENTRY(gtk_builder_get_object(builder, "save_entry"));
+
 	//Load menu items
 	about_item = gtk_builder_get_object(builder, "about");
 	quit_item = gtk_builder_get_object(builder, "quit");
@@ -132,6 +139,7 @@ int main(int argc, char *argv[])
 	error_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"error_dialog_okay"));
 	days_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"set_days_okay"));
 	sect_gen_okay_button = GTK_BUTTON(gtk_builder_get_object(builder, "sect_gen_okay_button"));
+	file_chooser_okay = GTK_BUTTON(gtk_builder_get_object(builder, "file_chooser_okay"));
 	spin_button = GTK_SPIN_BUTTON(gtk_builder_get_object(builder,"spinbutton"));
 
 	//Load tree and list related structures.
@@ -192,6 +200,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
 	g_signal_connect(days_okay_button, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
 	g_signal_connect(sect_gen_okay_button, "clicked", G_CALLBACK(generate_sections), NULL);
+	g_signal_connect(file_chooser_okay, "clicked", G_CALLBACK(write_to_db), NULL);
 	g_signal_connect(spin_button, "change-value", G_CALLBACK(change_digits), NULL);
 
     //Connect check box signals
@@ -268,6 +277,13 @@ void show_adjust_columns_dialog()
 void hide_adjust_columns_dialog()
 {
 	gtk_widget_hide(GTK_WIDGET(show_hide_columns_window));
+}
+
+void write_to_db()
+{
+	char *db_name = gtk_entry_get_text(save_entry);
+	create_db(db_name);
+
 }
 
 void hide_set_days_dialog()
