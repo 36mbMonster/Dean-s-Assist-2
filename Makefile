@@ -13,7 +13,7 @@ endif
 SHELL = bash
 
 GTK := $(shell pkg-config --cflags --libs gtk+-3.0)
-SQLITE := $(-l sqlite3)
+SQLITE := -l sqlite3 -ldl -lpthread
 CFLAGS := -g -Wall $(GTK) $(SQLITE)
 
 TARGET = deans2
