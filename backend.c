@@ -26,13 +26,14 @@ char *create_db(char *name)
 	char *message;
 	char *sql;
 
-	if(error)
+printf("an error: %d\nokay: %d\n",error,SQLITE_OK);
+
+	if(error != SQLITE_OK)
 	{
 		return sqlite3_errmsg(working_db);
 	}
-	return "";
 
-	working_db =	"CREATE TABLE CoB_Sched("\
+	sql =	"CREATE TABLE CoB_Sched("\
 					"Dept varchar(3),"\
 					"Num varchar(4),"\
 					"Start smallint,"\
@@ -44,6 +45,7 @@ char *create_db(char *name)
 					"Inst varchar(255));";
 
 	error = sqlite3_exec(working_db, sql, callback, 0, &message);
+printf("an error: %d\nokay: %d\n",error,SQLITE_OK);
 
 	if(error != SQLITE_OK)
 		return message;
