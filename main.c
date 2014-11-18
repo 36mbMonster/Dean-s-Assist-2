@@ -201,7 +201,6 @@ int main(int argc, char *argv[])
 	g_signal_connect(days_okay_button, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
 	g_signal_connect(sect_gen_okay_button, "clicked", G_CALLBACK(generate_sections), NULL);
 	g_signal_connect(file_chooser_okay, "clicked", G_CALLBACK(write_to_db), NULL);
-	g_signal_connect(spin_button, "change-value", G_CALLBACK(change_digits), NULL);
 
     //Connect check box signals
     g_signal_connect(monday, "clicked", G_CALLBACK(check_clicked), NULL);
@@ -245,12 +244,6 @@ int main(int argc, char *argv[])
 ***************************************************************************
 */
 
-static void change_digits( GtkWidget *widget,
-                           GtkSpinButton *spin )
-{
-  //gtk_spin_button_set_digits (GTK_SPIN_BUTTON (spin_button),
-    //                          gtk_spin_button_get_value_as_int (spin));
-}
 
 void show_about_dialog()
 {
@@ -283,6 +276,25 @@ void write_to_db()
 {
 	char *db_name = gtk_entry_get_text(save_entry);
 	create_db(db_name);
+
+	char *dept, *days, *bldg, *instr;
+	int num, start, end, sect, room;
+
+	gtk_tree_model_get(model, &iter,
+	COL_DEPT, &dept,
+	COL_NUMBER, &num,
+	COL_START, &start,
+	COL_END, &end,
+	COL_DAYS, &days,
+	COL_SECT, &sect,
+	COL_BLDG, &bldg,
+	COL_ROOM, &room,
+	COL_INSTR, &instr,
+	-1);
+
+	char statement[100] = "insert into CoB_Sched values('";
+	sprintf(statement,"%s',%d,%d,%d,'%s',%d,'%s',%d,'%s');",dept,num,start,end,days,sect,bldg,room,instr);
+	execute_sql(statement);
 
 }
 

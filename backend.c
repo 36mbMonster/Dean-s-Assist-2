@@ -26,8 +26,6 @@ char *create_db(char *name)
 	char *message;
 	char *sql;
 
-printf("an error: %d\nokay: %d\n",error,SQLITE_OK);
-
 	if(error != SQLITE_OK)
 	{
 		return sqlite3_errmsg(working_db);
@@ -45,7 +43,6 @@ printf("an error: %d\nokay: %d\n",error,SQLITE_OK);
 					"Inst varchar(255));";
 
 	error = sqlite3_exec(working_db, sql, callback, 0, &message);
-printf("an error: %d\nokay: %d\n",error,SQLITE_OK);
 
 	if(error != SQLITE_OK)
 		return message;
@@ -54,16 +51,15 @@ printf("an error: %d\nokay: %d\n",error,SQLITE_OK);
 
 }
 
-void execute_sql(char *statement)
+char *execute_sql(char *statement)
 {
 	char *message;
 	int error = sqlite3_exec(working_db, statement, callback, 0, &message);
 
+	printf("error: %d\n",error);
+
 	if(error != SQLITE_OK)
-	{
-		printf("* * * * * SQL Error: %s\n",&message);
-		sqlite3_free(message);
-	}
+		return message;
 }
 
 void close_db()
