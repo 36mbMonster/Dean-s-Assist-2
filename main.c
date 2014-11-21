@@ -276,25 +276,38 @@ void write_to_db()
 {
 	char *db_name = gtk_entry_get_text(save_entry);
 	create_db(db_name);
+	gboolean more_list = 0;
 
-	char *dept, *days, *bldg, *instr;
-	int num, start, end, sect, room;
+	char *dept, *num, *days, *bldg, *instr;
+	int start, end, sect, room;
 
-	gtk_tree_model_get(model, &iter,
-	COL_DEPT, &dept,
-	COL_NUMBER, &num,
-	COL_START, &start,
-	COL_END, &end,
-	COL_DAYS, &days,
-	COL_SECT, &sect,
-	COL_BLDG, &bldg,
-	COL_ROOM, &room,
-	COL_INSTR, &instr,
-	-1);
+	more_list = gtk_tree_model_get_iter_first(model, &iter);
 
-	char statement[100] = "insert into CoB_Sched values('";
-	sprintf(statement,"%s',%d,%d,%d,'%s',%d,'%s',%d,'%s');",dept,num,start,end,days,sect,bldg,room,instr);
-	execute_sql(statement);
+	while(more_list)
+	{
+
+		gtk_tree_model_get(model, &iter,
+		COL_DEPT, &dept,
+		COL_NUMBER, &num,
+		COL_START, &start,
+		COL_END, &end,
+		COL_DAYS, &days,
+		COL_SECT, &sect,
+		COL_BLDG, &bldg,
+		COL_ROOM, &room,
+		COL_INSTR, &instr,
+		-1);
+
+		char statement[150];
+
+		//Generate dynamic SQL statement.
+		sprintf(statement,"insert into CoB_Sched values(\'%s\',\'%s\',%d,%d,\'%s\',%d,\'%s\',%d,\'%s\');",dept,num,start,end,days,sect,bldg,room,instr);
+		printf("%s\n",statement);
+		execute_sql(statement);
+
+		//Get the next row
+		more_list = gtk_tree_model_iter_next(model, &iter);
+	}
 
 }
 
@@ -342,8 +355,8 @@ void generate_sections()
 	if(selector == 0)
 		return;
 
-	char *dept, *days, *bldg, *instr;
-	int num, start, end, sect, room;
+	char *dept, *num, *days, *bldg, *instr;
+	int start, end, sect, room;
 
 	gtk_tree_model_get(model, &iter,
 	COL_DEPT, &dept,
@@ -409,7 +422,7 @@ void check_clicked(GtkCheckButton *check,
 
 }
 
-//Get user input from the cell and update the row
+//Get user input from the cell and update the rowquite character c
 //WORKS!!
 void cell_edited(GtkCellRendererText *renderer,
 				const gchar         *path_string,
