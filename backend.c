@@ -21,6 +21,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 //NOT DONE
 char *create_db(char *name)
 {
+	printf("%s\n",name);
 
 	int error = sqlite3_open(name, &working_db);
 	char *message;

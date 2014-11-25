@@ -41,6 +41,7 @@ GtkButton *error_okay_button;
 GtkButton *days_okay_button;
 GtkButton *sect_gen_okay_button;
 GtkButton *file_chooser_okay;
+GtkButton *file_chooser_cancel;
 GtkSpinButton *spin_button;
 
 GtkAdjustment *spin_adjust;
@@ -275,7 +276,8 @@ void hide_adjust_columns_dialog()
 void write_to_db()
 {
 	char *db_name = gtk_entry_get_text(save_entry);
-	create_db(db_name);
+	char *fullname = file_extension_correct(db_name);
+	create_db(fullname);
 	gboolean more_list = 0;
 
 	char *dept, *num, *days, *bldg, *instr;
@@ -307,8 +309,10 @@ void write_to_db()
 
 		//Get the next row
 		more_list = gtk_tree_model_iter_next(model, &iter);
-	}
 
+
+	}
+	gtk_widget_hide(GTK_WIDGET(file_dialog));
 }
 
 void hide_set_days_dialog()
