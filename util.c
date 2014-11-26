@@ -60,12 +60,14 @@ int is_valid_course_num(const char *str)
 
 char *file_extension_correct(char *in)
 {
-	int size = sizeof(in)/sizeof(char);
-	char name[255];
-	sprintf(name, "%s",in);
+	int size = strlen(in);
+	char *name = malloc(255);
 
-	if(name[size - 3] != '.' || name[size - 2] != 'd' || name[size - 1] != 'b')
+	if(in[size - 3] != '.' || in[size - 2] != 'd' || in[size - 1] != 'b')
+	{
 		sprintf(name, "%s.db", in);
-	return name;
+		return name;
+	}
+	return in;
 
 }
