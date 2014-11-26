@@ -262,7 +262,7 @@
             <property name="can_focus">False</property>
             <property name="layout_style">end</property>
             <child>
-              <object class="GtkButton" id="button2">
+              <object class="GtkButton" id="file_chooser_cancel">
                 <property name="label" translatable="yes">Cancel</property>
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -335,7 +335,7 @@
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">button2</action-widget>
+      <action-widget response="0">file_chooser_cancel</action-widget>
       <action-widget response="0">file_chooser_okay</action-widget>
     </action-widgets>
   </object>
