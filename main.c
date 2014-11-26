@@ -1,99 +1,4 @@
-#include <gtk/gtk.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "util.c"
-#include "backend.c"
-
-//Function declarations
-void show_about_dialog();
-static void change_digits( GtkWidget *widget, GtkSpinButton *spin );
-void show_adjust_columns_dialog();
-void hide_adjust_columns_dialog();
-void hide_set_days_dialog();
-void hide_error_dialog();
-void check_clicked();
-void delete_row();
-void new_row();
-void cell_edited();
-void save_as();
-void show_generate_sections();
-void generate_sections();
-void change_digits();
-void write_to_db();
-
-int i = 0;
-
-//GTK Components
-GtkBuilder *builder;
-GtkWidget *window;
-GtkWidget *show_hide_columns_window;
-GtkWidget *set_days_window;
-GtkFileChooserDialog *file_dialog;
-GtkAboutDialog *about_dialog;
-GtkMessageDialog *error_dialog;
-GtkMessageDialog *generate_sections_dialog;
-
-GtkEntry *save_entry;
-
-GtkButton *error_okay_button;
-GtkButton *days_okay_button;
-GtkButton *sect_gen_okay_button;
-GtkButton *file_chooser_okay;
-GtkButton *file_chooser_cancel;
-GtkSpinButton *spin_button;
-
-GtkAdjustment *spin_adjust;
-
-GtkWidget *treeview;
-GtkTreeModel *model;
-GtkTreePath *path;
-GtkTreeIter iter;
-GtkTreeViewColumn *columns[9];
-GtkListStore *store;
-GtkTreeSelection *selector;
-
-int days[5];
-
-//Check boxes
-GtkCheckButton *monday;
-GtkCheckButton *tuesday;
-GtkCheckButton *wednesdy;
-GtkCheckButton *thursday;
-GtkCheckButton *friday;
-
-//Cell text renderers
-GtkCellRendererText *dept_text;
-GtkCellRendererText *number_text;
-GtkCellRendererText *start_text;
-GtkCellRendererText *end_text;
-GtkCellRendererText *days_text;
-GtkCellRendererText *sect_text;
-GtkCellRendererText *bldg_text;
-GtkCellRendererText *room_text;
-GtkCellRendererText *instructor_text;
-
-GObject *about_item;
-GObject *quit_item;
-GObject *show_hide_columns_item;
-GObject *new_course_item;
-GObject *delete_row_item;
-GObject *save_semester_as_item;
-GObject *generate_sections_item;
-
-enum
-{
-	COL_DEPT,
-	COL_NUMBER,
-	COL_START,
-	COL_END,
-	COL_DAYS,
-	COL_SECT,
-	COL_BLDG,
-	COL_ROOM,
-	COL_INSTR
-};
+#include "deans2.h"
 
 int main(int argc, char *argv[])
 {
@@ -141,6 +46,7 @@ int main(int argc, char *argv[])
 	days_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"set_days_okay"));
 	sect_gen_okay_button = GTK_BUTTON(gtk_builder_get_object(builder, "sect_gen_okay_button"));
 	file_chooser_okay = GTK_BUTTON(gtk_builder_get_object(builder, "file_chooser_okay"));
+	file_chooser_cancel = GTK_BUTTON(gtk_builder_get_object(builder, "file_chooser_cancel"));
 	spin_button = GTK_SPIN_BUTTON(gtk_builder_get_object(builder,"spinbutton"));
 
 	//Load tree and list related structures.
@@ -202,6 +108,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(days_okay_button, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
 	g_signal_connect(sect_gen_okay_button, "clicked", G_CALLBACK(generate_sections), NULL);
 	g_signal_connect(file_chooser_okay, "clicked", G_CALLBACK(write_to_db), NULL);
+	g_signal_connect(file_chooser_cancel, "clicked", G_CALLBACK(hide_file_dialog), NULL);
 
     //Connect check box signals
     g_signal_connect(monday, "clicked", G_CALLBACK(check_clicked), NULL);
@@ -348,6 +255,11 @@ void hide_set_days_dialog()
 void hide_error_dialog()
 {
 	gtk_widget_hide(GTK_WIDGET(error_dialog));
+}
+
+void hide_file_dialog()
+{
+	gtk_widget_hide(GTK_WIDGET(file_dialog));
 }
 
 void generate_sections()
