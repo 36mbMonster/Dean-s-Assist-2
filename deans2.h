@@ -6,6 +6,10 @@
 #include "util.c"
 #include "backend.c"
 
+//Used for telling the filechooser whether to read or write files
+const int READ = 0;
+const int WRITE = 1;
+
 //Function declarations
 
 //show dialog functions
@@ -25,12 +29,13 @@ void delete_row();
 void new_row();
 void cell_edited();
 void save_as();
-void change_digits( GtkWidget *widget, GtkSpinButton *spin );
+void load_file();
 void generate_sections();
-void change_digits();
+void file_dialog_okay();
 void write_to_db();
 
 int i = 0;
+int file_mode;
 
 //GTK Components
 GtkBuilder *builder;
@@ -87,6 +92,7 @@ GObject *show_hide_columns_item;
 GObject *new_course_item;
 GObject *delete_row_item;
 GObject *save_semester_as_item;
+GObject *load_semester_item;
 GObject *generate_sections_item;
 
 enum

@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
 	new_course_item = gtk_builder_get_object(builder, "new_course");
 	delete_row_item = gtk_builder_get_object(builder, "delete");
 	save_semester_as_item = gtk_builder_get_object(builder, "save_semester_as");
+	load_semester_item = gtk_builder_get_object(builder, "load_semester");
 	generate_sections_item = gtk_builder_get_object(builder, "generate_sections");
 
     //Load check boxes
@@ -100,6 +101,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(show_hide_columns_item, "activate", G_CALLBACK(show_adjust_columns_dialog), NULL);
 	g_signal_connect(delete_row_item, "activate", G_CALLBACK(delete_row), NULL);
 	g_signal_connect(save_semester_as_item, "activate", G_CALLBACK(save_as), NULL);
+	g_signal_connect(load_semester_item, "activate", G_CALLBACK(load_file), NULL);
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
 	g_signal_connect(generate_sections_item, "activate", G_CALLBACK(show_generate_sections), NULL);
 
@@ -107,7 +109,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
 	g_signal_connect(days_okay_button, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
 	g_signal_connect(sect_gen_okay_button, "clicked", G_CALLBACK(generate_sections), NULL);
-	g_signal_connect(file_chooser_okay, "clicked", G_CALLBACK(write_to_db), NULL);
+	g_signal_connect(file_chooser_okay, "clicked", G_CALLBACK(file_dialog_okay), NULL);
 	g_signal_connect(file_chooser_cancel, "clicked", G_CALLBACK(hide_file_dialog), NULL);
 
     //Connect check box signals
@@ -162,7 +164,21 @@ void show_about_dialog()
 
 void save_as()
 {
+	file_mode = WRITE;
 	gtk_widget_show_all(GTK_WIDGET(file_dialog));
+}
+
+void load_file()
+{
+	file_mode = READ;
+	gtk_widget_show_all(GTK_WIDGET(file_dialog));
+}
+
+void file_dialog_okay()
+{
+	if(file_mode == WRITE)
+		write_to_db();
+	else if(file_mode == READ){}
 }
 
 void show_generate_sections()
@@ -337,6 +353,7 @@ void check_clicked(GtkCheckButton *check,
 		days[4] = days[4] ^ 1;
 
 }
+
 
 //Get user input from the cell and update the rowquite character c
 //WORKS!!
