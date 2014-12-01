@@ -4,12 +4,12 @@ ifeq ($(OS),Windows_NT)
 	DIRCHK = if exist bin rd /s /q bin
 	CPGLADE = copy main_win.glade bin\Release
 	RM = rmdir bin
-	SQLITE = -dll sqlite3.dll
+	SQLITE = -dll sqlite3.dll && copy /Y sqlite3.dll bin\Debug && copy /Y sqlite3.dll bin\Release
 else
 	CC = gcc
 	BIN = -vp bin/
 	RM = rm -rf bin
-	SQLITE = -l sqlite3 -ldl -lpthread
+	SQLITE = -l sqlite3 -ldl -lpthread && rm -f sqlite3.dll
 endif
 
 SHELL = bash
