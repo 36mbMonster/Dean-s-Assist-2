@@ -4,16 +4,18 @@ ifeq ($(OS),Windows_NT)
 	DIRCHK = if exist bin rd /s /q bin
 	CPGLADE = copy main_win.glade bin\Release
 	RM = rmdir bin
+	SQLITE = -dll sqlite3.dll
 else
 	CC = gcc
 	BIN = -vp bin/
 	RM = rm -rf bin
+	SQLITE = -l sqlite3 -ldl -lpthread
 endif
 
 SHELL = bash
 
 GTK := $(shell pkg-config --cflags --libs gtk+-3.0)
-SQLITE := -l sqlite3 -ldl -lpthread
+
 CFLAGS := -g -Wall $(GTK) $(SQLITE)
 
 TARGET = deans2
