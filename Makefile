@@ -18,7 +18,7 @@ SHELL = bash
 
 GTK := $(shell pkg-config --cflags --libs gtk+-3.0)
 
-CFLAGS := -g -Wall $(GTK) $(SQLITE)
+CFLAGS := -g -Wall -static-libgcc $(GTK) $(SQLITE)
 
 TARGET = deans2
 
