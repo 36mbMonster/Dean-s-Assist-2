@@ -4,12 +4,14 @@ ifeq ($(OS),Windows_NT)
 	DIRCHK = if exist bin rd /s /q bin
 	CPGLADE = copy main_win.glade bin\Release
 	RM = rmdir bin
-	SQLITE = -dll sqlite3.dll && copy /Y sqlite3.dll bin\Debug && copy /Y sqlite3.dll bin\Release
+	SQLITE = -dll sqlite3.dll
+	DLL = copy /Y sqlite3.dll bin\Debug && copy /Y sqlite3.dll bin\Release
 else
 	CC = gcc
 	BIN = -vp bin/
 	RM = rm -rf bin
-	SQLITE = -l sqlite3 -ldl -lpthread && rm -f sqlite3.dll
+	SQLITE = -l sqlite3 -ldl -lpthread
+	DLL = rm -f sqlite3.dll
 endif
 
 SHELL = bash
@@ -26,16 +28,19 @@ all:
 	mkdir $(BIN)Release
 	$(CPGLADE)
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
+	$(DLL)
 
 Debug:
 	mkdir $(BIN)Debug
 	$(CPGLADE)
 	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
+	$(DLL)
 
 deans2:
 	mkdir $(BIN)Release
 	$(CPGLADE)
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
+	$(DLL)
 
 clean:
 	$(RM)
