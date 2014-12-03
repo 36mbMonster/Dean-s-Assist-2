@@ -70,6 +70,8 @@ int main(int argc, char *argv[])
 	room_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"room_text"));
 	instructor_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"instructor_text"));
 
+	file_chooser_label = GTK_LABEL(gtk_builder_get_object(builder, "file_chooser_label"));
+
 	//Load the columns. They are all named "treeviewcolumn" followed by a number as defined in the glade file.
 	//This makes it easy to load them all through a loop.
 	for(i = 1; i < 10; i++)
@@ -172,13 +174,19 @@ void load_file()
 {
 	file_mode = READ;
 	gtk_widget_show_all(GTK_WIDGET(file_dialog));
+	gtk_widget_hide(GTK_WIDGET(save_entry));
+	gtk_widget_hide(GTK_WIDGET(file_chooser_label));
 }
 
 void file_dialog_okay()
 {
 	if(file_mode == WRITE)
+	{
+		gtk_widget_show(GTK_WIDGET(save_entry));
 		write_to_db();
-	else if(file_mode == READ){}
+	}
+	else if(file_mode == READ)
+	{}
 }
 
 void show_generate_sections()
