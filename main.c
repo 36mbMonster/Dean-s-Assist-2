@@ -88,6 +88,7 @@ int main(int argc, char *argv[])
 
 	spin_adjust = gtk_adjustment_new(0, 0, 15, 1, 2, 0);
 	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
+	chooser = GTK_FILE_CHOOSER(file_dialog);
 
 /**
 ***************************************************************************
@@ -181,12 +182,9 @@ void load_file()
 void file_dialog_okay()
 {
 	if(file_mode == WRITE)
-	{
-		gtk_widget_show(GTK_WIDGET(save_entry));
 		write_to_db();
-	}
 	else if(file_mode == READ)
-	{}
+		read_from_db();
 }
 
 void show_generate_sections()
@@ -244,6 +242,20 @@ void write_to_db()
 
 	}
 	gtk_widget_hide(GTK_WIDGET(file_dialog));
+}
+
+void read_from_db()
+{
+	char *filename = gtk_file_chooser_get_filename(chooser);
+
+	char **dept, **num, **days, **bldg, **instr;
+	int *start, *end, *sect, *room;
+
+	open_db(filename);
+	execute_sql("select * from CoB_Sched;");
+
+	days = get_day_vals();
+	printf("TESTING: ***%s %d***\n",get_day_vals()[0], get_start_vals()[0]);
 }
 
 void hide_set_days_dialog()

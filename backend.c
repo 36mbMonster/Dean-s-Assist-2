@@ -2,16 +2,51 @@
 
 char *open_db(char *name);
 char *create_db();
+char *open_db();
 void close_db();
+
+
+char **get_dept_vals();
+char **get_num_vals();
+char **get_day_vals();
+char **get_bldg_vals();
+char **get_instr_vals();
+int *get_start_vals();
+int *get_end_vals();
+int *get_sect_vals();
+int *get_room_vals();
+
+char *dept_vals[255];
+char *num_vals[255];
+char *day_vals[255];
+char *bldg_vals[255];
+char *instr_vals[255];
+int start_vals[255];
+int end_vals[255];
+int sect_vals[255];
+int room_vals[255];
 
 sqlite3 *working_db;
 
 static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
-	int i;
-	for(i = 0; i < argc; i++)
+	int i = 0;
+	int j = 0;
+	while(i < argc)
 	{
 		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
+		dept_vals[j] = argv[i++];
+		num_vals[j] = argv[i++];
+		start_vals[j] = atoi(argv[i++]);
+		end_vals[j] = atoi(argv[i++]);
+		day_vals[j] = argv[i++];
+		sect_vals[j] = atoi(argv[i++]);
+		bldg_vals[j] = argv[i++];
+		room_vals[j] = atoi(argv[i++]);
+		instr_vals[j] = argv[i++];
+		j++;
+		printf("*****: %s %s %d %d %s %d %s %d %s\n",dept_vals[0], num_vals[0], start_vals[0], end_vals[0], day_vals[0], sect_vals[0], bldg_vals[0], room_vals[0], instr_vals[0]);
+
 	}
 	printf("\n");
 	return 0;
@@ -63,7 +98,28 @@ char *execute_sql(char *statement)
 		return message;
 }
 
+char *open_db(char *db_name)
+{
+	int error = sqlite3_open(db_name, &working_db);
+
+	if(error != SQLITE_OK)
+		return sqlite3_errmsg(working_db);
+	else
+		return "ok";
+}
+
 void close_db()
 {
 	sqlite3_close(working_db);
 }
+
+//Get values
+char **get_dept_vals(){return dept_vals;}
+char **get_num_vals(){return num_vals;}
+char **get_day_vals(){return day_vals;}
+char **get_bldg_vals(){return bldg_vals;}
+char **get_instr_vals(){return instr_vals;}
+int *get_start_vals(){return start_vals;}
+int *get_end_vals(){return end_vals;}
+int *get_sect_vals(){return sect_vals;}
+int *get_room_vals(){return room_vals;}
