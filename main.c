@@ -255,7 +255,7 @@ void read_from_db()
 	execute_sql("select * from CoB_Sched;");
 
 	days = get_day_vals();
-	printf("TESTING: ***%s %d***\n",get_day_vals()[0], get_start_vals()[0]);
+	printf("TESTING: ***%s***\n",days[0]);
 }
 
 void hide_set_days_dialog()

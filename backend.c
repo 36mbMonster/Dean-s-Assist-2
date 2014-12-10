@@ -44,8 +44,8 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 		bldg_vals[j] = argv[i++];
 		room_vals[j] = atoi(argv[i++]);
 		instr_vals[j] = argv[i++];
+		printf("*****: %s %s %d %d %s %d %s %d %s\n",dept_vals[j], num_vals[j], start_vals[j], end_vals[j], day_vals[j], sect_vals[j], bldg_vals[j], room_vals[j], instr_vals[j]);
 		j++;
-		printf("*****: %s %s %d %d %s %d %s %d %s\n",dept_vals[0], num_vals[0], start_vals[0], end_vals[0], day_vals[0], sect_vals[0], bldg_vals[0], room_vals[0], instr_vals[0]);
 
 	}
 	printf("\n");
@@ -116,7 +116,7 @@ void close_db()
 //Get values
 char **get_dept_vals(){return dept_vals;}
 char **get_num_vals(){return num_vals;}
-char **get_day_vals(){return day_vals;}
+char **get_day_vals(){printf("----------->%s\n",day_vals[0]);return day_vals;}
 char **get_bldg_vals(){return bldg_vals;}
 char **get_instr_vals(){return instr_vals;}
 int *get_start_vals(){return start_vals;}
