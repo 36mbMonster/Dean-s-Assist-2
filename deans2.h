@@ -33,6 +33,7 @@ void load_file();
 void generate_sections();
 void file_dialog_okay();
 void write_to_db();
+void read_from_db();
 
 int i = 0;
 int file_mode;
@@ -43,11 +44,13 @@ GtkWidget *window;
 GtkWidget *show_hide_columns_window;
 GtkWidget *set_days_window;
 GtkFileChooserDialog *file_dialog;
+GtkFileChooser *chooser;
 GtkAboutDialog *about_dialog;
 GtkMessageDialog *error_dialog;
 GtkMessageDialog *generate_sections_dialog;
 
 GtkEntry *save_entry;
+GtkLabel *file_chooser_label;
 
 GtkButton *error_okay_button;
 GtkButton *days_okay_button;
