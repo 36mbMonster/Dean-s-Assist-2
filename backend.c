@@ -16,6 +16,8 @@ int *get_end_vals();
 int *get_sect_vals();
 int *get_room_vals();
 
+int get_size();
+
 char *dept_vals[255];
 char *num_vals[255];
 char *day_vals[255];
@@ -26,29 +28,31 @@ int end_vals[255];
 int sect_vals[255];
 int room_vals[255];
 
+int idx;
+
 sqlite3 *working_db;
 
 static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
 	int i = 0;
-	int j = 0;
 	while(i < argc)
 	{
 		printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-		dept_vals[j] = argv[i++];
-		num_vals[j] = argv[i++];
-		start_vals[j] = atoi(argv[i++]);
-		end_vals[j] = atoi(argv[i++]);
-		day_vals[j] = argv[i++];
-		sect_vals[j] = atoi(argv[i++]);
-		bldg_vals[j] = argv[i++];
-		room_vals[j] = atoi(argv[i++]);
-		instr_vals[j] = argv[i++];
-		printf("*****: %s %s %d %d %s %d %s %d %s\n",dept_vals[j], num_vals[j], start_vals[j], end_vals[j], day_vals[j], sect_vals[j], bldg_vals[j], room_vals[j], instr_vals[j]);
-		j++;
+		dept_vals[idx] = argv[i++];
+		num_vals[idx] = argv[i++];
+		start_vals[idx] = atoi(argv[i++]);
+		end_vals[idx] = atoi(argv[i++]);
+		day_vals[idx] = argv[i++];
+		sect_vals[idx] = atoi(argv[i++]);
+		bldg_vals[idx] = argv[i++];
+		room_vals[idx] = atoi(argv[i++]);
+		instr_vals[idx] = argv[i++];
+		printf("*****: %s %s %d %d %s %d %s %d %s\n",dept_vals[idx], num_vals[idx], start_vals[idx], end_vals[idx], day_vals[idx], sect_vals[idx], bldg_vals[idx], room_vals[idx], instr_vals[idx]);
+		//i=0;
+		idx++;
 
 	}
-	printf("\n");
+	printf("\nargc was %d\n",argc);
 	return 0;
 }
 
@@ -90,6 +94,7 @@ char *create_db(char *name)
 char *execute_sql(char *statement)
 {
 	char *message;
+	idx = 0;
 	int error = sqlite3_exec(working_db, statement, callback, 0, &message);
 
 	printf("error: %d\n",error);
@@ -116,10 +121,11 @@ void close_db()
 //Get values
 char **get_dept_vals(){return dept_vals;}
 char **get_num_vals(){return num_vals;}
-char **get_day_vals(){printf("----------->%s\n",day_vals[0]);return day_vals;}
+char **get_day_vals(){printf("----------->%d\n",sect_vals[1]);return day_vals;}
 char **get_bldg_vals(){return bldg_vals;}
 char **get_instr_vals(){return instr_vals;}
 int *get_start_vals(){return start_vals;}
 int *get_end_vals(){return end_vals;}
 int *get_sect_vals(){return sect_vals;}
 int *get_room_vals(){return room_vals;}
+int get_size(){return idx;}

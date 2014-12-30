@@ -250,12 +250,43 @@ void read_from_db()
 
 	char **dept, **num, **days, **bldg, **instr;
 	int *start, *end, *sect, *room;
+	int i, size;
 
 	open_db(filename);
 	execute_sql("select * from CoB_Sched;");
 
+    dept = get_dept_vals();
+    num = get_num_vals();
 	days = get_day_vals();
-	printf("TESTING: ***%s***\n",days[0]);
+	bldg = get_bldg_vals();
+	instr = get_instr_vals();
+	start = get_start_vals();
+	end = get_end_vals();
+	sect = get_sect_vals();
+	room = get_room_vals();
+	printf("TESTING: ***%s***\n",days[1]);
+
+	gtk_tree_model_get_iter(model, &iter, path);
+	size = get_size();
+
+    for(i = 0; i < size; i++)
+    {
+        gtk_list_store_insert(store, &iter, 0);
+
+        gtk_list_store_set(store, &iter,
+        COL_DEPT, dept[i],
+        COL_NUMBER, num[i],
+        COL_START, start[i],
+        COL_END, end[i],
+        COL_DAYS, days[i],
+        COL_SECT, sect[i],
+        COL_BLDG, bldg[i],
+        COL_ROOM, room[i],
+        COL_INSTR, instr[i],
+        -1);
+
+        gtk_tree_model_iter_next(model, &iter);
+    }
 }
 
 void hide_set_days_dialog()
