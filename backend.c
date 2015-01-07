@@ -68,7 +68,7 @@ char *create_db(char *name)
 
 	if(error != SQLITE_OK)
 	{
-		return sqlite3_errmsg(working_db);
+		return (char *) sqlite3_errmsg(working_db);
 	}
 
 	sql =	"CREATE TABLE CoB_Sched("\
@@ -98,9 +98,7 @@ char *execute_sql(char *statement)
 	int error = sqlite3_exec(working_db, statement, callback, 0, &message);
 
 	printf("error: %d\n",error);
-
-	if(error != SQLITE_OK)
-		return message;
+	return message;
 }
 
 char *open_db(char *db_name)
@@ -108,7 +106,7 @@ char *open_db(char *db_name)
 	int error = sqlite3_open(db_name, &working_db);
 
 	if(error != SQLITE_OK)
-		return sqlite3_errmsg(working_db);
+		return (char *) sqlite3_errmsg(working_db);
 	else
 		return "ok";
 }
@@ -121,7 +119,7 @@ void close_db()
 //Get values
 char **get_dept_vals(){return dept_vals;}
 char **get_num_vals(){return num_vals;}
-char **get_day_vals(){printf("----------->%d\n",sect_vals[1]);return day_vals;}
+char **get_day_vals(){return day_vals;}
 char **get_bldg_vals(){return bldg_vals;}
 char **get_instr_vals(){return instr_vals;}
 int *get_start_vals(){return start_vals;}

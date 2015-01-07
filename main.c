@@ -204,7 +204,7 @@ void hide_adjust_columns_dialog()
 
 void write_to_db()
 {
-	char *db_name = gtk_entry_get_text(save_entry);
+	char *db_name = (char *) gtk_entry_get_text(save_entry);
 	char *fullname = file_extension_correct(db_name);
 	create_db(fullname);
 	gboolean more_list = 0;
@@ -241,6 +241,7 @@ void write_to_db()
 
 
 	}
+	close_db();
 	gtk_widget_hide(GTK_WIDGET(file_dialog));
 }
 
@@ -286,6 +287,7 @@ void read_from_db()
 
         gtk_tree_model_iter_next(model, &iter);
     }
+    close_db();
     gtk_widget_hide(GTK_WIDGET(file_dialog));
 }
 
@@ -457,7 +459,7 @@ void cell_edited(GtkCellRendererText *renderer,
 		break;
 		case COL_START:
 		{
-			if(!is_int(new_text) && new_text < 700 && new_text > 2200)
+			if(!is_int(new_text) && atoi(new_text) < 700 && atoi(new_text) > 2200)
 			{
 		    	gtk_message_dialog_format_secondary_markup(error_dialog, "%s", INVALID_TIME_ERROR);
 				gtk_dialog_run(GTK_DIALOG(error_dialog));
