@@ -264,7 +264,6 @@ void read_from_db()
 	end = get_end_vals();
 	sect = get_sect_vals();
 	room = get_room_vals();
-	printf("TESTING: ***%s***\n",days[1]);
 
 	gtk_tree_model_get_iter(model, &iter, path);
 	size = get_size();
@@ -287,6 +286,7 @@ void read_from_db()
 
         gtk_tree_model_iter_next(model, &iter);
     }
+    gtk_widget_hide(GTK_WIDGET(file_dialog));
 }
 
 void hide_set_days_dialog()
