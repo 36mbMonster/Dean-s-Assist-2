@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
 	//path = gtk_tree_path_new_from_indices(1,-1);
 	model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeview));
 
-	//Get the columns from the builder and populate the column array.
+	//Get the renderers from the builder and populate the column array.
 	dept_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"dept_text"));
 	number_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"number_text"));
 	start_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"start_text"));
@@ -123,6 +123,17 @@ int main(int argc, char *argv[])
     g_signal_connect(friday, "clicked", G_CALLBACK(check_clicked), NULL);
 
 	//Connect column signals.
+	g_signal_connect(columns[0],"clicked", G_CALLBACK(sort_by_alpha), NULL);
+	g_signal_connect(columns[1],"clicked", G_CALLBACK(sort_by_alpha), NULL);
+	g_signal_connect(columns[2],"clicked", G_CALLBACK(sort_by_num), NULL);
+	g_signal_connect(columns[3],"clicked", G_CALLBACK(sort_by_num), NULL);
+	g_signal_connect(columns[4],"clicked", G_CALLBACK(sort_by_alpha), NULL);
+	g_signal_connect(columns[5],"clicked", G_CALLBACK(sort_by_num), NULL);
+	g_signal_connect(columns[6],"clicked", G_CALLBACK(sort_by_alpha), NULL);
+	g_signal_connect(columns[7],"clicked", G_CALLBACK(sort_by_num), NULL);
+	g_signal_connect(columns[8],"clicked", G_CALLBACK(sort_by_alpha), NULL);
+
+	//Connect cell renderer signals.
 	g_signal_connect(dept_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(number_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(start_text, "edited", G_CALLBACK(cell_edited), NULL);
@@ -520,6 +531,26 @@ void cell_edited(GtkCellRendererText *renderer,
 	}
 
 	gtk_tree_path_free(path);
+
+}
+
+//Sort number based columns
+void sort_by_num(GtkTreeViewColumn *acolumn, gpointer data)
+{
+	GtkTreeSortable *sortable;
+	GtkSortType order;
+	gint sort_id;
+
+	sortable = GTK_TREE_SORTABLE(model);
+
+	gint col_num = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (acolumn), "column"));
+	gtk_tree_sortable_set_sort_column_id(sortable, col_num, GTK_SORT_ASCENDING);
+
+	printf("MADE IT HERE\n");
+}
+
+void sort_by_alpha(GtkTreeViewColumn *acolumn, gpointer data)
+{
 
 }
 

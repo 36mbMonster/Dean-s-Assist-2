@@ -35,6 +35,10 @@ void file_dialog_okay();
 void write_to_db();
 void read_from_db();
 
+//Sorting functions
+void sort_by_num(GtkTreeViewColumn *acolumn, gpointer data);
+void sort_by_alpha(GtkTreeViewColumn *acolumn, gpointer data);
+
 int i = 0;
 int file_mode;
 
@@ -109,4 +113,17 @@ enum
 	COL_BLDG,
 	COL_ROOM,
 	COL_INSTR
+};
+
+enum
+{
+	SORTID_DEPT,
+	SORTID_NUMBER,
+	SORTID_START,
+	SORTID_END,
+	SORTID_DAYS,
+	SORTID_SECT,
+	SORTID_BLDG,
+	SORTID_ROOM,
+	SORTID_INSTR
 };
