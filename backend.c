@@ -38,28 +38,25 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 	int i = 0;
 	while(i < argc)
 	{
-		//printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
 		dept_vals[idx] = malloc(sizeof(char*));
 		strcpy(dept_vals[idx],argv[i++]);
-		//dept_vals[idx] = argv[i++];
+
 		num_vals[idx] = malloc(sizeof(char*));
 		strcpy(num_vals[idx],argv[i++]);
-		//num_vals[idx] = argv[i++];
+
 		start_vals[idx] = atoi(argv[i++]);
 		end_vals[idx] = atoi(argv[i++]);
 		day_vals[idx] = malloc(sizeof(char*));
 		strcpy(day_vals[idx],argv[i++]);
-		//day_vals[idx] = argv[i++];
+
 		sect_vals[idx] = atoi(argv[i++]);
 		bldg_vals[idx] = malloc(sizeof(char*));
 		strcpy(bldg_vals[idx],argv[i++]);
-		//bldg_vals[idx] = argv[i++];
+
 		room_vals[idx] = atoi(argv[i++]);
 		instr_vals[idx] = malloc(sizeof(char*));
 		strcpy(instr_vals[idx],argv[i++]);
-		//instr_vals[idx] = argv[i++];
-		printf("*****: %s %s %d %d %s %d %s %d %s\n",dept_vals[idx], num_vals[idx], start_vals[idx], end_vals[idx], day_vals[idx], sect_vals[idx], bldg_vals[idx], room_vals[idx], instr_vals[idx]);
-		//i=0;
+
 		idx++;
 
 	}
