@@ -72,6 +72,9 @@ int main(int argc, char *argv[])
 
 	file_chooser_label = GTK_LABEL(gtk_builder_get_object(builder, "file_chooser_label"));
 
+	GtkTreeSortable *sortable;
+	sortable = GTK_TREE_SORTABLE(store);
+
 	//Load the columns. They are all named "treeviewcolumn" followed by a number as defined in the glade file.
 	//This makes it easy to load them all through a loop.
 	for(i = 1; i < 10; i++)
@@ -84,6 +87,7 @@ int main(int argc, char *argv[])
 		strcat(test,buffer);
 
 		columns[i-1] = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(builder, test));
+		gtk_tree_sortable_set_sort_func(sortable, i-1, sort_by_num, GINT_TO_POINTER(SORTID_BLDG),NULL);
 	}
 
 	spin_adjust = gtk_adjustment_new(0, 0, 15, 1, 2, 0);
@@ -535,7 +539,7 @@ void cell_edited(GtkCellRendererText *renderer,
 }
 
 //Sort number based columns
-void sort_by_num(GtkTreeViewColumn *acolumn, gpointer data)
+GtkTreeIterCompareFunc sort_by_num(GtkTreeViewColumn *acolumn, gpointer data)
 {
 	GtkTreeSortable *sortable;
 	GtkSortType order;
@@ -547,9 +551,10 @@ void sort_by_num(GtkTreeViewColumn *acolumn, gpointer data)
 	gtk_tree_sortable_set_sort_column_id(sortable, col_num, GTK_SORT_ASCENDING);
 
 	printf("MADE IT HERE\n");
+	return 0;
 }
 
-void sort_by_alpha(GtkTreeViewColumn *acolumn, gpointer data)
+GtkTreeIterCompareFunc sort_by_alpha(GtkTreeViewColumn *acolumn, gpointer data)
 {
 
 }
