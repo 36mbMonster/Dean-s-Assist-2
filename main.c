@@ -539,8 +539,8 @@ void cell_edited(GtkCellRendererText *renderer,
 }
 
 //Sort number based columns
-GtkTreeIterCompareFunc sort_by_num(GtkTreeViewColumn *acolumn, gpointer data)
-{
+static gint sort_by_num(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
+{/*
 	GtkTreeSortable *sortable;
 	GtkSortType order;
 	gint sort_id;
@@ -548,15 +548,27 @@ GtkTreeIterCompareFunc sort_by_num(GtkTreeViewColumn *acolumn, gpointer data)
 	sortable = GTK_TREE_SORTABLE(model);
 
 	gint col_num = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (acolumn), "column"));
-	gtk_tree_sortable_set_sort_column_id(sortable, col_num, GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_sort_column_id(sortable, col_num, GTK_SORT_ASCENDING);*/
 
 	printf("MADE IT HERE\n");
-	return 0;
+
+	gint column = GPOINTER_TO_INT(user_data);
+	int *n1, n2;
+
+	gtk_tree_model_get(amodel, a, column, &n1, -1);
+	gtk_tree_model_get(amodel, b, column, &n2, -1);
+
+	if(n1 < n2)
+		return -1;
+	else if(n1 > n2)
+		return 1;
+	else
+		return 0;
 }
 
-GtkTreeIterCompareFunc sort_by_alpha(GtkTreeViewColumn *acolumn, gpointer data)
+static gint sort_by_alpha(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
 {
-
+	return 0;
 }
 
 //Deletes course section from the semester.
