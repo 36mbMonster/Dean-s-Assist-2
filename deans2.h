@@ -36,8 +36,8 @@ void write_to_db();
 void read_from_db();
 
 //Sorting functions
-void sort_by_num(GtkTreeViewColumn *acolumn, gpointer data);
-void sort_by_alpha(GtkTreeViewColumn *acolumn, gpointer data);
+static gint sort_by_num(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
+static gint sort_by_alpha(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
 
 int i = 0;
 int file_mode;
