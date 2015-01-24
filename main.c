@@ -370,10 +370,11 @@ void generate_sections()
 	COL_INSTR, &instr,
 	-1);
 
+
 	int i;
 	for(i = 0; i < num_sections; i++)
 	{
-		gtk_list_store_insert_before(store, &iter, 0);
+		gtk_list_store_insert(store, &iter, 0);
 
 		gtk_list_store_set(store, &iter,
 		COL_DEPT, dept,
