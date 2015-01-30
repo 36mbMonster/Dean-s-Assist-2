@@ -89,8 +89,11 @@ int main(int argc, char *argv[])
 		columns[i-1] = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(builder, test));
 	}
 
-	gtk_tree_sortable_set_sort_func(sortable, 2, sort_by_num, GINT_TO_POINTER(SORTID_START),NULL);
-	//gtk_tree_sortable_set_sort_column_id(sortable, SORTID_START, GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_sort_func(sortable, 7, sort_by_num, GINT_TO_POINTER(SORTID_ROOM),NULL);
+	//gtk_tree_sortable_set_sort_column_id(sortable, SORTID_ROOM, GTK_SORT_ASCENDING);
+
+	gtk_tree_sortable_set_sort_func(sortable, 5, sort_by_num, GINT_TO_POINTER(SORTID_SECT),NULL);
+	//gtk_tree_sortable_set_sort_column_id(sortable, SORTID_SECT, GTK_SORT_ASCENDING);
 
 	spin_adjust = gtk_adjustment_new(0, 0, 15, 1, 2, 0);
 	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
