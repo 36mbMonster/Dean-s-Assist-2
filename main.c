@@ -51,13 +51,12 @@ int main(int argc, char *argv[])
 	spin_button = GTK_SPIN_BUTTON(gtk_builder_get_object(builder,"spinbutton"));
 
 	//Load tree and list related structures.
-	treeview = GTK_WIDGET(gtk_builder_get_object(builder, "treeview"));
+	treeview = GTK_TREE_VIEW(gtk_builder_get_object(builder, "treeview"));
 	selector = GTK_TREE_SELECTION(gtk_builder_get_object(builder, "treeview-selection"));
 	store = GTK_LIST_STORE(gtk_builder_get_object(builder,"liststore"));
 
 	//Set the tree model
-	//path = gtk_tree_path_new_from_indices(1,-1);
-	model = gtk_tree_view_get_model(GTK_TREE_VIEW(treeview));
+	model = gtk_tree_view_get_model(treeview);
 
 	//Get the renderers from the builder and populate the column array.
 	dept_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"dept_text"));
@@ -93,7 +92,9 @@ int main(int argc, char *argv[])
 	//gtk_tree_sortable_set_sort_column_id(sortable, SORTID_ROOM, GTK_SORT_ASCENDING);
 
 	gtk_tree_sortable_set_sort_func(sortable, 5, sort_by_num, GINT_TO_POINTER(SORTID_SECT),NULL);
-	//gtk_tree_sortable_set_sort_column_id(sortable, SORTID_SECT, GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_sort_column_id(sortable, SORTID_SECT, GTK_SORT_ASCENDING);
+
+	treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
 
 	spin_adjust = gtk_adjustment_new(0, 0, 15, 1, 2, 0);
 	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
@@ -559,7 +560,7 @@ static gint sort_by_num(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gp
 	printf("MADE IT HERE\n");
 
 	gint column = GPOINTER_TO_INT(user_data);
-	int *n1, n2;
+	int *n1, *n2;
 
 	gtk_tree_model_get(amodel, a, column, &n1, -1);
 	gtk_tree_model_get(amodel, b, column, &n2, -1);
@@ -571,6 +572,16 @@ static gint sort_by_num(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gp
 	else
 		return 0;
 }
+
+static gint sort_by_course(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
+{
+	gint column = GPOINTER_TO_INT(user_data);
+	char **n1, **n2;
+
+	gtk_tree_model_get(amodel, a, column, &n1, -1);
+	gtk_tree_model_get(amodel, b, column, &n2, -1);
+}
+
 
 static gint sort_by_alpha(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
 {

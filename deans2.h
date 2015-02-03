@@ -38,6 +38,7 @@ void read_from_db();
 //Sorting functions
 static gint sort_by_num(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
 static gint sort_by_alpha(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
+static gint sort_by_course(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
 
 int i = 0;
 int file_mode;
@@ -65,7 +66,7 @@ GtkSpinButton *spin_button;
 
 GtkAdjustment *spin_adjust;
 
-GtkWidget *treeview;
+GtkTreeView *treeview;
 GtkTreeModel *model;
 GtkTreePath *path;
 GtkTreeIter iter;
