@@ -89,12 +89,6 @@ int main(int argc, char *argv[])
 		gtk_tree_view_column_set_sort_column_id(columns[i-1], i-1);
 	}
 
-	gtk_tree_sortable_set_sort_func(sortable, 7, sort_by_num, GINT_TO_POINTER(SORTID_ROOM),NULL);
-	gtk_tree_sortable_set_sort_column_id(sortable, SORTID_ROOM, GTK_SORT_ASCENDING);
-
-	gtk_tree_sortable_set_sort_func(sortable, 5, sort_by_num, GINT_TO_POINTER(SORTID_SECT),NULL);
-	gtk_tree_sortable_set_sort_column_id(sortable, SORTID_SECT, GTK_SORT_ASCENDING);
-
 	treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
 
 	spin_adjust = gtk_adjustment_new(0, 0, 15, 1, 2, 0);
@@ -132,17 +126,6 @@ int main(int argc, char *argv[])
     g_signal_connect(wednesdy, "clicked", G_CALLBACK(check_clicked), NULL);
     g_signal_connect(thursday, "clicked", G_CALLBACK(check_clicked), NULL);
     g_signal_connect(friday, "clicked", G_CALLBACK(check_clicked), NULL);
-
-	//Connect column signals.
-	g_signal_connect(columns[0],"clicked", G_CALLBACK(sort_by_alpha), NULL);
-	g_signal_connect(columns[1],"clicked", G_CALLBACK(sort_by_alpha), NULL);
-	g_signal_connect(columns[2],"clicked", G_CALLBACK(sort_by_num), NULL);
-	g_signal_connect(columns[3],"clicked", G_CALLBACK(sort_by_num), NULL);
-	g_signal_connect(columns[4],"clicked", G_CALLBACK(sort_by_alpha), NULL);
-	g_signal_connect(columns[5],"clicked", G_CALLBACK(sort_by_num), NULL);
-	g_signal_connect(columns[6],"clicked", G_CALLBACK(sort_by_alpha), NULL);
-	g_signal_connect(columns[7],"clicked", G_CALLBACK(sort_by_num), NULL);
-	g_signal_connect(columns[8],"clicked", G_CALLBACK(sort_by_alpha), NULL);
 
 	//Connect cell renderer signals.
 	g_signal_connect(dept_text, "edited", G_CALLBACK(cell_edited), NULL);
@@ -544,49 +527,6 @@ void cell_edited(GtkCellRendererText *renderer,
 
 	gtk_tree_path_free(path);
 
-}
-
-//Sort number based columns
-static gint sort_by_num(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
-{/*
-	GtkTreeSortable *sortable;
-	GtkSortType order;
-	gint sort_id;
-
-	sortable = GTK_TREE_SORTABLE(model);
-
-	gint col_num = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (acolumn), "column"));
-	gtk_tree_sortable_set_sort_column_id(sortable, col_num, GTK_SORT_ASCENDING);*/
-
-	printf("MADE IT HERE\n");
-
-	gint column = GPOINTER_TO_INT(user_data);
-	int *n1, *n2;
-
-	gtk_tree_model_get(amodel, a, column, &n1, -1);
-	gtk_tree_model_get(amodel, b, column, &n2, -1);
-
-	if(n1 < n2)
-		return -1;
-	else if(n1 > n2)
-		return 1;
-	else
-		return 0;
-}
-
-static gint sort_by_course(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
-{
-	gint column = GPOINTER_TO_INT(user_data);
-	char **n1, **n2;
-
-	gtk_tree_model_get(amodel, a, column, &n1, -1);
-	gtk_tree_model_get(amodel, b, column, &n2, -1);
-}
-
-
-static gint sort_by_alpha(GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data)
-{
-	return 0;
 }
 
 //Deletes course section from the semester.

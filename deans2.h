@@ -35,11 +35,6 @@ void file_dialog_okay();
 void write_to_db();
 void read_from_db();
 
-//Sorting functions
-static gint sort_by_num(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
-static gint sort_by_alpha(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
-static gint sort_by_course(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer user_data);
-
 int i = 0;
 int file_mode;
 
