@@ -86,10 +86,11 @@ int main(int argc, char *argv[])
 		strcat(test,buffer);
 
 		columns[i-1] = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(builder, test));
+		gtk_tree_view_column_set_sort_column_id(columns[i-1], i-1);
 	}
 
 	gtk_tree_sortable_set_sort_func(sortable, 7, sort_by_num, GINT_TO_POINTER(SORTID_ROOM),NULL);
-	//gtk_tree_sortable_set_sort_column_id(sortable, SORTID_ROOM, GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_sort_column_id(sortable, SORTID_ROOM, GTK_SORT_ASCENDING);
 
 	gtk_tree_sortable_set_sort_func(sortable, 5, sort_by_num, GINT_TO_POINTER(SORTID_SECT),NULL);
 	gtk_tree_sortable_set_sort_column_id(sortable, SORTID_SECT, GTK_SORT_ASCENDING);
