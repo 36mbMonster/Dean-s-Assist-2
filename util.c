@@ -4,6 +4,7 @@
 
 int is_int(const gchar *str);
 int is_valid_course_num(const gchar *str);
+int add_time(int x, int y);
 char *file_extension_correct(char *in);
 
 const char *COURSE_NUMBER_ERROR = "The entry was invalid. A course number can be two or three didgets with an optional letter at the end.";
@@ -56,6 +57,26 @@ int is_valid_course_num(const char *str)
         return 1;
     }
     return 0;
+}
+
+//Adds two integers together as if they were times.
+int add_time(int x, int y)
+{
+	int hourx =  x/100;
+	int minutex = x - hourx * 100;
+	int houry = y/100;
+	int minutey = y - houry * 100;
+
+	int minute_sum = minutex + minutey;
+	int hour_sum = hourx + houry;
+
+	if(minute_sum >= 60)
+	{
+		minute_sum -= 60;
+		hour_sum++;
+	}
+
+	return hour_sum*100 + minute_sum;
 }
 
 char *file_extension_correct(char *in)
