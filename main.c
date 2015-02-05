@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
 	show_hide_columns_item = gtk_builder_get_object(builder, "show_hide_columns");
 	new_course_item = gtk_builder_get_object(builder, "new_course");
 	delete_row_item = gtk_builder_get_object(builder, "delete");
+	save_semester_item = gtk_builder_get_object(builder,"save_semester");
 	save_semester_as_item = gtk_builder_get_object(builder, "save_semester_as");
 	load_semester_item = gtk_builder_get_object(builder, "load_semester");
 	generate_sections_item = gtk_builder_get_object(builder, "generate_sections");
@@ -106,6 +107,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(new_course_item, "activate", G_CALLBACK(new_row), NULL);
 	g_signal_connect(show_hide_columns_item, "activate", G_CALLBACK(show_adjust_columns_dialog), NULL);
 	g_signal_connect(delete_row_item, "activate", G_CALLBACK(delete_row), NULL);
+//	g_signal_connect(save_semester_item, "activate", G_CALLBACK(), NULL);
 	g_signal_connect(save_semester_as_item, "activate", G_CALLBACK(save_as), NULL);
 	g_signal_connect(load_semester_item, "activate", G_CALLBACK(load_file), NULL);
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
@@ -173,15 +175,55 @@ void show_about_dialog()
 void save_as()
 {
 	file_mode = WRITE;
-	gtk_widget_show_all(GTK_WIDGET(file_dialog));
+	file_dialog = gtk_file_chooser_dialog_new ("Save File",
+                                      GTK_WINDOW(window),
+                                      GTK_FILE_CHOOSER_ACTION_SAVE,
+                                      ("_Cancel"),
+                                      GTK_RESPONSE_CANCEL,
+                                      ("_Save"),
+                                      GTK_RESPONSE_ACCEPT,
+                                      NULL);
+
+	//gtk_widget_show_all(GTK_WIDGET(file_dialog));
+	int response = gtk_dialog_run(GTK_DIALOG(file_dialog));
+
+	if(response == GTK_RESPONSE_ACCEPT)
+	{
+		char *filename;
+		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_dialog));
+		write_to_db(filename);
+		g_free(filename);
+	}
+
+	gtk_widget_destroy(GTK_WIDGET(file_dialog));
 }
 
 void load_file()
 {
 	file_mode = READ;
-	gtk_widget_show_all(GTK_WIDGET(file_dialog));
-	gtk_widget_hide(GTK_WIDGET(save_entry));
-	gtk_widget_hide(GTK_WIDGET(file_chooser_label));
+	//gtk_widget_show_all(GTK_WIDGET(file_dialog));
+	//gtk_widget_hide(GTK_WIDGET(save_entry));
+	//gtk_widget_hide(GTK_WIDGET(file_chooser_label));
+	file_dialog = gtk_file_chooser_dialog_new ("Load File",
+								  GTK_WINDOW(window),
+								  GTK_FILE_CHOOSER_ACTION_OPEN,
+								  ("_Cancel"),
+								  GTK_RESPONSE_CANCEL,
+								  ("_Open"),
+								  GTK_RESPONSE_ACCEPT,
+								  NULL);
+
+	int response = gtk_dialog_run(GTK_DIALOG(file_dialog));
+
+	if(response == GTK_RESPONSE_ACCEPT)
+	{
+		char *filename;
+		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_dialog));
+		read_from_db(filename);
+		g_free(filename);
+	}
+
+	gtk_widget_destroy(GTK_WIDGET(file_dialog));
 }
 
 void file_dialog_okay()
@@ -207,9 +249,9 @@ void hide_adjust_columns_dialog()
 	gtk_widget_hide(GTK_WIDGET(show_hide_columns_window));
 }
 
-void write_to_db()
+void write_to_db(char *db_name)
 {
-	char *db_name = (char *) gtk_entry_get_text(save_entry);
+	//char *db_name = (char *) gtk_entry_get_text(save_entry);
 	char *fullname = file_extension_correct(db_name);
 	create_db(fullname);
 	gboolean more_list = 0;
@@ -250,9 +292,9 @@ void write_to_db()
 	gtk_widget_hide(GTK_WIDGET(file_dialog));
 }
 
-void read_from_db()
+void read_from_db(char *filename)
 {
-	char *filename = gtk_file_chooser_get_filename(chooser);
+	//char *filename = gtk_file_chooser_get_filename(chooser);
 
 	char **dept, **num, **days, **bldg, **instr;
 	int *start, *end, *sect, *room;

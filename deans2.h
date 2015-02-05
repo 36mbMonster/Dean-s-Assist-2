@@ -25,6 +25,7 @@ void hide_file_dialog();
 
 //Read or write data
 void check_clicked();
+void time_gen();
 void delete_row();
 void new_row();
 void cell_edited();
@@ -70,6 +71,7 @@ GtkListStore *store;
 GtkTreeSelection *selector;
 
 int days[5];
+gboolean gen_times;
 
 //Check boxes
 GtkCheckButton *monday;
@@ -77,6 +79,8 @@ GtkCheckButton *tuesday;
 GtkCheckButton *wednesdy;
 GtkCheckButton *thursday;
 GtkCheckButton *friday;
+
+GtkCheckButton *time_offset;
 
 //Cell text renderers
 GtkCellRendererText *dept_text;
@@ -94,6 +98,7 @@ GObject *quit_item;
 GObject *show_hide_columns_item;
 GObject *new_course_item;
 GObject *delete_row_item;
+GObject *save_semester_item;
 GObject *save_semester_as_item;
 GObject *load_semester_item;
 GObject *generate_sections_item;
