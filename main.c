@@ -2,7 +2,6 @@
 
 int main(int argc, char *argv[])
 {
-
 	gtk_init(&argc, &argv);
 
 	builder = gtk_builder_new();
@@ -42,6 +41,8 @@ int main(int argc, char *argv[])
     thursday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "th"));
     friday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "fr"));
 
+	time_offset = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "time_offset_check"));
+
 	//Load buttons
 	error_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"error_dialog_okay"));
 	days_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"set_days_okay"));
@@ -70,9 +71,6 @@ int main(int argc, char *argv[])
 	instructor_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"instructor_text"));
 
 	file_chooser_label = GTK_LABEL(gtk_builder_get_object(builder, "file_chooser_label"));
-
-	GtkTreeSortable *sortable;
-	sortable = GTK_TREE_SORTABLE(store);
 
 	//Load the columns. They are all named "treeviewcolumn" followed by a number as defined in the glade file.
 	//This makes it easy to load them all through a loop.
@@ -126,6 +124,8 @@ int main(int argc, char *argv[])
     g_signal_connect(wednesdy, "clicked", G_CALLBACK(check_clicked), NULL);
     g_signal_connect(thursday, "clicked", G_CALLBACK(check_clicked), NULL);
     g_signal_connect(friday, "clicked", G_CALLBACK(check_clicked), NULL);
+
+    g_signal_connect(time_offset, "clicked", G_CALLBACK(time_gen), NULL);
 
 	//Connect cell renderer signals.
 	g_signal_connect(dept_text, "edited", G_CALLBACK(cell_edited), NULL);
@@ -360,25 +360,61 @@ void generate_sections()
 	COL_INSTR, &instr,
 	-1);
 
+	//Time generation related features
+	int diff = 0;
+	int gap = 0; //The number of minutes between each generated section.
 
-	int i;
-	for(i = 0; i < num_sections; i++)
+	if(gen_times)
 	{
-		gtk_list_store_insert(store, &iter, 0);
+		diff = end - start;
+		gap = 15;
+		int p_end = end;
 
-		gtk_list_store_set(store, &iter,
-		COL_DEPT, dept,
-		COL_NUMBER, num,
-		COL_START, start,
-		COL_END, end,
-		COL_DAYS, days,
-		COL_SECT, i+2,
-		COL_BLDG, bldg,
-		COL_ROOM, room,
-		COL_INSTR, instr,
-		-1);
+		int i;
+		for(i = 0; i < num_sections; i++)
+		{
+			gtk_list_store_insert(store, &iter, 0);
 
-		gtk_tree_model_iter_next(model, &iter);
+			gtk_list_store_set(store, &iter,
+			COL_DEPT, dept,
+			COL_NUMBER, num,
+			COL_START, add_time(p_end,gap),
+			COL_END, add_time(p_end,add_time(gap,diff)),
+			COL_DAYS, days,
+			COL_SECT, i+2,
+			COL_BLDG, bldg,
+			COL_ROOM, room,
+			COL_INSTR, instr,
+			-1);
+
+			gtk_tree_model_iter_next(model, &iter);
+
+			p_end = add_time(p_end,add_time(gap,diff));
+		}
+	}
+
+	//If the user doesn't want to generate times
+	else
+	{
+		int i;
+		for(i = 0; i < num_sections; i++)
+		{
+			gtk_list_store_insert(store, &iter, 0);
+
+			gtk_list_store_set(store, &iter,
+			COL_DEPT, dept,
+			COL_NUMBER, num,
+			COL_START, start,
+			COL_END, end,
+			COL_DAYS, days,
+			COL_SECT, i+2,
+			COL_BLDG, bldg,
+			COL_ROOM, room,
+			COL_INSTR, instr,
+			-1);
+
+			gtk_tree_model_iter_next(model, &iter);
+		}
 	}
 
 
@@ -413,6 +449,10 @@ void check_clicked(GtkCheckButton *check,
 
 }
 
+void time_gen()
+{
+	gen_times = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(time_offset));
+}
 
 //Get user input from the cell and update the rowquite character c
 //WORKS!!
