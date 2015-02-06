@@ -45,19 +45,13 @@ GtkWidget *window;
 GtkWidget *show_hide_columns_window;
 GtkWidget *set_days_window;
 GtkFileChooserDialog *file_dialog;
-GtkFileChooser *chooser;
 GtkAboutDialog *about_dialog;
 GtkMessageDialog *error_dialog;
 GtkMessageDialog *generate_sections_dialog;
 
-GtkEntry *save_entry;
-GtkLabel *file_chooser_label;
-
 GtkButton *error_okay_button;
 GtkButton *days_okay_button;
 GtkButton *sect_gen_okay_button;
-GtkButton *file_chooser_okay;
-GtkButton *file_chooser_cancel;
 GtkSpinButton *spin_button;
 
 GtkAdjustment *spin_adjust;

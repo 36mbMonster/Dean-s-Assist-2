@@ -17,12 +17,9 @@ int main(int argc, char *argv[])
 	window = GTK_WIDGET(gtk_builder_get_object(builder,"window"));
 	show_hide_columns_window = GTK_WIDGET(gtk_builder_get_object(builder,"adjust_columns_win"));
 	set_days_window = GTK_WIDGET(gtk_builder_get_object(builder,"set_days_win"));
-	file_dialog = GTK_FILE_CHOOSER_DIALOG(gtk_builder_get_object(builder, "filechooserdialog"));
 	about_dialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(builder,"aboutdialog"));
 	error_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder,"error_dialog"));
 	generate_sections_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder, "gensect_dialog"));
-
-	save_entry = GTK_ENTRY(gtk_builder_get_object(builder, "save_entry"));
 
 	//Load menu items
 	about_item = gtk_builder_get_object(builder, "about");
@@ -48,8 +45,6 @@ int main(int argc, char *argv[])
 	error_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"error_dialog_okay"));
 	days_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"set_days_okay"));
 	sect_gen_okay_button = GTK_BUTTON(gtk_builder_get_object(builder, "sect_gen_okay_button"));
-	file_chooser_okay = GTK_BUTTON(gtk_builder_get_object(builder, "file_chooser_okay"));
-	file_chooser_cancel = GTK_BUTTON(gtk_builder_get_object(builder, "file_chooser_cancel"));
 	spin_button = GTK_SPIN_BUTTON(gtk_builder_get_object(builder,"spinbutton"));
 
 	//Load tree and list related structures.
@@ -71,8 +66,6 @@ int main(int argc, char *argv[])
 	room_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"room_text"));
 	instructor_text = GTK_CELL_RENDERER_TEXT(gtk_builder_get_object(builder,"instructor_text"));
 
-	file_chooser_label = GTK_LABEL(gtk_builder_get_object(builder, "file_chooser_label"));
-
 	//Load the columns. They are all named "treeviewcolumn" followed by a number as defined in the glade file.
 	//This makes it easy to load them all through a loop.
 	for(i = 1; i < 10; i++)
@@ -92,7 +85,6 @@ int main(int argc, char *argv[])
 
 	spin_adjust = gtk_adjustment_new(0, 0, 15, 1, 2, 0);
 	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
-	chooser = GTK_FILE_CHOOSER(file_dialog);
 
 /**
 ***************************************************************************
@@ -117,8 +109,6 @@ int main(int argc, char *argv[])
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
 	g_signal_connect(days_okay_button, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
 	g_signal_connect(sect_gen_okay_button, "clicked", G_CALLBACK(generate_sections), NULL);
-	g_signal_connect(file_chooser_okay, "clicked", G_CALLBACK(file_dialog_okay), NULL);
-	g_signal_connect(file_chooser_cancel, "clicked", G_CALLBACK(hide_file_dialog), NULL);
 
     //Connect check box signals
     g_signal_connect(monday, "clicked", G_CALLBACK(check_clicked), NULL);
@@ -174,15 +164,15 @@ void show_about_dialog()
 
 void save_as()
 {
-	file_mode = WRITE;
-	file_dialog = gtk_file_chooser_dialog_new ("Save File",
+	file_dialog = GTK_FILE_CHOOSER_DIALOG(gtk_file_chooser_dialog_new (
+									  "Save File",
                                       GTK_WINDOW(window),
                                       GTK_FILE_CHOOSER_ACTION_SAVE,
                                       ("_Cancel"),
                                       GTK_RESPONSE_CANCEL,
                                       ("_Save"),
                                       GTK_RESPONSE_ACCEPT,
-                                      NULL);
+                                      NULL));
 
 	//gtk_widget_show_all(GTK_WIDGET(file_dialog));
 	int response = gtk_dialog_run(GTK_DIALOG(file_dialog));
@@ -200,18 +190,15 @@ void save_as()
 
 void load_file()
 {
-	file_mode = READ;
-	//gtk_widget_show_all(GTK_WIDGET(file_dialog));
-	//gtk_widget_hide(GTK_WIDGET(save_entry));
-	//gtk_widget_hide(GTK_WIDGET(file_chooser_label));
-	file_dialog = gtk_file_chooser_dialog_new ("Load File",
+	file_dialog = GTK_FILE_CHOOSER_DIALOG(gtk_file_chooser_dialog_new (
+								  "Load File",
 								  GTK_WINDOW(window),
 								  GTK_FILE_CHOOSER_ACTION_OPEN,
 								  ("_Cancel"),
 								  GTK_RESPONSE_CANCEL,
 								  ("_Open"),
 								  GTK_RESPONSE_ACCEPT,
-								  NULL);
+								  NULL));
 
 	int response = gtk_dialog_run(GTK_DIALOG(file_dialog));
 
@@ -224,14 +211,6 @@ void load_file()
 	}
 
 	gtk_widget_destroy(GTK_WIDGET(file_dialog));
-}
-
-void file_dialog_okay()
-{
-	if(file_mode == WRITE)
-		write_to_db();
-	else if(file_mode == READ)
-		read_from_db();
 }
 
 void show_generate_sections()
@@ -251,7 +230,6 @@ void hide_adjust_columns_dialog()
 
 void write_to_db(char *db_name)
 {
-	//char *db_name = (char *) gtk_entry_get_text(save_entry);
 	char *fullname = file_extension_correct(db_name);
 	create_db(fullname);
 	gboolean more_list = 0;
@@ -286,7 +264,6 @@ void write_to_db(char *db_name)
 		//Get the next row
 		more_list = gtk_tree_model_iter_next(model, &iter);
 
-
 	}
 	close_db();
 	gtk_widget_hide(GTK_WIDGET(file_dialog));
@@ -294,8 +271,6 @@ void write_to_db(char *db_name)
 
 void read_from_db(char *filename)
 {
-	//char *filename = gtk_file_chooser_get_filename(chooser);
-
 	char **dept, **num, **days, **bldg, **instr;
 	int *start, *end, *sect, *room;
 	int i, size;
