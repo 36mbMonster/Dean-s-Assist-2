@@ -36,6 +36,12 @@ void file_dialog_okay();
 void write_to_db();
 void read_from_db();
 
+//Printing (currently stubs)
+void init_print();
+void start_printer();
+void begin_print();
+void draw_page();
+
 int i = 0;
 int file_mode;
 
@@ -49,10 +55,14 @@ GtkAboutDialog *about_dialog;
 GtkMessageDialog *error_dialog;
 GtkMessageDialog *generate_sections_dialog;
 
+//Buttons
 GtkButton *error_okay_button;
 GtkButton *days_okay_button;
 GtkButton *sect_gen_okay_button;
 GtkSpinButton *spin_button;
+
+//Printing
+GtkPrintSettings *print_settings;
 
 GtkAdjustment *spin_adjust;
 
@@ -87,6 +97,7 @@ GtkCellRendererText *bldg_text;
 GtkCellRendererText *room_text;
 GtkCellRendererText *instructor_text;
 
+//Menu items
 GObject *about_item;
 GObject *quit_item;
 GObject *show_hide_columns_item;
@@ -96,6 +107,7 @@ GObject *save_semester_item;
 GObject *save_semester_as_item;
 GObject *load_semester_item;
 GObject *generate_sections_item;
+GObject *print_item;
 
 enum
 {

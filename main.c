@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 	save_semester_as_item = gtk_builder_get_object(builder, "save_semester_as");
 	load_semester_item = gtk_builder_get_object(builder, "load_semester");
 	generate_sections_item = gtk_builder_get_object(builder, "generate_sections");
+	print_item = gtk_builder_get_object(builder, "print");
 
     //Load check boxes
     monday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "mo"));
@@ -104,6 +105,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(load_semester_item, "activate", G_CALLBACK(load_file), NULL);
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
 	g_signal_connect(generate_sections_item, "activate", G_CALLBACK(show_generate_sections), NULL);
+	g_signal_connect(print_item, "activate", G_CALLBACK(init_print), NULL);
 
 	//Connect button signals
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
@@ -226,6 +228,11 @@ void show_adjust_columns_dialog()
 void hide_adjust_columns_dialog()
 {
 	gtk_widget_hide(GTK_WIDGET(show_hide_columns_window));
+}
+
+void init_print()
+{
+	//start_printer();
 }
 
 void write_to_db(char *db_name)
