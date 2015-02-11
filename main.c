@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(load_semester_item, "activate", G_CALLBACK(load_file), NULL);
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
 	g_signal_connect(generate_sections_item, "activate", G_CALLBACK(show_generate_sections), NULL);
-	g_signal_connect(print_item, "activate", G_CALLBACK(init_print), NULL);
+	g_signal_connect(print_item, "activate", G_CALLBACK(start_printer), NULL);
 
 	//Connect button signals
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
@@ -228,11 +228,6 @@ void show_adjust_columns_dialog()
 void hide_adjust_columns_dialog()
 {
 	gtk_widget_hide(GTK_WIDGET(show_hide_columns_window));
-}
-
-void init_print()
-{
-	//start_printer();
 }
 
 void write_to_db(char *db_name)
