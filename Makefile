@@ -27,19 +27,19 @@ all:
 	mkdir $(BIN)Debug
 	mkdir $(BIN)Release
 	$(CPGLADE)
-	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
+	$(CC) main.c print.c $(CFLAGS) -o bin/Release/$(TARGET)
 	$(DLL)
 
 Debug:
 	mkdir $(BIN)Debug
 	$(CPGLADE)
-	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
+	$(CC) main.c print.c $(CFLAGS) -o bin/Debug/$(TARGET)
 	$(DLL)
 
 deans2:
 	mkdir $(BIN)Release
 	$(CPGLADE)
-	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
+	$(CC) main.c print.c $(CFLAGS) -o bin/Release/$(TARGET)
 	$(DLL)
 
 clean:
