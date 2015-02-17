@@ -5,6 +5,7 @@
 
 #include "util.c"
 #include "backend.c"
+#include "print.c"
 
 //Used for telling the filechooser whether to read or write files
 const int READ = 0;
@@ -37,10 +38,7 @@ void write_to_db();
 void read_from_db();
 
 //Printing (currently stubs)
-void init_print();
-void start_printer();
-void begin_print();
-void draw_page();
+
 
 int i = 0;
 int file_mode;
@@ -62,7 +60,7 @@ GtkButton *sect_gen_okay_button;
 GtkSpinButton *spin_button;
 
 //Printing
-GtkPrintSettings *print_settings;
+
 
 GtkAdjustment *spin_adjust;
 

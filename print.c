@@ -1,9 +1,15 @@
-#include "deans2.h"
+#include <gtk/gtk.h>
 
-void start_printer()
+void init_print();
+void start_printer(GtkWidget *window);
+void begin_print();
+void draw_page();
+
+GtkPrintSettings *print_settings;
+
+void start_printer(GtkWidget *window)
 {
 	GtkPrintOperation *print_operation;
-	GtkPrintOperation res;
 
 	print_operation = gtk_print_operation_new();
 
