@@ -32,6 +32,7 @@ int main(int argc, char *argv[])
 	load_semester_item = gtk_builder_get_object(builder, "load_semester");
 	generate_sections_item = gtk_builder_get_object(builder, "generate_sections");
 	print_item = gtk_builder_get_object(builder, "print");
+	new_semester_item = gtk_builder_get_object(builder, "new_semester");
 
     //Load check boxes
     monday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "mo"));
@@ -106,6 +107,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
 	g_signal_connect(generate_sections_item, "activate", G_CALLBACK(show_generate_sections), NULL);
 	g_signal_connect(print_item, "activate", G_CALLBACK(start_printer), NULL);
+	g_signal_connect(new_semester_item, "activate", G_CALLBACK(new_semester),NULL);
 
 	//Connect button signals
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
@@ -162,6 +164,19 @@ void show_about_dialog()
 	//gtk_widget_show_all( about_dialog );
 	gtk_dialog_run(GTK_DIALOG(about_dialog));
 	gtk_widget_hide(GTK_WIDGET(about_dialog));
+}
+
+void new_semester()
+{
+    //Check whether or not the model is empty
+    if(gtk_tree_model_get_iter_first(model, &iter))
+    {
+        GtkDialog *question_dialog;
+        question_dialog = gtk_message_dialog_new(GTK_WINDOW (window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, "Creating a new semester will result in the loss of any unsaved work in the current semester.\nAre you sure you want to continue?");
+        g_signal_connect(question_dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
+
+        gtk_dialog_run(question_dialog);
+    }
 }
 
 void save_as()

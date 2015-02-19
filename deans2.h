@@ -30,6 +30,7 @@ void time_gen();
 void delete_row();
 void new_row();
 void cell_edited();
+void new_semester();
 void save_as();
 void load_file();
 void generate_sections();
@@ -106,6 +107,7 @@ GObject *save_semester_as_item;
 GObject *load_semester_item;
 GObject *generate_sections_item;
 GObject *print_item;
+GObject *new_semester_item;
 
 enum
 {
