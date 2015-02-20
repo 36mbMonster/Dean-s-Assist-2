@@ -49,6 +49,7 @@ void begin_print(GtkPrintOperation *operation,
 {
 	printf("begin\n");
 
+	//Fix this later
 	gtk_print_operation_set_n_pages(operation,1);
 }
 
@@ -58,6 +59,18 @@ void draw_page(GtkPrintOperation *operation,
 			gpointer user_data)
 {
 	printf("draw\n");
+
+	cairo_t *cr;
+	PangoLayout *layout;
+	PangoFontDescription *font;
+
+	cr = gtk_print_context_get_cairo_context(context);
+
+	//Draw a rectangle to represent the paper to be printed.
+	cairo_set_source_rgb(cr, 1.0, 0, 0);
+	cairo_rectangle(cr, 0, 0, gtk_print_context_get_width (context), gtk_print_context_get_height(context));
+
+	cairo_fill(cr);
 }
 
 void end_print()
