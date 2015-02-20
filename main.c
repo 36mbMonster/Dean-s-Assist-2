@@ -171,11 +171,21 @@ void new_semester()
     //Check whether or not the model is empty
     if(gtk_tree_model_get_iter_first(model, &iter))
     {
-        GtkDialog *question_dialog;
-        question_dialog = gtk_message_dialog_new(GTK_WINDOW (window), GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO, "Creating a new semester will result in the loss of any unsaved work in the current semester.\nAre you sure you want to continue?");
+        GtkWidget *question_dialog;
+        question_dialog = gtk_message_dialog_new(GTK_WINDOW (window), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
+                                                 "Creating a new semester will result in the loss of any unsaved work in the current semester.\nAre you sure you want to continue?");
         g_signal_connect(question_dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
 
-        gtk_dialog_run(question_dialog);
+        int res = gtk_dialog_run(GTK_DIALOG(question_dialog));
+
+        if(res == GTK_RESPONSE_YES)
+        {
+            printf("****new****\n");
+            store = GTK_LIST_STORE(gtk_builder_get_object(builder,"liststore"));
+            treeview = GTK_TREE_VIEW(gtk_builder_get_object(builder, "treeview"));
+            treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
+        }
+
     }
 }
 
