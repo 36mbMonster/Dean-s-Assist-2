@@ -60,17 +60,39 @@ void draw_page(GtkPrintOperation *operation,
 {
 	printf("draw\n");
 
+    int layout_height;
+	double width;
+	double text_height;
+
 	cairo_t *cr;
 	PangoLayout *layout;
 	PangoFontDescription *font;
 
 	cr = gtk_print_context_get_cairo_context(context);
+	width = gtk_print_context_get_width(context);
 
 	//Draw a rectangle to represent the paper to be printed.
-	cairo_set_source_rgb(cr, 1.0, 0, 0);
-	cairo_rectangle(cr, 0, 0, gtk_print_context_get_width (context), gtk_print_context_get_height(context));
+	//cairo_set_source_rgb(cr, 0, 0, 0);
+	//cairo_rectangle(cr, 0, 0, width, gtk_print_context_get_height(context)-20);
 
-	cairo_fill(cr);
+	//cairo_fill(cr);
+
+	layout = gtk_print_context_create_pango_layout (context);
+	font = pango_font_description_from_string ("sans 14");
+	pango_layout_set_font_description (layout, font);
+	pango_font_description_free (font);
+
+    pango_layout_set_text(layout, "Hello World!", -1);
+    pango_layout_set_width(layout, width * PANGO_SCALE);
+    pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
+
+    pango_layout_get_size(layout, NULL, &layout_height);
+    //text_height = (double)layout_height / PANGO_SCALE;
+
+    //cairo_move_to(cr, width / 2, (gtk_print_context_get_height(context)-20 - text_height) / 2);
+    pango_cairo_show_layout(cr, layout);
+
+    g_object_unref(layout);
 }
 
 void end_print()
