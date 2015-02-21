@@ -174,18 +174,17 @@ void new_semester()
         GtkWidget *question_dialog;
         question_dialog = gtk_message_dialog_new(GTK_WINDOW (window), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
                                                  "Creating a new semester will result in the loss of any unsaved work in the current semester.\nAre you sure you want to continue?");
-        g_signal_connect(question_dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
 
         int res = gtk_dialog_run(GTK_DIALOG(question_dialog));
 
         if(res == GTK_RESPONSE_YES)
         {
-            printf("****new****\n");
-            store = GTK_LIST_STORE(gtk_builder_get_object(builder,"liststore"));
-            treeview = GTK_TREE_VIEW(gtk_builder_get_object(builder, "treeview"));
-            treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
+            gtk_list_store_clear(store);
+            treeview = gtk_tree_view_new();
+            model = gtk_tree_view_get_model(treeview);
         }
 
+        gtk_widget_destroy(question_dialog);
     }
 }
 
