@@ -1,20 +1,23 @@
 #include <gtk/gtk.h>
 #include <time.h>
+#include "constants.h"
 
 void init_print();
-void start_printer(GtkWidget *window);
+void start_printer();
 void begin_print();
 void draw_page();
 void end_print();
 
 GtkPrintSettings *print_settings;
+GtkTreeModel *model;
 
-void start_printer(GtkWidget *window)
+void start_printer(GtkWidget *window, GtkTreeModel *amodel)
 {
 	GError *error;
 	GtkPrintOperation *print_operation;
 	print_settings = NULL;
 	print_operation = gtk_print_operation_new();
+	model = amodel;
 
 	if(print_settings != NULL)
 		gtk_print_operation_set_print_settings(print_operation, print_settings);
@@ -122,7 +125,37 @@ void draw_page(GtkPrintOperation *operation,
 	*/
 
 	pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
-	pango_layout_set_text(layout,"Time\tDay\tSec Bldg Room",-1);
+	pango_layout_set_text(layout,"Time    Day    Sec Bldg Room   Instructor",-1);
+
+	/**
+	***************************************************************************
+	*							  Print the Data						  	  *
+	***************************************************************************
+	*/
+
+	gboolean more_list;
+	GtkTreeIter iter;
+	more_list = gtk_tree_model_get_iter_first(model, &iter);
+
+	char *dept, *num, *days, *bldg, *instr;
+	int start, end, sect, room;
+
+	while(more_list)
+	{
+		gtk_tree_model_get(model, &iter,
+		COL_DEPT, &dept,
+		COL_NUMBER, &num,
+		COL_START, &start,
+		COL_END, &end,
+		COL_DAYS, &days,
+		COL_SECT, &sect,
+		COL_BLDG, &bldg,
+		COL_ROOM, &room,
+		COL_INSTR, &instr,
+		-1);
+
+		char text[150];
+	}
 
     g_object_unref(layout);
 }

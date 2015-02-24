@@ -7,10 +7,6 @@
 #include "backend.c"
 #include "print.c"
 
-//Used for telling the filechooser whether to read or write files
-const int READ = 0;
-const int WRITE = 1;
-
 //Function declarations
 
 //show dialog functions
@@ -38,9 +34,6 @@ void file_dialog_okay();
 void write_to_db();
 void read_from_db();
 
-//Printing (currently stubs)
-
-
 int i = 0;
 int file_mode;
 
@@ -59,9 +52,6 @@ GtkButton *error_okay_button;
 GtkButton *days_okay_button;
 GtkButton *sect_gen_okay_button;
 GtkSpinButton *spin_button;
-
-//Printing
-
 
 GtkAdjustment *spin_adjust;
 
@@ -108,29 +98,3 @@ GObject *load_semester_item;
 GObject *generate_sections_item;
 GObject *print_item;
 GObject *new_semester_item;
-
-enum
-{
-	COL_DEPT,
-	COL_NUMBER,
-	COL_START,
-	COL_END,
-	COL_DAYS,
-	COL_SECT,
-	COL_BLDG,
-	COL_ROOM,
-	COL_INSTR
-};
-
-enum
-{
-	SORTID_DEPT,
-	SORTID_NUMBER,
-	SORTID_START,
-	SORTID_END,
-	SORTID_DAYS,
-	SORTID_SECT,
-	SORTID_BLDG,
-	SORTID_ROOM,
-	SORTID_INSTR
-};
