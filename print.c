@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <time.h>
 
 void init_print();
 void start_printer(GtkWidget *window);
@@ -78,19 +79,50 @@ void draw_page(GtkPrintOperation *operation,
 	//cairo_fill(cr);
 
 	layout = gtk_print_context_create_pango_layout (context);
-	font = pango_font_description_from_string ("sans 14");
+	font = pango_font_description_from_string ("courier 12");
 	pango_layout_set_font_description (layout, font);
 	pango_font_description_free (font);
 
-    pango_layout_set_text(layout, "Hello World!", -1);
-    pango_layout_set_width(layout, width * PANGO_SCALE);
-    pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
+	/**
+	***************************************************************************
+	*							  Print the Header						  	  *
+	***************************************************************************
+	*/
 
+	pango_layout_set_width(layout, width * PANGO_SCALE);
     pango_layout_get_size(layout, NULL, &layout_height);
-    //text_height = (double)layout_height / PANGO_SCALE;
 
-    //cairo_move_to(cr, width / 2, (gtk_print_context_get_height(context)-20 - text_height) / 2);
-    pango_cairo_show_layout(cr, layout);
+	pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
+	time_t t;
+	struct tm *local;
+	char str_date[8];
+	t = time(NULL);
+	local = localtime(&t);
+	strftime(str_date, sizeof(str_date), "%m/%d/%Y\n",local);
+	char text[25];
+	strcpy(text,"Page No.    ?\n");
+	strcat(text, str_date);
+	pango_layout_set_text(layout, text, -1);
+	//pango_cairo_show_layout(cr, layout);
+	printf("%s\n",text);
+
+	pango_layout_set_alignment(layout, PANGO_ALIGN_RIGHT);
+	pango_layout_set_text(layout, "Fall/Spring <year>\n", -1);
+	//pango_cairo_show_layout(cr, layout);
+
+
+	pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
+    pango_layout_set_text(layout, "San Jose State University\nSchool of Business", -1);
+    //pango_cairo_show_layout(cr, layout);
+
+	/**
+	***************************************************************************
+	*							  Print the Columns						  	  *
+	***************************************************************************
+	*/
+
+	pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
+	pango_layout_set_text(layout,"Time\tDay\tSec Bldg Room",-1);
 
     g_object_unref(layout);
 }
