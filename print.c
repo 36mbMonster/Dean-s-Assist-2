@@ -106,17 +106,17 @@ void draw_page(GtkPrintOperation *operation,
 	strcpy(text,"Page No.    ?\n");
 	strcat(text, str_date);
 	pango_layout_set_text(layout, text, -1);
-	//pango_cairo_show_layout(cr, layout);
+	pango_cairo_show_layout(cr, layout);
 	printf("%s\n",text);
 
 	pango_layout_set_alignment(layout, PANGO_ALIGN_RIGHT);
 	pango_layout_set_text(layout, "Fall/Spring <year>\n", -1);
-	//pango_cairo_show_layout(cr, layout);
+	pango_cairo_show_layout(cr, layout);
 
 
 	pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
     pango_layout_set_text(layout, "San Jose State University\nSchool of Business", -1);
-    //pango_cairo_show_layout(cr, layout);
+    pango_cairo_show_layout(cr, layout);
 
 	/**
 	***************************************************************************
@@ -125,7 +125,7 @@ void draw_page(GtkPrintOperation *operation,
 	*/
 
 	pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
-	pango_layout_set_text(layout,"Time    Day    Sec Bldg Room   Instructor",-1);
+	pango_layout_set_text(layout,"\tTime    Day    Sec Bldg Room   Instructor",-1);
 
 	/**
 	***************************************************************************
@@ -140,6 +140,7 @@ void draw_page(GtkPrintOperation *operation,
 	char *dept, *num, *days, *bldg, *instr;
 	int start, end, sect, room;
 
+	pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
 	while(more_list)
 	{
 		gtk_tree_model_get(model, &iter,
@@ -155,6 +156,8 @@ void draw_page(GtkPrintOperation *operation,
 		-1);
 
 		char text[150];
+		sprintf(text,"%s %s %d-%d %s    %d  %s  %d   %s\n",dept,num,start,end,days,sect,bldg,room,instr);
+		pango_layout_set_text(layout, text, -1);
 	}
 
     g_object_unref(layout);
