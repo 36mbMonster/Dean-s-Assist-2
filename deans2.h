@@ -33,6 +33,7 @@ void generate_sections();
 void file_dialog_okay();
 void write_to_db();
 void read_from_db();
+void prep_printer();
 
 int i = 0;
 int file_mode;
