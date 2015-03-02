@@ -96,7 +96,7 @@ void draw_page(GtkPrintOperation *operation,
 
 	pango_layout_set_width(layout, -1);
 
-	pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
+	//pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
 	time_t t;
 	struct tm *local;
 	char str_date[10];
@@ -110,25 +110,24 @@ void draw_page(GtkPrintOperation *operation,
 	pango_cairo_show_layout(cr, layout);
 	printf("%s\n",text);
 
+	//pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
+	//pango_layout_get_pixel_size(layout, &text_width, &text_height);
+    pango_layout_set_text(layout, "San Jose State University\nSchool of Business\n\n", -1);
+    pango_layout_get_pixel_size (layout, &text_width, &text_height);
 
-	if (text_width > width)
+    if (text_width > width)
 	{
 		pango_layout_set_width (layout, width);
 		pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_START);
 		pango_layout_get_pixel_size (layout, &text_width, &text_height);
 	}
 
-	pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
-	//pango_layout_get_pixel_size(layout, &text_width, &text_height);
-    pango_layout_set_text(layout, "San Jose State University\nSchool of Business\n\n", -1);
-    //cairo_move_to(cr, (width - text_width)/2, 0);
+    cairo_move_to(cr, (width - text_width)/2, 24);
     pango_cairo_show_layout(cr, layout);
 
-	pango_layout_set_width (layout, -1);
-	pango_layout_set_alignment(layout, PANGO_ALIGN_RIGHT);
-	//pango_layout_get_pixel_size(layout, &text_width, &text_height);
 	pango_layout_set_text(layout, "Fall/Spring <year>\n", -1);
-	//cairo_move_to(cr, (width - text_width), 0);
+	pango_layout_get_pixel_size(layout, &text_width, &text_height);
+	cairo_move_to(cr, (width - text_width), 0);
 	pango_cairo_show_layout(cr, layout);
 
 
@@ -146,14 +145,14 @@ void draw_page(GtkPrintOperation *operation,
 	char *dept, *num, *days, *bldg, *instr;
 	int start, end, sect, room;
 
-	pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
-	cairo_move_to(cr, 0, GAP);
+	//pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
+	cairo_move_to(cr, 0, GAP + 24);
 	char column_text[100];
 	sprintf(column_text, "%-5s%-6s%-12s%-12s%-5s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
 	pango_layout_set_text(layout,column_text,-1);
 	pango_cairo_show_layout(cr, layout);
 
-	cairo_move_to(cr, 0, GAP + 12);
+	cairo_move_to(cr, 0, GAP + 36);
 	while(more_list)
 	{
 		gtk_tree_model_get(model, &iter,
