@@ -4,6 +4,8 @@
 
 #define GAP (2 * 12 * 72 / 25.4)
 
+const int FONT_SIZE = 12;
+
 void start_printer();
 void begin_print();
 void draw_page();
@@ -68,6 +70,7 @@ void draw_page(GtkPrintOperation *operation,
     int layout_height;
 	double width;
 	int text_width, text_height;
+	int current_y = 0;
 
 	cairo_t *cr;
 	PangoLayout *layout;
@@ -84,7 +87,7 @@ void draw_page(GtkPrintOperation *operation,
 
 	layout = gtk_print_context_create_pango_layout (context);
 	font = pango_font_description_from_string ("courier");
-	pango_font_description_set_size(font, 12 * PANGO_SCALE);
+	pango_font_description_set_size(font, FONT_SIZE * PANGO_SCALE);
 	pango_layout_set_font_description (layout, font);
 	pango_font_description_free (font);
 
@@ -112,7 +115,7 @@ void draw_page(GtkPrintOperation *operation,
 
 	//pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
 	//pango_layout_get_pixel_size(layout, &text_width, &text_height);
-    pango_layout_set_text(layout, "San Jose State University\nSchool of Business\n\n", -1);
+    pango_layout_set_text(layout, "San Jose State University", -1);
     pango_layout_get_pixel_size (layout, &text_width, &text_height);
 
     if (text_width > width)
@@ -122,7 +125,14 @@ void draw_page(GtkPrintOperation *operation,
 		pango_layout_get_pixel_size (layout, &text_width, &text_height);
 	}
 
-    cairo_move_to(cr, (width - text_width)/2, 24);
+	current_y = FONT_SIZE * 2;
+    cairo_move_to(cr, (width - text_width)/2, current_y);
+    pango_cairo_show_layout(cr, layout);
+
+    pango_layout_set_text(layout, "School of Business", -1);
+    pango_layout_get_pixel_size (layout, &text_width, &text_height);
+	current_y += FONT_SIZE;
+    cairo_move_to(cr, (width - text_width)/2, current_y);
     pango_cairo_show_layout(cr, layout);
 
 	pango_layout_set_text(layout, "Fall/Spring <year>\n", -1);
@@ -146,13 +156,15 @@ void draw_page(GtkPrintOperation *operation,
 	int start, end, sect, room;
 
 	//pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
-	cairo_move_to(cr, 0, GAP + 24);
+	current_y += GAP;
+	cairo_move_to(cr, 0, current_y);
 	char column_text[100];
 	sprintf(column_text, "%-5s%-6s%-12s%-12s%-5s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
 	pango_layout_set_text(layout,column_text,-1);
 	pango_cairo_show_layout(cr, layout);
 
-	cairo_move_to(cr, 0, GAP + 36);
+	current_y += FONT_SIZE;
+	cairo_move_to(cr, 0, current_y);
 	while(more_list)
 	{
 		gtk_tree_model_get(model, &iter,
@@ -170,7 +182,7 @@ void draw_page(GtkPrintOperation *operation,
 		char text[150];
 		sprintf(text,"%-5s%-6s%-4d%s%-4d%-12s%-3d%-5s%-5d%-20s\n",dept,num,start,"-",end,days,sect,bldg,room,instr);
 		pango_layout_set_text(layout, text, -1);
-		cairo_rel_move_to (cr, 0, 12);
+		cairo_rel_move_to (cr, 0, FONT_SIZE);
 		pango_cairo_show_layout(cr, layout);
 
 		more_list = gtk_tree_model_iter_next(model, &iter);
