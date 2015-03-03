@@ -146,6 +146,7 @@ int main(int argc, char *argv[])
 	g_object_set_data (G_OBJECT (instructor_text), "column", GINT_TO_POINTER (COL_INSTR));
 
 	//Show the window and start gtk.
+	gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
     gtk_widget_show(window);
     gtk_main();
 
@@ -208,6 +209,7 @@ void save_as()
 		char *filename;
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_dialog));
 		write_to_db(filename);
+		gtk_window_set_title(GTK_WINDOW(window), filename);
 		g_free(filename);
 	}
 
@@ -233,6 +235,7 @@ void load_file()
 		char *filename;
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_dialog));
 		read_from_db(filename);
+		gtk_window_set_title(GTK_WINDOW(window), filename);
 		g_free(filename);
 	}
 
