@@ -159,7 +159,7 @@ void draw_page(GtkPrintOperation *operation,
 	current_y += GAP;
 	cairo_move_to(cr, 0, current_y);
 	char column_text[100];
-	sprintf(column_text, "%-5s%-6s%-12s%-12s%-5s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+	sprintf(column_text, "%-5s%-6s%-13s%-12s%-4s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
 	pango_layout_set_text(layout,column_text,-1);
 	pango_cairo_show_layout(cr, layout);
 
@@ -180,7 +180,7 @@ void draw_page(GtkPrintOperation *operation,
 		-1);
 
 		char text[150];
-		sprintf(text,"%-5s%-6s%-4d%s%-4d%-12s%-3d%-5s%-5d%-20s\n",dept,num,start,"-",end,days,sect,bldg,room,instr);
+		sprintf(text,"%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",dept,num,start,"-",end,days,sect,bldg,room,instr);
 		pango_layout_set_text(layout, text, -1);
 		cairo_rel_move_to (cr, 0, FONT_SIZE);
 		pango_cairo_show_layout(cr, layout);
