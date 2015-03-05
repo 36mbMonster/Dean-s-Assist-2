@@ -98,20 +98,17 @@ void draw_page(GtkPrintOperation *operation,
 	PangoLayout *layout;
 	PangoFontDescription *font;
 
+	//Get the print context and calculate the width based on it.
 	cr = gtk_print_context_get_cairo_context(context);
 	width = gtk_print_context_get_width(context);
 
-	//Draw a rectangle to represent the paper to be printed.
-	//cairo_set_source_rgb(cr, 0, 0, 0);
-	//cairo_rectangle(cr, 0, 0, width, gtk_print_context_get_height(context)-20);
-
-	//cairo_fill(cr);
-
+	//Set the font type, size and scale.
 	layout = gtk_print_context_create_pango_layout (context);
 	font = pango_font_description_from_string ("courier");
 	pango_font_description_set_size(font, FONT_SIZE * PANGO_SCALE);
 	pango_layout_set_font_description (layout, font);
 	pango_font_description_free (font);
+	pango_layout_set_width(layout, -1);
 
 	/**
 	***************************************************************************
@@ -119,24 +116,24 @@ void draw_page(GtkPrintOperation *operation,
 	***************************************************************************
 	*/
 
-	pango_layout_set_width(layout, -1);
-
-	//pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
-	time_t t;
 	struct tm *local;
 	char str_date[10];
+	char text[25];
+
+	//Calculate the local time
+	time_t t;
 	t = time(NULL);
 	local = localtime(&t);
 	strftime(str_date, sizeof(str_date), "%m/%d/%y\n",local);
-	char text[25];
+
+	//Print the number of pages
 	sprintf(text,"Page No. %d\n",pages);
 	strcat(text, str_date);
 	pango_layout_set_text(layout, text, -1);
 	pango_cairo_show_layout(cr, layout);
 	printf("%s\n",text);
 
-	//pango_layout_set_alignment(layout, PANGO_ALIGN_CENTER);
-	//pango_layout_get_pixel_size(layout, &text_width, &text_height);
+	//Print the first part of the organizatino header
     pango_layout_set_text(layout, "San Jose State University", -1);
     pango_layout_get_pixel_size (layout, &text_width, &text_height);
 
@@ -147,16 +144,19 @@ void draw_page(GtkPrintOperation *operation,
 		pango_layout_get_pixel_size (layout, &text_width, &text_height);
 	}
 
+	//Print the text 2 lines below the top.
 	current_y = FONT_SIZE * 2;
     cairo_move_to(cr, (width - text_width)/2, current_y);
     pango_cairo_show_layout(cr, layout);
 
+	//Print the rest of the organization header one line below that.
     pango_layout_set_text(layout, "School of Business", -1);
     pango_layout_get_pixel_size (layout, &text_width, &text_height);
 	current_y += FONT_SIZE;
     cairo_move_to(cr, (width - text_width)/2, current_y);
     pango_cairo_show_layout(cr, layout);
 
+	//**************FIXME***************
 	pango_layout_set_text(layout, "Fall/Spring <year>\n", -1);
 	pango_layout_get_pixel_size(layout, &text_width, &text_height);
 	cairo_move_to(cr, (width - text_width), 0);
@@ -176,7 +176,7 @@ void draw_page(GtkPrintOperation *operation,
 	GtkTreeIter iter;
 	more_list = gtk_tree_model_get_iter_first(model, &iter);
 
-	//pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
+	//Print the column headers a lot farther down after the page header.
 	current_y += GAP;
 	cairo_move_to(cr, 0, current_y);
 	char column_text[100];
@@ -184,8 +184,11 @@ void draw_page(GtkPrintOperation *operation,
 	pango_layout_set_text(layout,column_text,-1);
 	pango_cairo_show_layout(cr, layout);
 
+	//Start printing the data with a one row gap beneath the column headers.
 	current_y += FONT_SIZE;
 	cairo_move_to(cr, 0, current_y);
+
+	//Load the data from the model into the string buffer.
 	while(more_list)
 	{
 		gtk_tree_model_get(model, &iter,
@@ -215,5 +218,6 @@ void draw_page(GtkPrintOperation *operation,
 
 void end_print()
 {
+	//Do something here? Is this even needed?
 	printf("printing ended.\n");
 }
