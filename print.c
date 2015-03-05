@@ -1,10 +1,16 @@
 #include <gtk/gtk.h>
 #include <time.h>
+#include <math.h>
 #include "constants.h"
 
 #define GAP (2 * 12 * 72 / 25.4)
 
 const int FONT_SIZE = 12;
+
+int pages;
+int lines;
+int height;
+int lines_per_page;
 
 void start_printer();
 void begin_print();
@@ -56,8 +62,24 @@ void begin_print(GtkPrintOperation *operation,
 {
 	printf("begin\n");
 
-	//Fix this later
-	gtk_print_operation_set_n_pages(operation,1);
+	height = gtk_print_context_get_height(context);
+	lines_per_page = floor(height/FONT_SIZE);
+	lines = 0;
+
+	//Calculate the number of lines
+	gboolean more_list;
+	GtkTreeIter iter;
+	more_list = gtk_tree_model_get_iter_first(model, &iter);
+
+	while(more_list)
+	{
+		lines++;
+		more_list = gtk_tree_model_iter_next(model, &iter);
+	}
+
+	pages = (lines - 1) / lines_per_page + 1;
+
+	gtk_print_operation_set_n_pages(operation,pages);
 }
 
 void draw_page(GtkPrintOperation *operation,
@@ -107,7 +129,7 @@ void draw_page(GtkPrintOperation *operation,
 	local = localtime(&t);
 	strftime(str_date, sizeof(str_date), "%m/%d/%y\n",local);
 	char text[25];
-	strcpy(text,"Page No. ?\n");
+	sprintf(text,"Page No. %d\n",pages);
 	strcat(text, str_date);
 	pango_layout_set_text(layout, text, -1);
 	pango_cairo_show_layout(cr, layout);
@@ -148,12 +170,11 @@ void draw_page(GtkPrintOperation *operation,
 	***************************************************************************
 	*/
 
+	char *dept, *num, *days, *bldg, *instr;
+	int start, end, sect, room;
 	gboolean more_list;
 	GtkTreeIter iter;
 	more_list = gtk_tree_model_get_iter_first(model, &iter);
-
-	char *dept, *num, *days, *bldg, *instr;
-	int start, end, sect, room;
 
 	//pango_layout_set_alignment(layout, PANGO_ALIGN_LEFT);
 	current_y += GAP;
