@@ -180,13 +180,19 @@ void draw_page(GtkPrintOperation *operation,
 	current_y += GAP;
 	cairo_move_to(cr, 0, current_y);
 	char column_text[100];
-	sprintf(column_text, "%-5s%-6s%-13s%-12s%-4s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+	//sprintf(column_text, "%-5s%-6s%-13s%-12s%-4s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+	sprintf(column_text, "\t%-13s%-12s%-4s%-5s%-5s%-20s\n","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
 	pango_layout_set_text(layout,column_text,-1);
 	pango_cairo_show_layout(cr, layout);
 
 	//Start printing the data with a one row gap beneath the column headers.
 	current_y += FONT_SIZE;
 	cairo_move_to(cr, 0, current_y);
+
+	char *previous_cn;
+	previous_cn = malloc(sizeof(char)*4);
+	previous_cn = "";
+	int ident_size = 0;
 
 	//Load the data from the model into the string buffer.
 	while(more_list)
@@ -204,16 +210,35 @@ void draw_page(GtkPrintOperation *operation,
 		-1);
 
 		char text[150];
-		sprintf(text,"%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",dept,num,start,"-",end,days,sect,bldg,room,instr);
+		char ident[12];
+
+		if(strcmp(previous_cn,num) != 0)
+		{
+			sprintf(ident,"** %s %s ",dept,num);
+			ident_size = strlen(ident);
+		}
+		else
+		{
+			sprintf(ident,"");
+			int k;
+			for(k = 0; k < ident_size; k++)
+				strcat(ident," ");
+		}
+
+		sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,start,"-",end,days,sect,bldg,room,instr);
+		//sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,dept,num,start,"-",end,days,sect,bldg,room,instr);
 		pango_layout_set_text(layout, text, -1);
 		cairo_rel_move_to (cr, 0, FONT_SIZE);
 		pango_cairo_show_layout(cr, layout);
 
 		more_list = gtk_tree_model_iter_next(model, &iter);
+		previous_cn = num;
 		printf("%s\n",text);
+		//free(ident);
 	}
 
     g_object_unref(layout);
+    //free(previous_cn);
 }
 
 void end_print()
