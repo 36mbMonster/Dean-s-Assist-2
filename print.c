@@ -181,7 +181,7 @@ void draw_page(GtkPrintOperation *operation,
 	cairo_move_to(cr, 0, current_y);
 	char column_text[100];
 	//sprintf(column_text, "%-5s%-6s%-13s%-12s%-4s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
-	sprintf(column_text, "\t%-13s%-12s%-4s%-5s%-5s%-20s\n","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+	sprintf(column_text, "\t\t%-13s%-8s%-4s%-5s%-5s%-20s\n","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
 	pango_layout_set_text(layout,column_text,-1);
 	pango_cairo_show_layout(cr, layout);
 
@@ -214,27 +214,34 @@ void draw_page(GtkPrintOperation *operation,
 
 		if(strcmp(previous_cn,num) != 0)
 		{
-			sprintf(ident,"** %s %s ",dept,num);
+			sprintf(ident,"**%-5s%-5s",dept,num);
 			ident_size = strlen(ident);
+
+            pango_layout_set_text(layout, ident, -1);
+            cairo_rel_move_to (cr, 0, FONT_SIZE);
+            pango_cairo_show_layout(cr, layout);
+
+            printf("%s\n",ident);
 		}
-		else
-		{
-			sprintf(ident,"");
+		//else
+		//{
+			strncpy(ident," ",sizeof(ident));
 			int k;
-			for(k = 0; k < ident_size; k++)
+			for(k = 0; k < ident_size-1; k++)
 				strcat(ident," ");
-		}
 
-		sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,start,"-",end,days,sect,bldg,room,instr);
-		//sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,dept,num,start,"-",end,days,sect,bldg,room,instr);
-		pango_layout_set_text(layout, text, -1);
-		cairo_rel_move_to (cr, 0, FONT_SIZE);
-		pango_cairo_show_layout(cr, layout);
+            sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,start,"-",end,days,sect,bldg,room,instr);
+            //sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,dept,num,start,"-",end,days,sect,bldg,room,instr);
+            pango_layout_set_text(layout, text, -1);
+            cairo_rel_move_to (cr, 0, FONT_SIZE);
+            pango_cairo_show_layout(cr, layout);
 
-		more_list = gtk_tree_model_iter_next(model, &iter);
-		previous_cn = num;
-		printf("%s\n",text);
-		//free(ident);
+            more_list = gtk_tree_model_iter_next(model, &iter);
+            previous_cn = num;
+            printf("%s\n",text);
+            //free(ident);
+		//}
+
 	}
 
     g_object_unref(layout);
