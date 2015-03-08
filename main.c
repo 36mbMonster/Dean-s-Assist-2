@@ -85,6 +85,12 @@ int main(int argc, char *argv[])
 
 	treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
 
+	//Make the font bigger
+	PangoFontDescription *font;
+	font = pango_font_description_from_string ("");
+	pango_font_description_set_size(font, 14 * PANGO_SCALE);
+	gtk_widget_override_font (GTK_WIDGET(window), font);
+
 	spin_adjust = gtk_adjustment_new(0, 0, 15, 1, 2, 0);
 	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
 
