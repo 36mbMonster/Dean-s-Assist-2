@@ -18,7 +18,7 @@ SHELL = bash
 
 GTK := $(shell pkg-config --cflags --libs gtk+-3.0)
 
-CFLAGS := -g -Wall -static-libgcc $(GTK) $(SQLITE)
+CFLAGS := -g -Wall -static-libgcc -lm $(GTK) $(SQLITE)
 
 TARGET = deans2
 
@@ -36,7 +36,7 @@ Debug:
 	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
 	$(DLL)
 
-deans2:
+Release:
 	mkdir $(BIN)Release
 	$(CPGLADE)
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
