@@ -87,8 +87,8 @@ int main(int argc, char *argv[])
 
 	//Make the font bigger
 	PangoFontDescription *font;
-	font = pango_font_description_from_string ("");
-	pango_font_description_set_size(font, 14 * PANGO_SCALE);
+	font = pango_font_description_new();
+	pango_font_description_set_size(font, 14);
 	gtk_widget_override_font (GTK_WIDGET(window), font);
 
 	spin_adjust = gtk_adjustment_new(0, 0, 15, 1, 2, 0);
@@ -622,7 +622,8 @@ void cell_edited(GtkCellRendererText *renderer,
 		break;
 	}
 
-	gtk_tree_path_free(path);
+
+	//gtk_tree_path_free(path);
 
 }
 
