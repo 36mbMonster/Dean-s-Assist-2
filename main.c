@@ -597,13 +597,21 @@ void cell_edited(GtkCellRendererText *renderer,
 			gtk_widget_show_all(set_days_window);
 		}
 		break;
-		case COL_INSTR:
-		{
+		case COL_SECT:
+        {
+                gint entry = atoi(new_text);
                 gtk_list_store_set(store, &iter,
-								COL_INSTR, new_text,
+								COL_SECT, entry,
 								-1);
-		}
-		break;
+        }
+        break;
+		case COL_BLDG:
+        {
+                gtk_list_store_set(store, &iter,
+								COL_BLDG, new_text,
+								-1);
+        }
+        break;
 		case COL_ROOM:
 		{
 			if(is_int(new_text) && atoi(new_text) > -1)
@@ -618,6 +626,13 @@ void cell_edited(GtkCellRendererText *renderer,
 				gtk_message_dialog_format_secondary_markup(error_dialog, "%s", INVALID_ROOM_ERROR);
 				gtk_dialog_run(GTK_DIALOG(error_dialog));
 			}
+		}
+		break;
+        case COL_INSTR:
+		{
+                gtk_list_store_set(store, &iter,
+								COL_INSTR, new_text,
+								-1);
 		}
 		break;
 	}
