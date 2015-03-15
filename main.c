@@ -250,11 +250,10 @@ void load_file()
 
 	if(response == GTK_RESPONSE_ACCEPT)
 	{
-		char *filename;
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_dialog));
 		read_from_db(filename);
 		gtk_window_set_title(GTK_WINDOW(window), filename);
-		g_free(filename);
+		has_saved = 1;
 	}
 
 	gtk_widget_destroy(GTK_WIDGET(file_dialog));
