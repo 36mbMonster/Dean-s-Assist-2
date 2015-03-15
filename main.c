@@ -94,6 +94,8 @@ int main(int argc, char *argv[])
 	spin_adjust = gtk_adjustment_new(0, 0, 15, 1, 2, 0);
 	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
 
+	has_saved = 0;
+
 /**
 ***************************************************************************
 *							  Connect Signals						  	  *
@@ -107,7 +109,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(new_course_item, "activate", G_CALLBACK(new_row), NULL);
 	g_signal_connect(show_hide_columns_item, "activate", G_CALLBACK(show_adjust_columns_dialog), NULL);
 	g_signal_connect(delete_row_item, "activate", G_CALLBACK(delete_row), NULL);
-//	g_signal_connect(save_semester_item, "activate", G_CALLBACK(), NULL);
+	g_signal_connect(save_semester_item, "activate", G_CALLBACK(save), NULL);
 	g_signal_connect(save_semester_as_item, "activate", G_CALLBACK(save_as), NULL);
 	g_signal_connect(load_semester_item, "activate", G_CALLBACK(load_file), NULL);
 	g_signal_connect(show_hide_columns_window, "hide", G_CALLBACK(hide_adjust_columns_dialog), NULL);
@@ -195,6 +197,14 @@ void new_semester()
     }
 }
 
+void save()
+{
+    if(has_saved)
+        write_to_db(filename);
+    else
+        save_as();
+}
+
 void save_as()
 {
 	file_dialog = GTK_FILE_CHOOSER_DIALOG(gtk_file_chooser_dialog_new (
@@ -212,11 +222,13 @@ void save_as()
 
 	if(response == GTK_RESPONSE_ACCEPT)
 	{
-		char *filename;
+
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_dialog));
 		write_to_db(filename);
 		gtk_window_set_title(GTK_WINDOW(window), filename);
-		g_free(filename);
+
+		//set flag
+		has_saved = 1;
 	}
 
 	gtk_widget_destroy(GTK_WIDGET(file_dialog));

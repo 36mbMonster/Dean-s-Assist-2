@@ -27,6 +27,7 @@ void delete_row();
 void new_row();
 void cell_edited();
 void new_semester();
+void save();
 void save_as();
 void load_file();
 void generate_sections();
@@ -36,7 +37,8 @@ void read_from_db();
 void prep_printer();
 
 int i = 0;
-int file_mode;
+int has_saved;
+char *filename;
 
 //GTK Components
 GtkBuilder *builder;
