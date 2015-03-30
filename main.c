@@ -386,6 +386,7 @@ void hide_set_days_dialog()
 		}
 		days[i] = 0;
 	}
+	gtk_tree_model_get_iter(model, &iter, path);
 	gtk_tree_selection_get_selected(selector, &model, &iter);
 	gtk_list_store_set(store, &iter,
                         COL_DAYS, out,
@@ -407,11 +408,6 @@ void hide_file_dialog()
 void generate_sections()
 {
 	int num_sections = gtk_spin_button_get_value_as_int(spin_button);
-	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);
-	gtk_tree_selection_get_selected(selector, &model, &iter);
-
-	if(selector == 0)
-		return;
 
 	char *dept, *num, *days, *bldg, *instr;
 	int start, end, sect, room;
@@ -664,8 +660,6 @@ void delete_row()
 //WORKS!!
 void new_row()
 {
-
-	gtk_tree_model_get_iter(model, &iter, path);
 
 	gtk_list_store_insert(store, &iter, 0);
 
