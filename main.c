@@ -236,6 +236,7 @@ void save_as()
 
 void load_file()
 {
+
 	file_dialog = GTK_FILE_CHOOSER_DIALOG(gtk_file_chooser_dialog_new (
 								  "Load File",
 								  GTK_WINDOW(window),
@@ -250,6 +251,30 @@ void load_file()
 
 	if(response == GTK_RESPONSE_ACCEPT)
 	{
+		//Check whether or not the model is empty
+		if(gtk_tree_model_get_iter_first(model, &iter))
+		{
+			GtkWidget *question_dialog;
+			question_dialog = gtk_message_dialog_new(GTK_WINDOW (window), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
+													 "Loading a semester will result in the loss of any unsaved work in the current semester.\nAre you sure you want to continue?");
+
+			int res = gtk_dialog_run(GTK_DIALOG(question_dialog));
+
+			if(res == GTK_RESPONSE_YES)
+			{
+				gtk_list_store_clear(store);
+				treeview = gtk_tree_view_new();
+				model = gtk_tree_view_get_model(treeview);
+			}
+			else
+			{
+				gtk_widget_destroy(question_dialog);
+				gtk_widget_destroy(GTK_WIDGET(file_dialog));
+				return;
+			}
+
+			gtk_widget_destroy(question_dialog);
+		}
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_dialog));
 		read_from_db(filename);
 		gtk_window_set_title(GTK_WINDOW(window), filename);
@@ -541,9 +566,6 @@ void cell_edited(GtkCellRendererText *renderer,
 			gtk_tree_model_get(model, &iter, column, &old_entry, -1);
 			g_free(old_entry);
 
-			//u = gtk_tree_path_get_indices(path)[0];
-			//g_free(g_array_index(art));
-
 			gtk_list_store_set(store, &iter,
 								COL_DEPT, new_text,
 								-1);
@@ -653,6 +675,9 @@ void cell_edited(GtkCellRendererText *renderer,
 //WORKS!!
 void delete_row()
 {
+	selector = gtk_tree_view_get_selection(treeview);
+	gtk_tree_selection_select_path(selector, path);
+	gtk_tree_model_get_iter(model, &iter, path);
 	gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
 }
 
