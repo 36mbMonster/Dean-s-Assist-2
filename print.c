@@ -124,10 +124,11 @@ void draw_page(GtkPrintOperation *operation,
 	time_t t;
 	t = time(NULL);
 	local = localtime(&t);
+	//No carriage return character here because it was causing garbage characters to be printed.
 	strftime(str_date, sizeof(str_date), "%m/%d/%y\n",local);
 
 	//Print the number of pages
-	sprintf(text,"Page No. %d\n",pages);
+	sprintf(text,"Page No. %d\r\n",pages);
 	strcat(text, str_date);
 	pango_layout_set_text(layout, text, -1);
 	pango_cairo_show_layout(cr, layout);
@@ -157,7 +158,7 @@ void draw_page(GtkPrintOperation *operation,
     pango_cairo_show_layout(cr, layout);
 
 	//**************FIXME***************
-	pango_layout_set_text(layout, "Fall/Spring <year>\n", -1);
+	pango_layout_set_text(layout, "Fall/Spring <year>\r\n", -1);
 	pango_layout_get_pixel_size(layout, &text_width, &text_height);
 	cairo_move_to(cr, (width - text_width), 0);
 	pango_cairo_show_layout(cr, layout);
@@ -181,7 +182,7 @@ void draw_page(GtkPrintOperation *operation,
 	cairo_move_to(cr, 0, current_y);
 	char column_text[100];
 	//sprintf(column_text, "%-5s%-6s%-13s%-12s%-4s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
-	sprintf(column_text, "\t\t%-13s%-8s%-4s%-5s%-5s%-20s\n","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+	sprintf(column_text, "\t\t%-13s%-8s%-4s%-5s%-5s%-20s\r\n","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
 	pango_layout_set_text(layout,column_text,-1);
 	pango_cairo_show_layout(cr, layout);
 
@@ -230,7 +231,7 @@ void draw_page(GtkPrintOperation *operation,
 			for(k = 0; k < ident_size-1; k++)
 				strcat(ident," ");
 
-            sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,start,"-",end,days,sect,bldg,room,instr);
+            sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
             //sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,dept,num,start,"-",end,days,sect,bldg,room,instr);
             pango_layout_set_text(layout, text, -1);
             cairo_rel_move_to (cr, 0, FONT_SIZE);
