@@ -200,7 +200,13 @@ void new_semester()
 void save()
 {
     if(has_saved)
-        write_to_db(filename);
+    {
+    	open_db(filename);
+    	char *statement = "delete from CoB_Sched;";
+    	execute_sql(statement);
+    	close_db();
+    	write_to_db(filename);
+    }
     else
         save_as();
 }
