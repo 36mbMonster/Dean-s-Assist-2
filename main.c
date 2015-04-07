@@ -1,5 +1,5 @@
 #include "deans2.h"
-
+gboolean view_selection_func();
 int main(int argc, char *argv[])
 {
 	gtk_init(&argc, &argv);
@@ -84,6 +84,12 @@ int main(int argc, char *argv[])
 	}
 
 	treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
+
+	//Put selector in single select mode
+	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
+
+	gtk_tree_selection_set_select_function(selector, view_selection_func, NULL, NULL);
+	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);
 
 	//Make the font bigger
 	//If you don't use a generated font description, the text won't render.
@@ -681,10 +687,25 @@ void cell_edited(GtkCellRendererText *renderer,
 //WORKS!!
 void delete_row()
 {
-	selector = gtk_tree_view_get_selection(treeview);
-	gtk_tree_selection_select_path(selector, path);
-	gtk_tree_model_get_iter(model, &iter, path);
-	gtk_list_store_remove(GTK_LIST_STORE(model), &iter);
+
+	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
+	gtk_tree_selection_get_selected(selector, &model, &iter);
+	gtk_list_store_remove(GTK_LIST_STORE(store), &iter);
+
+}
+
+ gboolean
+  view_selection_func (GtkTreeSelection *selection,
+                       GtkTreeModel     *amodel,
+                       GtkTreePath      *apath,
+                       gboolean          path_currently_selected,
+                       gpointer          userdata)
+{
+	printf("selected\n");
+	gtk_tree_model_get_iter(amodel, &iter, apath);
+
+
+	return TRUE;
 }
 
 //Adds a new course or section to the list.
