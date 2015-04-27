@@ -26,6 +26,7 @@ void time_gen();
 void delete_row();
 void new_row();
 void cell_edited();
+void edit_days();
 void new_semester();
 void save();
 void save_as();

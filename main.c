@@ -142,7 +142,8 @@ int main(int argc, char *argv[])
 	g_signal_connect(number_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(start_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(end_text, "edited", G_CALLBACK(cell_edited), NULL);
-	g_signal_connect(days_text, "editing-started", G_CALLBACK(cell_edited), NULL);
+	//g_signal_connect(days_text, "editing-started", G_CALLBACK(cell_edited), NULL);
+	g_signal_connect(days_text, "editing-started", G_CALLBACK(edit_days), NULL);
 	g_signal_connect(sect_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(bldg_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(room_text, "edited", G_CALLBACK(cell_edited), NULL);
@@ -423,8 +424,8 @@ void hide_set_days_dialog()
 		}
 		days[i] = 0;
 	}
-	gtk_tree_model_get_iter(model, &iter, path);
-	gtk_tree_selection_get_selected(selector, &model, &iter);
+	//gtk_tree_model_get_iter(model, &iter, path);
+	//gtk_tree_selection_get_selected(selector, &model, &iter);
 	gtk_list_store_set(store, &iter,
                         COL_DAYS, out,
                                     -1);
@@ -527,8 +528,8 @@ void check_clicked(GtkCheckButton *check,
                     const gchar         *path_string,
                     gpointer             data)
 {
-	path = gtk_tree_path_new_from_string (path_string);
-	gtk_tree_model_get_iter (model, &iter, path);
+	//path = gtk_tree_path_new_from_string (path_string);
+	//gtk_tree_model_get_iter (model, &iter, path);
 
     const char *label = gtk_button_get_label(GTK_BUTTON(check));
 
@@ -553,6 +554,24 @@ void check_clicked(GtkCheckButton *check,
 void time_gen()
 {
 	gen_times = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(time_offset));
+}
+
+//Call this instead of cell_edited when the days column is clicked.
+//I needed a separate function because that column gives off an
+//"editing started" signal rather than an "edited" signal like the others.
+void
+edit_days (GtkCellRenderer *cell,
+                      GtkCellEditable *editable,
+                      const gchar     *path_string,
+                      gpointer         data)
+
+{
+	path = gtk_tree_path_new_from_string (path_string);
+
+	gtk_tree_model_get_iter (model, &iter, path);
+
+	gtk_widget_show_all(set_days_window);
+
 }
 
 //Get user input from the cell and update the rowquite character c
@@ -631,11 +650,6 @@ void cell_edited(GtkCellRendererText *renderer,
 								COL_END, entry,
 								-1);
 			}
-		}
-		break;
-		case COL_DAYS:
-		{
-			gtk_widget_show_all(set_days_window);
 		}
 		break;
 		case COL_SECT:
