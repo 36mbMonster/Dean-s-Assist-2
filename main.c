@@ -1,5 +1,6 @@
 #include "deans2.h"
 gboolean view_selection_func();
+void update_model();
 int main(int argc, char *argv[])
 {
 	gtk_init(&argc, &argv);
@@ -164,7 +165,6 @@ int main(int argc, char *argv[])
 	gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
     gtk_widget_show(window);
     gtk_main();
-
 
     return 0;
 }
@@ -702,8 +702,9 @@ void cell_edited(GtkCellRendererText *renderer,
 void delete_row()
 {
 
-	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
-	gtk_tree_selection_get_selected(selector, &model, &iter);
+	//selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
+	//gtk_tree_selection_get_selected(selector, &model, &iter);
+
 	gtk_list_store_remove(GTK_LIST_STORE(store), &iter);
 
 }
@@ -745,4 +746,12 @@ void new_row()
 
 	//Increment the iterator. If this is not done, the program will crash upon certain instructions.
 	gtk_tree_model_iter_next(model, &iter);
+}
+
+void update_model(GtkTreeView       *tree_view,
+               GtkTreePath       *path,
+               GtkTreeViewColumn *column,
+               gpointer           user_data)
+{
+	gtk_tree_model_get_iter(model, &iter, path);
 }
