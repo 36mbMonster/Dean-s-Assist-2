@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
 	//Put selector in single select mode
 	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
 
-	gtk_tree_selection_set_select_function(selector, view_selection_func, NULL, NULL);
+	//gtk_tree_selection_set_select_function(selector, view_selection_func, NULL, NULL);
 	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);
 
 	//Make the font bigger
@@ -703,12 +703,19 @@ void delete_row()
 {
 
 	//selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
-	//gtk_tree_selection_get_selected(selector, &model, &iter);
+	//printf("%d\n",gtk_tree_selection_get_selected(selector, &model, &iter));
+	//gtk_tree_selection_select_iter ( selector, &iter );
+	//gtk_list_store_remove(GTK_LIST_STORE(store), &iter);
+
+	GtkTreeModel *model2 = gtk_tree_view_get_model ( treeview );
+	GtkTreeSelection *selection = gtk_tree_view_get_selection ( treeview );
+	gtk_tree_model_get_iter_first ( model2, &iter );
+	gtk_tree_selection_select_iter ( selection, &iter );
 
 	gtk_list_store_remove(GTK_LIST_STORE(store), &iter);
 
 }
-
+/*
  gboolean
   view_selection_func (GtkTreeSelection *selection,
                        GtkTreeModel     *amodel,
@@ -721,7 +728,7 @@ void delete_row()
 
 
 	return TRUE;
-}
+}*/
 
 //Adds a new course or section to the list.
 //WORKS!!
@@ -746,12 +753,4 @@ void new_row()
 
 	//Increment the iterator. If this is not done, the program will crash upon certain instructions.
 	gtk_tree_model_iter_next(model, &iter);
-}
-
-void update_model(GtkTreeView       *tree_view,
-               GtkTreePath       *path,
-               GtkTreeViewColumn *column,
-               gpointer           user_data)
-{
-	gtk_tree_model_get_iter(model, &iter, path);
 }
