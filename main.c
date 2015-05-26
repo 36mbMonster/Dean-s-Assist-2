@@ -87,9 +87,7 @@ int main(int argc, char *argv[])
 	treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
 
 	//Put selector in single select mode
-	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
-
-	//gtk_tree_selection_set_select_function(selector, view_selection_func, NULL, NULL);
+	//selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
 	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);
 
 	//Make the font bigger
@@ -591,7 +589,6 @@ void cell_edited(GtkCellRendererText *renderer,
 	{
 		case COL_DEPT:
 		{
-			//gint u;
 			gchar *old_entry;
 
 			gtk_tree_model_get(model, &iter, column, &old_entry, -1);
@@ -702,18 +699,14 @@ void cell_edited(GtkCellRendererText *renderer,
 void delete_row()
 {
 
-	//selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
-	//printf("%d\n",gtk_tree_selection_get_selected(selector, &model, &iter));
-	//gtk_tree_selection_select_iter ( selector, &iter );
-	//gtk_list_store_remove(GTK_LIST_STORE(store), &iter);
+	GtkTreeView *treeview2;
+    GtkTreeModel *model2;
+    GtkTreeIter iter2;
 
-	GtkTreeModel *model2 = gtk_tree_view_get_model ( treeview );
-	GtkTreeSelection *selection = gtk_tree_view_get_selection ( treeview );
-	gtk_tree_model_get_iter_first ( model2, &iter );
-	gtk_tree_selection_select_iter ( selection, &iter );
-
-	gtk_list_store_remove(GTK_LIST_STORE(store), &iter);
-
+    treeview2 = GTK_TREE_VIEW(gtk_builder_get_object(builder, "treeview"));
+    selector = gtk_tree_view_get_selection(treeview2);
+    gtk_tree_selection_get_selected(selector, &model2, &iter2);
+    gtk_list_store_remove(GTK_LIST_STORE(store), &iter2);
 }
 /*
  gboolean
