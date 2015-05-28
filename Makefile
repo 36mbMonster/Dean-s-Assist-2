@@ -3,7 +3,7 @@ ifeq ($(OS),Windows_NT)
 	BIN = "bin\"
 	DIRCHK = if exist bin rd /s /q bin
 	CPGLADE = copy main_win.glade bin\Release
-	RM = rmdir bin
+	RM = rmdir /S /Q bin
 	SQLITE = -dll sqlite3.dll
 	DLL = copy /Y sqlite3.dll bin\Debug && copy /Y sqlite3.dll bin\Release
 else
