@@ -6,8 +6,8 @@
     <property name="border_width">5</property>
     <property name="type_hint">dialog</property>
     <property name="program_name">Deans2</property>
-    <property name="version">Alpha</property>
-    <property name="copyright" translatable="yes">(C) Jonathan Vaccaro 2014</property>
+    <property name="version">Beta</property>
+    <property name="copyright" translatable="yes">(C) Jonathan Vaccaro 2014 - 2015</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="aboutdialog-vbox1">
         <property name="can_focus">False</property>
@@ -202,28 +202,6 @@
       </object>
     </child>
   </object>
-  <object class="GtkListStore" id="liststore">
-    <columns>
-      <!-- column-name Dept. -->
-      <column type="gchararray"/>
-      <!-- column-name Number -->
-      <column type="gchararray"/>
-      <!-- column-name Start -->
-      <column type="guint"/>
-      <!-- column-name End -->
-      <column type="guint"/>
-      <!-- column-name Days -->
-      <column type="gchararray"/>
-      <!-- column-name Sect. -->
-      <column type="guint"/>
-      <!-- column-name Bldg. -->
-      <column type="gchararray"/>
-      <!-- column-name Room -->
-      <column type="guint"/>
-      <!-- column-name Instructor -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkMessageDialog" id="error_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -268,36 +246,6 @@
     <action-widgets>
       <action-widget response="0">error_dialog_okay</action-widget>
     </action-widgets>
-  </object>
-  <object class="GtkImage" id="image10">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-execute</property>
-  </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-file</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-open</property>
-  </object>
-  <object class="GtkImage" id="image5">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-save</property>
-  </object>
-  <object class="GtkImage" id="image6">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-save-as</property>
-  </object>
-  <object class="GtkImage" id="image7">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-print</property>
   </object>
   <object class="GtkMessageDialog" id="gensect_dialog">
     <property name="can_focus">False</property>
@@ -387,15 +335,62 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-add</property>
   </object>
+  <object class="GtkImage" id="image10">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-execute</property>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-file</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-open</property>
+  </object>
+  <object class="GtkImage" id="image5">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-save</property>
+  </object>
+  <object class="GtkImage" id="image6">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-save-as</property>
+  </object>
+  <object class="GtkImage" id="image7">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-print</property>
+  </object>
   <object class="GtkImage" id="image8">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-preferences</property>
   </object>
-  <object class="GtkImage" id="image9">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-home</property>
+  <object class="GtkListStore" id="liststore">
+    <columns>
+      <!-- column-name Dept. -->
+      <column type="gchararray"/>
+      <!-- column-name Number -->
+      <column type="gchararray"/>
+      <!-- column-name Start -->
+      <column type="guint"/>
+      <!-- column-name End -->
+      <column type="guint"/>
+      <!-- column-name Days -->
+      <column type="gchararray"/>
+      <!-- column-name Sect. -->
+      <column type="guint"/>
+      <!-- column-name Bldg. -->
+      <column type="gchararray"/>
+      <!-- column-name Room -->
+      <column type="guint"/>
+      <!-- column-name Instructor -->
+      <column type="gchararray"/>
+    </columns>
   </object>
   <object class="GtkWindow" id="set_days_win">
     <property name="can_focus">False</property>
@@ -702,32 +697,6 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="image">image8</property>
-                        <property name="use_stock">False</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="view">
-                <property name="use_action_appearance">False</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_View</property>
-                <property name="use_underline">True</property>
-                <child type="submenu">
-                  <object class="GtkMenu" id="view_menu">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkImageMenuItem" id="building_maintenance_item">
-                        <property name="label" translatable="yes">_Building Reports</property>
-                        <property name="use_action_appearance">False</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="image">image9</property>
                         <property name="use_stock">False</property>
                       </object>
                     </child>
