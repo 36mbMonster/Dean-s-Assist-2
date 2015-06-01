@@ -31,12 +31,14 @@ all:
 	$(DLL)
 
 Debug:
+	$(DIRCHK)
 	mkdir $(BIN)Debug
 	$(CPGLADE)
 	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
 	$(DLL)
 
 Release:
+	$(DIRCHK)
 	mkdir $(BIN)Release
 	$(CPGLADE)
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
