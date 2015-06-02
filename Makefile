@@ -1,17 +1,20 @@
+
 ifeq ($(OS),Windows_NT)
 	CC = mingw32-gcc
 	BIN = "bin\"
 	DIRCHK = if exist bin rd /s /q bin
-	CPGLADE = copy main_win.glade bin\Release
+	CPGLADE = copy main_win.glade bin\
+	CPSQL = copy sqlite3.c bin\
 	RM = rmdir /S /Q bin
-	SQLITE = -dll sqlite3.dll
-	DLL = copy /Y sqlite3.dll bin\Debug && copy /Y sqlite3.dll bin\Release
+	SQLITE = sqlite3.c
+	# Workaround vars for preventing issues in Linux
+	DEBUG = Debug
+	RELEASE = Release
 else
 	CC = gcc
 	BIN = -vp bin/
 	RM = rm -rf bin
 	SQLITE = -l sqlite3 -ldl -lpthread
-	DLL = rm -f sqlite3.dll
 endif
 
 SHELL = bash
@@ -26,23 +29,26 @@ all:
 	$(DIRCHK)
 	mkdir $(BIN)Debug
 	mkdir $(BIN)Release
-	$(CPGLADE)
+	$(CPGLADE)$(Debug)
+	$(CPGLADE)$(Release)
+	$(CPSQL)$(Debug)
+	$(CPSQL)$(Release)
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
-	$(DLL)
+	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
 
 Debug:
 	$(DIRCHK)
 	mkdir $(BIN)Debug
-	$(CPGLADE)
+	$(CPGLADE)$(Debug)
+	$(CPSQL)$(Debug)
 	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
-	$(DLL)
 
 Release:
 	$(DIRCHK)
 	mkdir $(BIN)Release
-	$(CPGLADE)
+	$(CPGLADE)$(Release)
+	$(CPSQL)$(Release)
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
-	$(DLL)
 
 clean:
 	$(RM)
