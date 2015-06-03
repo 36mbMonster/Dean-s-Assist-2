@@ -8,8 +8,8 @@ ifeq ($(OS),Windows_NT)
 	RM = rmdir /S /Q bin
 	SQLITE = sqlite3.c
 	# Workaround vars for preventing issues in Linux
-	DEBUG = Debug
-	RELEASE = Release
+	DEBUG = bin\Debug
+	RELEASE = bin\Release
 else
 	CC = gcc
 	BIN = -vp bin/
@@ -29,25 +29,25 @@ all:
 	$(DIRCHK)
 	mkdir $(BIN)Debug
 	mkdir $(BIN)Release
-	$(CPGLADE)$(Debug)
-	$(CPGLADE)$(Release)
-	$(CPSQL)$(Debug)
-	$(CPSQL)$(Release)
+	$(CPGLADE) $(DEBUG)
+	$(CPGLADE) $(RELEASE)
+	$(CPSQL) $(DEBUG)
+	$(CPSQL) $(RELEASE)
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
 	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
 
 Debug:
 	$(DIRCHK)
 	mkdir $(BIN)Debug
-	$(CPGLADE)$(Debug)
-	$(CPSQL)$(Debug)
+	$(CPGLADE) $(DEBUG)
+	$(CPSQL) $(DEBUG)
 	$(CC) main.c $(CFLAGS) -o bin/Debug/$(TARGET)
 
 Release:
 	$(DIRCHK)
 	mkdir $(BIN)Release
-	$(CPGLADE)$(Release)
-	$(CPSQL)$(Release)
+	$(CPGLADE) $(RELEASE)
+	$(CPSQL) $(RELEASE)
 	$(CC) main.c $(CFLAGS) -o bin/Release/$(TARGET)
 
 clean:
