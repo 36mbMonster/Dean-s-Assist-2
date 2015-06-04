@@ -13,6 +13,7 @@ else
 	BIN = -vp bin/
 	RM = rm -rf bin
 	SQLITE = -l sqlite3 -ldl -lpthread
+	CPGLADE = cp main_win.glade
 	DEBUG = bin/Debug
 	RELEASE = bin/Release
 endif
