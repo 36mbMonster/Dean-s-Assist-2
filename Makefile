@@ -3,7 +3,7 @@ ifeq ($(OS),Windows_NT)
 	CC = mingw32-gcc
 	BIN = "bin\"
 	DIRCHK = if exist bin rd /s /q bin
-	CPGLADE = copy main_win.glade "bin\"
+	CPGLADE = copy main_win.glade
 	RM = rmdir /S /Q bin
 	SQLITE = sqlite3.c
 	DEBUG = bin\Debug
