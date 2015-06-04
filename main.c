@@ -375,14 +375,14 @@ void read_from_db(char *filename)
 	sect = get_sect_vals();
 	room = get_room_vals();
 
-	gtk_tree_model_get_iter(model, &iter, path);
+	gtk_tree_model_get_iter_first(model, &iter);
 	size = get_size();
 
     for(i = 0; i < size; i++)
     {
-        gtk_list_store_insert(store, &iter, 0);
+        //gtk_list_store_insert(store, &iter, 0);
 
-        gtk_list_store_set(store, &iter,
+        gtk_list_store_insert_with_values(store, &iter, 0,
         COL_DEPT, dept[i],
         COL_NUMBER, num[i],
         COL_START, start[i],
