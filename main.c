@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 	treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
 
 	//Put selector in single select mode
-	//selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
+	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
 	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);
 
 	//Make the font bigger
@@ -112,7 +112,6 @@ int main(int argc, char *argv[])
 	g_signal_connect(about_item, "activate", G_CALLBACK(show_about_dialog), NULL);
 	g_signal_connect(quit_item, "activate", G_CALLBACK(gtk_main_quit), NULL);
 	g_signal_connect(new_course_item, "activate", G_CALLBACK(new_row), NULL);
-	g_signal_connect(show_hide_columns_item, "activate", G_CALLBACK(show_adjust_columns_dialog), NULL);
 	g_signal_connect(delete_row_item, "activate", G_CALLBACK(delete_row), NULL);
 	g_signal_connect(save_semester_item, "activate", G_CALLBACK(save), NULL);
 	g_signal_connect(save_semester_as_item, "activate", G_CALLBACK(save_as), NULL);
@@ -194,7 +193,7 @@ void new_semester()
         if(res == GTK_RESPONSE_YES)
         {
             gtk_list_store_clear(store);
-            treeview = gtk_tree_view_new();
+            treeview = GTK_TREE_VIEW(gtk_tree_view_new());
             model = gtk_tree_view_get_model(treeview);
         }
 
@@ -274,7 +273,7 @@ void load_file()
 			if(res == GTK_RESPONSE_YES)
 			{
 				gtk_list_store_clear(store);
-				treeview = gtk_tree_view_new();
+				treeview = GTK_TREE_VIEW(gtk_tree_view_new());
 				model = gtk_tree_view_get_model(treeview);
 			}
 			else
