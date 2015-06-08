@@ -37,6 +37,8 @@ void write_to_db();
 void read_from_db();
 void prep_printer();
 
+void quit_deans2();
+
 int i = 0;
 int has_saved;
 char *filename;

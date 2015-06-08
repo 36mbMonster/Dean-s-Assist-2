@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 	//Connect menu signals
 	g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 	g_signal_connect(about_item, "activate", G_CALLBACK(show_about_dialog), NULL);
-	g_signal_connect(quit_item, "activate", G_CALLBACK(gtk_main_quit), NULL);
+	g_signal_connect(quit_item, "activate", G_CALLBACK(quit_deans2), NULL);
 	g_signal_connect(new_course_item, "activate", G_CALLBACK(new_row), NULL);
 	g_signal_connect(delete_row_item, "activate", G_CALLBACK(delete_row), NULL);
 	g_signal_connect(save_semester_item, "activate", G_CALLBACK(save), NULL);
@@ -171,6 +171,12 @@ int main(int argc, char *argv[])
 ***************************************************************************
 */
 
+void quit_deans2()
+{
+    free_back();
+
+    gtk_main_quit();
+}
 
 void show_about_dialog()
 {
@@ -361,7 +367,7 @@ void read_from_db(char *filename)
 	int *start, *end, *sect, *room;
 	int i, size;
 
-	open_db(filename);
+	printf("%s\n",open_db(filename));
 	execute_sql("select * from CoB_Sched;");
 
     dept = get_dept_vals();
@@ -379,9 +385,7 @@ void read_from_db(char *filename)
 
     for(i = 0; i < size; i++)
     {
-        //gtk_list_store_insert(store, &iter, 0);
-
-        gtk_list_store_insert_with_values(store, &iter, 0,
+       gtk_list_store_insert_with_values(store, &iter, 0,
         COL_DEPT, dept[i],
         COL_NUMBER, num[i],
         COL_START, start[i],

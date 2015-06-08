@@ -5,7 +5,7 @@ char *open_db(char *name);
 char *create_db();
 char *open_db();
 void close_db();
-
+void free_back();
 
 char **get_dept_vals();
 char **get_num_vals();
@@ -121,6 +121,19 @@ char *open_db(char *db_name)
 void close_db()
 {
 	sqlite3_close(working_db);
+}
+
+void free_back()
+{
+    int i;
+    for(i = 0; i < idx; i++)
+    {
+        free(dept_vals[i]);
+        free(num_vals[i]);
+        free(day_vals[i]);
+        free(bldg_vals[i]);
+        free(instr_vals[i]);
+    }
 }
 
 //Get values
