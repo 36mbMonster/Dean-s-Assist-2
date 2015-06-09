@@ -6,6 +6,7 @@ int is_int(const gchar *str);
 int is_valid_course_num(const gchar *str);
 int add_time(int x, int y);
 char *file_extension_correct(char *in);
+void free_util();
 
 const char *COURSE_NUMBER_ERROR = "The entry was invalid. A course number can be two or three didgets with an optional letter at the end.";
 const char *INVALID_TIME_ERROR = "The entry was invalid. A time must be an integer between 700 and 2200.";
@@ -89,6 +90,8 @@ char *file_extension_correct(char *in)
 		sprintf(name, "%s.db", in);
 		return name;
 	}
+
+	free(name);
 	return in;
 
 }

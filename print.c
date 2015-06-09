@@ -16,6 +16,7 @@ void start_printer();
 void begin_print();
 void draw_page();
 void end_print();
+void free_print();
 
 GtkPrintSettings *print_settings;
 GtkTreeModel *model;
@@ -240,7 +241,7 @@ void draw_page(GtkPrintOperation *operation,
             more_list = gtk_tree_model_iter_next(model, &iter);
             previous_cn = num;
             printf("%s\n",text);
-            //free(ident);
+            free(previous_cn);
 		//}
 
 	}
