@@ -38,23 +38,23 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 	int i = 0;
 	while(i < argc)
 	{
-		dept_vals[idx] = malloc(sizeof(char*));
+		dept_vals[idx] = malloc(sizeof(char*)*sizeof(argv[i]));
 		strcpy(dept_vals[idx],argv[i++]);
 
-		num_vals[idx] = malloc(sizeof(char*));
+		num_vals[idx] = malloc(sizeof(char*)*sizeof(argv[i]));
 		strcpy(num_vals[idx],argv[i++]);
 
 		start_vals[idx] = atoi(argv[i++]);
 		end_vals[idx] = atoi(argv[i++]);
-		day_vals[idx] = malloc(sizeof(char*));
+		day_vals[idx] = malloc(sizeof(char*)*sizeof(argv[i]));
 		strcpy(day_vals[idx],argv[i++]);
 
 		sect_vals[idx] = atoi(argv[i++]);
-		bldg_vals[idx] = malloc(sizeof(char*));
+		bldg_vals[idx] = malloc(sizeof(char*)*sizeof(argv[i]));
 		strcpy(bldg_vals[idx],argv[i++]);
 
 		room_vals[idx] = atoi(argv[i++]);
-		instr_vals[idx] = malloc(sizeof(char*));
+		instr_vals[idx] = malloc(sizeof(char*)*sizeof(argv[i]));
 		strcpy(instr_vals[idx],argv[i++]);
 
 		idx++;
