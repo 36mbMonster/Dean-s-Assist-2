@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 		gtk_tree_view_column_set_sort_column_id(columns[i-1], i-1);
 	}
 
-	treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
+	//treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
 
 	//Put selector in single select mode
 	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
@@ -108,7 +108,7 @@ int main(int argc, char *argv[])
 */
 
 	//Connect menu signals
-	g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+	g_signal_connect(window, "destroy", G_CALLBACK(quit_deans2), NULL);
 	g_signal_connect(about_item, "activate", G_CALLBACK(show_about_dialog), NULL);
 	g_signal_connect(quit_item, "activate", G_CALLBACK(quit_deans2), NULL);
 	g_signal_connect(new_course_item, "activate", G_CALLBACK(new_row), NULL);
@@ -233,7 +233,6 @@ void save_as()
                                       GTK_RESPONSE_ACCEPT,
                                       NULL));
 
-	//gtk_widget_show_all(GTK_WIDGET(file_dialog));
 	int response = gtk_dialog_run(GTK_DIALOG(file_dialog));
 
 	if(response == GTK_RESPONSE_ACCEPT)
@@ -253,6 +252,11 @@ void save_as()
 void load_file()
 {
 
+	GtkTreeModel *model2;
+    GtkTreeIter iter2;
+
+    model2 = gtk_tree_view_get_model(treeview);
+
 	file_dialog = GTK_FILE_CHOOSER_DIALOG(gtk_file_chooser_dialog_new (
 								  "Load File",
 								  GTK_WINDOW(window),
@@ -268,7 +272,7 @@ void load_file()
 	if(response == GTK_RESPONSE_ACCEPT)
 	{
 		//Check whether or not the model is empty
-		if(gtk_tree_model_get_iter_first(model, &iter))
+		if(gtk_tree_model_get_iter_first(model2, &iter2))
 		{
 			GtkWidget *question_dialog;
 			question_dialog = gtk_message_dialog_new(GTK_WINDOW (window), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
@@ -279,8 +283,6 @@ void load_file()
 			if(res == GTK_RESPONSE_YES)
 			{
 				gtk_list_store_clear(store);
-				treeview = GTK_TREE_VIEW(gtk_tree_view_new());
-				model = gtk_tree_view_get_model(treeview);
 			}
 			else
 			{
@@ -425,8 +427,7 @@ void hide_set_days_dialog()
 		}
 		days[i] = 0;
 	}
-	//gtk_tree_model_get_iter(model, &iter, path);
-	//gtk_tree_selection_get_selected(selector, &model, &iter);
+
 	gtk_list_store_set(store, &iter,
                         COL_DAYS, out,
                                     -1);
@@ -529,8 +530,6 @@ void check_clicked(GtkCheckButton *check,
                     const gchar         *path_string,
                     gpointer             data)
 {
-	//path = gtk_tree_path_new_from_string (path_string);
-	//gtk_tree_model_get_iter (model, &iter, path);
 
     const char *label = gtk_button_get_label(GTK_BUTTON(check));
 
@@ -711,20 +710,6 @@ void delete_row()
     gtk_tree_selection_get_selected(selector, &model2, &iter2);
     gtk_list_store_remove(GTK_LIST_STORE(store), &iter2);
 }
-/*
- gboolean
-  view_selection_func (GtkTreeSelection *selection,
-                       GtkTreeModel     *amodel,
-                       GtkTreePath      *apath,
-                       gboolean          path_currently_selected,
-                       gpointer          userdata)
-{
-	printf("selected\n");
-	gtk_tree_model_get_iter(amodel, &iter, apath);
-
-
-	return TRUE;
-}*/
 
 //Adds a new course or section to the list.
 //WORKS!!
