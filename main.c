@@ -1,6 +1,6 @@
 #include "deans2.h"
-gboolean view_selection_func();
-void update_model();
+
+
 int main(int argc, char *argv[])
 {
 	gtk_init(&argc, &argv);
@@ -141,12 +141,14 @@ int main(int argc, char *argv[])
 	g_signal_connect(number_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(start_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(end_text, "edited", G_CALLBACK(cell_edited), NULL);
-	//g_signal_connect(days_text, "editing-started", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(days_text, "editing-started", G_CALLBACK(edit_days), NULL);
 	g_signal_connect(sect_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(bldg_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(room_text, "edited", G_CALLBACK(cell_edited), NULL);
 	g_signal_connect(instructor_text, "edited", G_CALLBACK(cell_edited), NULL);
+
+	//Connect keyboard event signal.
+	g_signal_connect(window, "key_press_event", G_CALLBACK(key_handler), NULL);
 
 	//Point columns to cell renderers
 	g_object_set_data (G_OBJECT (dept_text), "column", GINT_TO_POINTER (COL_DEPT));
@@ -171,6 +173,60 @@ int main(int argc, char *argv[])
 *							Signal Functions						  	  *
 ***************************************************************************
 */
+
+//Hot key event handling
+void key_handler(GtkWidget *win, GdkEventKey *event, gpointer data)
+{
+	//printf("%s\n",gdk_keyval_name(event->keyval));
+	switch(event -> keyval)
+	{
+		case GDK_KEY_g:
+			if(event->state & GDK_CONTROL_MASK)
+			{
+				show_generate_sections();
+				break;
+			}
+		case GDK_KEY_o:
+			if(event->state & GDK_CONTROL_MASK)
+			{
+				load_file();
+				break;
+			}
+		case GDK_KEY_p:
+			if(event->state & GDK_CONTROL_MASK)
+			{
+				prep_printer();
+				break;
+			}
+		case GDK_KEY_s:
+		case GDK_KEY_S:
+			if(event->state & GDK_CONTROL_MASK)
+			{
+				save();
+				break;
+			}
+			else if(event->state & GDK_CONTROL_MASK & GDK_SHIFT_MASK)
+			{
+				save_as();
+				break;
+			}
+		case GDK_KEY_F4:
+			if(event->state & GDK_MOD1_MASK)
+			{
+				quit_deans2();
+				break;
+			}
+		case GDK_KEY_plus:
+		case GDK_KEY_KP_Add:
+			if(event->state & GDK_CONTROL_MASK)
+			{
+				new_row();
+				break;
+			}
+		default:
+			return 0;
+	}
+}
 
 void quit_deans2()
 {
@@ -331,7 +387,27 @@ void load_file()
 
 void show_generate_sections()
 {
-	gtk_widget_show_all(GTK_WIDGET(generate_sections_dialog));
+	GtkTreeModel *model2;
+    GtkTreeIter iter2;
+
+    model2 = gtk_tree_view_get_model(treeview);
+	selector = gtk_tree_view_get_selection(treeview);
+
+	if(gtk_tree_model_get_iter_first(model2, &iter2) && gtk_tree_selection_get_selected(selector, &model2, &iter2))
+		gtk_widget_show_all(GTK_WIDGET(generate_sections_dialog));
+	else
+	{
+		GtkWidget *dialog;
+		dialog = gtk_message_dialog_new(GTK_WINDOW (window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+			"There is no class section selected to use for generation.");
+
+		int res = gtk_dialog_run(GTK_DIALOG(dialog));
+
+		if(res == GTK_RESPONSE_OK)
+		{
+			gtk_widget_destroy(dialog);
+		}
+	}
 }
 
 void show_adjust_columns_dialog()
