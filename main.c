@@ -100,6 +100,7 @@ int main(int argc, char *argv[])
 	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
 
 	has_saved = 0;
+	unsaved_changes = 0;
 
 /**
 ***************************************************************************
@@ -108,7 +109,7 @@ int main(int argc, char *argv[])
 */
 
 	//Connect menu signals
-	g_signal_connect(window, "destroy", G_CALLBACK(quit_deans2), NULL);
+	g_signal_connect(window, "delete_event", G_CALLBACK(quit_deans2), NULL);
 	g_signal_connect(about_item, "activate", G_CALLBACK(show_about_dialog), NULL);
 	g_signal_connect(quit_item, "activate", G_CALLBACK(quit_deans2), NULL);
 	g_signal_connect(new_course_item, "activate", G_CALLBACK(new_row), NULL);
@@ -173,9 +174,33 @@ int main(int argc, char *argv[])
 
 void quit_deans2()
 {
-    free_back();
+	printf("%d\n",unsaved_changes);
+	if(unsaved_changes)
+	{
+		GtkWidget *question_dialog;
+		question_dialog = gtk_message_dialog_new(GTK_WINDOW (window), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
+												 "Quitting deans2 will result in the loss of any unsaved work in the current semester.\nAre you sure you want to quit?");
 
-    gtk_main_quit();
+		int res = gtk_dialog_run(GTK_DIALOG(question_dialog));
+
+		if(res == GTK_RESPONSE_YES)
+		{
+			free_back();
+			gtk_main_quit();
+			return;
+		}
+		else
+		{
+			gtk_widget_destroy(question_dialog);
+			return;
+		}
+
+		gtk_widget_destroy(question_dialog);
+	}
+	free_back();
+
+	gtk_main_quit();
+
 }
 
 void show_about_dialog()
@@ -216,6 +241,7 @@ void save()
     	execute_sql(statement);
     	close_db();
     	write_to_db(filename);
+    	unsaved_changes = 0;
     }
     else
         save_as();
@@ -242,8 +268,9 @@ void save_as()
 		write_to_db(filename);
 		gtk_window_set_title(GTK_WINDOW(window), filename);
 
-		//set flag
+		//set flags
 		has_saved = 1;
+		unsaved_changes = 0;
 	}
 
 	gtk_widget_destroy(GTK_WIDGET(file_dialog));
@@ -403,6 +430,7 @@ void read_from_db(char *filename)
     }
     close_db();
     gtk_widget_hide(GTK_WIDGET(file_dialog));
+    unsaved_changes = 0;
 }
 
 void hide_set_days_dialog()
@@ -581,6 +609,7 @@ void cell_edited(GtkCellRendererText *renderer,
              	const gchar         *new_text,
              	gpointer             data)
 {
+	unsaved_changes = 1;
 
 	gint column = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (renderer), "column"));
 	path = gtk_tree_path_new_from_string (path_string);
