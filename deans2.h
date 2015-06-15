@@ -36,6 +36,9 @@ void file_dialog_okay();
 void write_to_db();
 void read_from_db();
 void prep_printer();
+void cut_r();
+void copy_r();
+void paste_r();
 
 void key_handler();
 void quit_deans2();
@@ -44,6 +47,8 @@ int i = 0;
 int has_saved;
 int unsaved_changes;
 char *filename;
+
+//Pseudo 'clipboard' variables
 
 //GTK Components
 GtkBuilder *builder;

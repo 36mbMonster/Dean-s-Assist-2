@@ -224,7 +224,7 @@ void key_handler(GtkWidget *win, GdkEventKey *event, gpointer data)
 				break;
 			}
 		default:
-			return 0;
+			return;
 	}
 }
 
@@ -264,6 +264,43 @@ void show_about_dialog()
 	//gtk_widget_show_all( about_dialog );
 	gtk_dialog_run(GTK_DIALOG(about_dialog));
 	gtk_widget_hide(GTK_WIDGET(about_dialog));
+}
+
+void cut()
+{
+    copy();
+    //delete here
+}
+
+//Copy one row.
+void copy()
+{
+    //Copy row data into temporary variables.
+
+	GtkTreeModel *model2;
+    GtkTreeIter iter2;
+
+    model2 = gtk_tree_view_get_model(treeview);
+    gtk_tree_selection_get_selected(selector, &model2, &iter2);
+
+    char *dept, *num, *days, *bldg, *instr;
+	int start, end, sect, room;
+
+	gtk_tree_model_get (model2, &iter2, COL_DEPT, &dept, -1);
+	gtk_tree_model_get (model2, &iter2, COL_NUMBER, &num, -1);
+	gtk_tree_model_get (model2, &iter2, COL_DAYS, &days, -1);
+	gtk_tree_model_get (model2, &iter2, COL_BLDG, &bldg, -1);
+	gtk_tree_model_get (model2, &iter2, COL_INSTR, &instr, -1);
+	gtk_tree_model_get (model2, &iter2, COL_START, &start, -1);
+	gtk_tree_model_get (model2, &iter2, COL_END, &end, -1);
+	gtk_tree_model_get (model2, &iter2, COL_SECT, &sect, -1);
+	gtk_tree_model_get (model2, &iter2, COL_ROOM, &room, -1);
+}
+
+void paste()
+{
+    //insert row
+    //clear 'clipboard'
 }
 
 void new_semester()
