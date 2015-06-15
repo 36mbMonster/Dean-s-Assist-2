@@ -80,6 +80,8 @@ void begin_print(GtkPrintOperation *operation,
 
 	pages = (lines - 1) / lines_per_page + 1;
 
+	printf("# of pages: (%d - 1)/%d + 1 = %d\n",lines,lines_per_page,pages);
+
 	gtk_print_operation_set_n_pages(operation,pages);
 }
 
@@ -106,10 +108,12 @@ void draw_page(GtkPrintOperation *operation,
 	//Set the font type, size and scale.
 	layout = gtk_print_context_create_pango_layout (context);
 	font = pango_font_description_from_string ("courier");
+
 	pango_font_description_set_size(font, FONT_SIZE * PANGO_SCALE);
 	pango_layout_set_font_description (layout, font);
 	pango_font_description_free (font);
 	pango_layout_set_width(layout, -1);
+	pango_layout_get_size (layout, NULL, &layout_height);
 
 	/**
 	***************************************************************************
@@ -129,7 +133,7 @@ void draw_page(GtkPrintOperation *operation,
 	strftime(str_date, sizeof(str_date), "%m/%d/%y\n",local);
 
 	//Print the number of pages
-	sprintf(text,"Page No. %d\r\n",pages);
+	sprintf(text,"Page No. %d\r\n",page);
 	strcat(text, str_date);
 	pango_layout_set_text(layout, text, -1);
 	pango_cairo_show_layout(cr, layout);
@@ -174,6 +178,7 @@ void draw_page(GtkPrintOperation *operation,
 
 	char *dept, *num, *days, *bldg, *instr;
 	int start, end, sect, room;
+	int line;
 	gboolean more_list;
 	GtkTreeIter iter;
 	more_list = gtk_tree_model_get_iter_first(model, &iter);
