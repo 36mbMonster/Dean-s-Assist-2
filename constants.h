@@ -1,4 +1,5 @@
 #define MAX_ROWS  1024
+#define MAX_LINES MAX_ROWS * 2
 
 const int MAX_GEN_SECTIONS = 15;
 const int EARLIEST_CLASS = 700;

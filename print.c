@@ -1,7 +1,6 @@
 #include <gtk/gtk.h>
 #include <time.h>
 #include <math.h>
-#include "constants.h"
 
 #define GAP (2 * 12 * 72 / 25.4)
 
@@ -12,11 +11,13 @@ int lines;
 int height;
 int lines_per_page;
 
+char *content[MAX_LINES]; //content in lines
+
 void start_printer();
 void begin_print();
 void draw_page();
 void end_print();
-void free_print();
+void load_data();
 
 GtkPrintSettings *print_settings;
 GtkTreeModel *model;
@@ -65,18 +66,9 @@ void begin_print(GtkPrintOperation *operation,
 
 	height = gtk_print_context_get_height(context);
 	lines_per_page = floor(height/FONT_SIZE);
-	lines = 0;
 
-	//Calculate the number of lines
-	gboolean more_list;
-	GtkTreeIter iter;
-	more_list = gtk_tree_model_get_iter_first(model, &iter);
-
-	while(more_list)
-	{
-		lines++;
-		more_list = gtk_tree_model_iter_next(model, &iter);
-	}
+	//Calculate the number of lines and load the semester data into an array.
+	load_data();
 
 	pages = (lines - 1) / lines_per_page + 1;
 
@@ -176,12 +168,9 @@ void draw_page(GtkPrintOperation *operation,
 	***************************************************************************
 	*/
 
-	char *dept, *num, *days, *bldg, *instr;
-	int start, end, sect, room;
-	int line;
-	gboolean more_list;
-	GtkTreeIter iter;
-	more_list = gtk_tree_model_get_iter_first(model, &iter);
+
+	int line = page * lines_per_page;
+
 
 	//Print the column headers a lot farther down after the page header.
 	current_y += GAP;
@@ -195,6 +184,37 @@ void draw_page(GtkPrintOperation *operation,
 	//Start printing the data with a one row gap beneath the column headers.
 	current_y += FONT_SIZE;
 	cairo_move_to(cr, 0, current_y);
+
+	//print here
+	line = page * lines_per_page;
+	int i;
+	for(i = 0; i < lines_per_page && line < lines; i++)
+	{
+		pango_layout_set_text(layout, content[line], -1);
+		pango_cairo_show_layout(cr, layout);
+		cairo_rel_move_to (cr, 0, FONT_SIZE + 3);
+		line++;
+	}
+
+    g_object_unref(layout);
+}
+
+void end_print()
+{
+	//Do something here? Is this even needed?
+	printf("printing ended.\n");
+}
+
+void load_data()
+{
+	lines = 0;
+
+	gboolean more_list;
+	GtkTreeIter iter;
+	more_list = gtk_tree_model_get_iter_first(model, &iter);
+
+	char *dept, *num, *days, *bldg, *instr;
+	int start, end, sect, room;
 
 	char *previous_cn;
 	previous_cn = malloc(sizeof(char)*4);
@@ -216,7 +236,7 @@ void draw_page(GtkPrintOperation *operation,
 		COL_INSTR, &instr,
 		-1);
 
-		char text[150];
+		char text[150]; //row
 		char ident[12];
 
 		if(strcmp(previous_cn,num) != 0)
@@ -224,11 +244,15 @@ void draw_page(GtkPrintOperation *operation,
 			sprintf(ident,"**%-5s%-5s",dept,num);
 			ident_size = strlen(ident);
 
-            pango_layout_set_text(layout, ident, -1);
+			content[lines] = malloc(sizeof(char*)*ident_size);
+			strcpy(content[lines],ident);
+			printf("%s\n",content[lines]);
+            /*pango_layout_set_text(layout, ident, -1);
             cairo_rel_move_to (cr, 0, FONT_SIZE);
             pango_cairo_show_layout(cr, layout);
 
-            printf("%s\n",ident);
+            printf("%s\n",ident);*/
+            lines++;
 		}
 		//else
 		//{
@@ -239,24 +263,21 @@ void draw_page(GtkPrintOperation *operation,
 
             sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
             //sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,dept,num,start,"-",end,days,sect,bldg,room,instr);
-            pango_layout_set_text(layout, text, -1);
+            /*pango_layout_set_text(layout, text, -1);
             cairo_rel_move_to (cr, 0, FONT_SIZE);
-            pango_cairo_show_layout(cr, layout);
+            pango_cairo_show_layout(cr, layout);*/
 
             more_list = gtk_tree_model_iter_next(model, &iter);
             previous_cn = num;
-            printf("%s\n",text);
-            free(previous_cn);
+
+            content[lines] = malloc(sizeof(char*)*150);
+            strcpy(content[lines],text);
+            printf("%s\n",content[lines]);
+            lines++;
+
 		//}
 
 	}
+	free(previous_cn);
 
-    g_object_unref(layout);
-    //free(previous_cn);
-}
-
-void end_print()
-{
-	//Do something here? Is this even needed?
-	printf("printing ended.\n");
 }
