@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(instructor_text, "edited", G_CALLBACK(cell_edited), NULL);
 
 	//Connect keyboard event signal.
-	g_signal_connect(window, "key_press_event", G_CALLBACK(key_handler), NULL);
+	g_signal_connect(window, "key_release_event", G_CALLBACK(key_handler), NULL);
 
 	//Point columns to cell renderers
 	g_object_set_data (G_OBJECT (dept_text), "column", GINT_TO_POINTER (COL_DEPT));
@@ -268,7 +268,7 @@ void show_about_dialog()
 
 void cut()
 {
-    copy();
+    //copy();
     //delete here
 }
 
