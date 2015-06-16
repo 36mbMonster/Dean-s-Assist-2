@@ -125,9 +125,11 @@ void draw_page(GtkPrintOperation *operation,
 	strftime(str_date, sizeof(str_date), "%m/%d/%y\n",local);
 
 	//Print the number of pages
-	sprintf(text,"Page No. %d\r\n",page);
+	sprintf(text,"Page No. %d\r\n",page + 1);
 	strcat(text, str_date);
 	pango_layout_set_text(layout, text, -1);
+	pango_layout_get_pixel_size (layout, &text_width, &text_height);
+	cairo_move_to(cr, 0, current_y);
 	pango_cairo_show_layout(cr, layout);
 	printf("%s\n",text);
 
