@@ -1,4 +1,5 @@
 #include "sqlite3.h"
+#include "constants.h"
 #include <stdlib.h>
 
 char *open_db(char *name);
@@ -19,15 +20,15 @@ int *get_room_vals();
 
 int get_size();
 
-char *dept_vals[255];
-char *num_vals[255];
-char *day_vals[255];
-char *bldg_vals[255];
-char *instr_vals[255];
-int start_vals[255];
-int end_vals[255];
-int sect_vals[255];
-int room_vals[255];
+char *dept_vals[MAX_ROWS];
+char *num_vals[MAX_ROWS];
+char *day_vals[MAX_ROWS];
+char *bldg_vals[MAX_ROWS];
+char *instr_vals[MAX_ROWS];
+int start_vals[MAX_ROWS];
+int end_vals[MAX_ROWS];
+int sect_vals[MAX_ROWS];
+int room_vals[MAX_ROWS];
 
 int idx;
 

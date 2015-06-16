@@ -1,3 +1,9 @@
+#define MAX_ROWS  1024
+
+const int MAX_GEN_SECTIONS = 15;
+const int EARLIEST_CLASS = 700;
+const int LATEST_CLASS = 2045;
+
 enum
 {
 	COL_DEPT,

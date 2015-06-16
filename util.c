@@ -9,7 +9,7 @@ char *file_extension_correct(char *in);
 void free_util();
 
 const char *COURSE_NUMBER_ERROR = "The entry was invalid. A course number can be two or three didgets with an optional letter at the end.";
-const char *INVALID_TIME_ERROR = "The entry was invalid. A time must be an integer between 700 and 2200.";
+const char *INVALID_TIME_ERROR = "The entry was invalid. A time must be an integer between ? and ?."; //FIXME
 const char *INVALID_ROOM_ERROR = "The entry was invalid. A room number must be an integer greater than -1.";
 
 int is_int(const gchar *str)

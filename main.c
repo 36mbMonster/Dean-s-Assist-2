@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 	font = pango_font_description_from_string("Arial 14");
 	gtk_widget_override_font (GTK_WIDGET(window), font);
 
-	spin_adjust = gtk_adjustment_new(0, 0, 15, 1, 2, 0);
+	spin_adjust = gtk_adjustment_new(0, 0, MAX_GEN_SECTIONS, 1, 2, 0);
 	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
 
 	has_saved = 0;
@@ -162,7 +162,7 @@ int main(int argc, char *argv[])
 	g_object_set_data (G_OBJECT (instructor_text), "column", GINT_TO_POINTER (COL_INSTR));
 
 	//Show the window and start gtk.
-	gtk_window_set_default_size(GTK_WINDOW(window), 800, 600);
+	gtk_window_set_default_size(GTK_WINDOW(window), 800, 600); //fix magic number
     gtk_widget_show(window);
     gtk_main();
 
@@ -763,7 +763,7 @@ void cell_edited(GtkCellRendererText *renderer,
 		break;
 		case COL_START:
 		{
-			if(!is_int(new_text) && atoi(new_text) < 700 && atoi(new_text) > 2200)
+			if(!is_int(new_text) && atoi(new_text) < EARLIEST_CLASS && atoi(new_text) > LATEST_CLASS)
 			{
 		    	gtk_message_dialog_format_secondary_markup(error_dialog, "%s", INVALID_TIME_ERROR);
 				gtk_dialog_run(GTK_DIALOG(error_dialog));
@@ -779,7 +779,7 @@ void cell_edited(GtkCellRendererText *renderer,
 		break;
 		case COL_END:
 		{
-			if(!is_int(new_text) )
+			if(!is_int(new_text) && atoi(new_text) < EARLIEST_CLASS && atoi(new_text) > LATEST_CLASS)
 			{
 		    	gtk_message_dialog_format_secondary_markup(error_dialog, "%s", INVALID_TIME_ERROR);
 				gtk_dialog_run(GTK_DIALOG(error_dialog));
@@ -833,8 +833,6 @@ void cell_edited(GtkCellRendererText *renderer,
 		break;
 	}
 
-
-	//gtk_tree_path_free(path);
 
 }
 
