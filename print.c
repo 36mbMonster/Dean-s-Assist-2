@@ -36,6 +36,10 @@ void start_printer(GtkWidget *window, GtkTreeModel *amodel)
 	g_signal_connect(print_operation, "begin-print", G_CALLBACK(begin_print),NULL);
 	g_signal_connect(print_operation, "draw-page", G_CALLBACK(draw_page),NULL);
 
+	gtk_print_operation_set_use_full_page (print_operation, FALSE);
+	gtk_print_operation_set_unit (print_operation, GTK_UNIT_POINTS);
+	gtk_print_operation_set_embed_page_setup (print_operation, TRUE);
+
 	int res;
 	res = gtk_print_operation_run (print_operation, GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,GTK_WINDOW (window), &error);
 
