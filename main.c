@@ -21,6 +21,7 @@ int main(int argc, char *argv[])
 	about_dialog = GTK_ABOUT_DIALOG(gtk_builder_get_object(builder,"aboutdialog"));
 	error_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder,"error_dialog"));
 	generate_sections_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder, "gensect_dialog"));
+	semester_dialog = GTK_DIALOG(gtk_builder_get_object(builder, "semester_dialog"));
 
 	//Load menu items
 	about_item = gtk_builder_get_object(builder, "about");
@@ -34,6 +35,7 @@ int main(int argc, char *argv[])
 	generate_sections_item = gtk_builder_get_object(builder, "generate_sections");
 	print_item = gtk_builder_get_object(builder, "print");
 	new_semester_item = gtk_builder_get_object(builder, "new_semester");
+	set_semester_item = gtk_builder_get_object(builder, "meta");
 
     //Load check boxes
     monday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "mo"));
@@ -49,6 +51,7 @@ int main(int argc, char *argv[])
 	days_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"set_days_okay"));
 	sect_gen_okay_button = GTK_BUTTON(gtk_builder_get_object(builder, "sect_gen_okay_button"));
 	spin_button = GTK_SPIN_BUTTON(gtk_builder_get_object(builder,"spinbutton"));
+	spin_button1 = GTK_SPIN_BUTTON(gtk_builder_get_object(builder,"spinbutton1"));
 
 	//Load tree and list related structures.
 	treeview = GTK_TREE_VIEW(gtk_builder_get_object(builder, "treeview"));
@@ -99,6 +102,9 @@ int main(int argc, char *argv[])
 	spin_adjust = gtk_adjustment_new(0, 0, MAX_GEN_SECTIONS, 1, 2, 0);
 	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
 
+	/*spin_adjust1 = gtk_adjustment_new(get_current_year(), 2000, 3000, 1, 5, 0);
+	gtk_spin_button_set_adjustment(spin_button1, spin_adjust1);*/
+
 	has_saved = 0;
 	unsaved_changes = 0;
 
@@ -121,6 +127,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(generate_sections_item, "activate", G_CALLBACK(show_generate_sections), NULL);
 	g_signal_connect(print_item, "activate", G_CALLBACK(prep_printer), NULL);
 	g_signal_connect(new_semester_item, "activate", G_CALLBACK(new_semester),NULL);
+	g_signal_connect(set_semester_item, "activate", G_CALLBACK(set_semester), NULL);
 
 	//Connect button signals
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
@@ -264,6 +271,12 @@ void show_about_dialog()
 	//gtk_widget_show_all( about_dialog );
 	gtk_dialog_run(GTK_DIALOG(about_dialog));
 	gtk_widget_hide(GTK_WIDGET(about_dialog));
+}
+
+void set_semester()
+{
+	gtk_dialog_run(semester_dialog);
+
 }
 
 void cut()

@@ -1,10 +1,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
 
 int is_int(const gchar *str);
 int is_valid_course_num(const gchar *str);
 int add_time(int x, int y);
+int get_current_year();
 char *file_extension_correct(char *in);
 void free_util();
 
@@ -78,6 +80,12 @@ int add_time(int x, int y)
 	}
 
 	return hour_sum*100 + minute_sum;
+}
+
+int get_current_year()
+{
+	struct tm *tm_struct = time(NULL);
+	return tm_struct->tm_hour;
 }
 
 char *file_extension_correct(char *in)

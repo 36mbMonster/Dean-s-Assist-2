@@ -39,6 +39,7 @@ void prep_printer();
 void cut_r();
 void copy_r();
 void paste_r();
+void set_semester();
 
 void key_handler();
 void quit_deans2();
@@ -56,6 +57,7 @@ GtkWidget *window;
 GtkWidget *show_hide_columns_window;
 GtkWidget *set_days_window;
 GtkFileChooserDialog *file_dialog;
+GtkDialog *semester_dialog;
 GtkAboutDialog *about_dialog;
 GtkMessageDialog *error_dialog;
 GtkMessageDialog *generate_sections_dialog;
@@ -65,8 +67,10 @@ GtkButton *error_okay_button;
 GtkButton *days_okay_button;
 GtkButton *sect_gen_okay_button;
 GtkSpinButton *spin_button;
+GtkSpinButton *spin_button1;
 
 GtkAdjustment *spin_adjust;
+GtkAdjustment *spin_adjust1;
 
 GtkTreeView *treeview;
 GtkTreeModel *model;
@@ -111,3 +115,4 @@ GObject *load_semester_item;
 GObject *generate_sections_item;
 GObject *print_item;
 GObject *new_semester_item;
+GObject *set_semester_item;
