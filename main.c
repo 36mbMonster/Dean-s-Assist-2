@@ -52,6 +52,10 @@ int main(int argc, char *argv[])
 	sect_gen_okay_button = GTK_BUTTON(gtk_builder_get_object(builder, "sect_gen_okay_button"));
 	spin_button = GTK_SPIN_BUTTON(gtk_builder_get_object(builder,"spinbutton"));
 	spin_button1 = GTK_SPIN_BUTTON(gtk_builder_get_object(builder,"spinbutton1"));
+	semester_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"semester_ok"));
+	semester_cancel_button = GTK_BUTTON(gtk_builder_get_object(builder,"semester_cancel"));
+
+	semester_combo = GTK_COMBO_BOX(gtk_builder_get_object(builder, "comboboxtext1"));
 
 	//Load tree and list related structures.
 	treeview = GTK_TREE_VIEW(gtk_builder_get_object(builder, "treeview"));
@@ -102,8 +106,10 @@ int main(int argc, char *argv[])
 	spin_adjust = gtk_adjustment_new(0, 0, MAX_GEN_SECTIONS, 1, 2, 0);
 	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
 
-	/*spin_adjust1 = gtk_adjustment_new(get_current_year(), 2000, 3000, 1, 5, 0);
-	gtk_spin_button_set_adjustment(spin_button1, spin_adjust1);*/
+	spin_adjust1 = gtk_adjustment_new(get_current_year(), 2000, 3000, 1, 5, 0);
+	gtk_spin_button_set_adjustment(spin_button1, spin_adjust1);
+
+	gtk_window_set_title(GTK_WINDOW(window), "[undefined semester] - deans2");
 
 	has_saved = 0;
 	unsaved_changes = 0;
@@ -127,12 +133,14 @@ int main(int argc, char *argv[])
 	g_signal_connect(generate_sections_item, "activate", G_CALLBACK(show_generate_sections), NULL);
 	g_signal_connect(print_item, "activate", G_CALLBACK(prep_printer), NULL);
 	g_signal_connect(new_semester_item, "activate", G_CALLBACK(new_semester),NULL);
-	g_signal_connect(set_semester_item, "activate", G_CALLBACK(set_semester), NULL);
+	g_signal_connect(set_semester_item, "activate", G_CALLBACK(show_semester), NULL);
 
 	//Connect button signals
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
 	g_signal_connect(days_okay_button, "clicked", G_CALLBACK(hide_set_days_dialog), NULL);
+	g_signal_connect(semester_cancel_button, "clicked", G_CALLBACK(hide_semester), NULL);
 	g_signal_connect(sect_gen_okay_button, "clicked", G_CALLBACK(generate_sections), NULL);
+	g_signal_connect(semester_okay_button, "clicked", G_CALLBACK(set_semester), NULL);
 
     //Connect check box signals
     g_signal_connect(monday, "clicked", G_CALLBACK(check_clicked), NULL);
@@ -273,9 +281,27 @@ void show_about_dialog()
 	gtk_widget_hide(GTK_WIDGET(about_dialog));
 }
 
-void set_semester()
+void show_semester()
 {
 	gtk_dialog_run(semester_dialog);
+
+}
+
+void hide_semester()
+{
+	gtk_widget_hide(GTK_WIDGET(show_hide_columns_window));
+}
+
+void set_semester()
+{
+	school_year = gtk_spin_button_get_value_as_int(spin_button1);
+	school_period = gtk_combo_box_text_get_active_text(semester_combo);
+
+	char title[150];
+	sprintf(title, "[%s %d] - deans2", school_period, school_year);
+	gtk_window_set_title(GTK_WINDOW(window), title);
+
+	gtk_widget_hide(GTK_WIDGET(semester_dialog));
 
 }
 

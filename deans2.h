@@ -40,6 +40,8 @@ void cut_r();
 void copy_r();
 void paste_r();
 void set_semester();
+void show_semester();
+void hide_semester();
 
 void key_handler();
 void quit_deans2();
@@ -47,6 +49,8 @@ void quit_deans2();
 int i = 0;
 int has_saved;
 int unsaved_changes;
+int school_year;
+char *school_period;
 char *filename;
 
 //Pseudo 'clipboard' variables
@@ -66,11 +70,15 @@ GtkMessageDialog *generate_sections_dialog;
 GtkButton *error_okay_button;
 GtkButton *days_okay_button;
 GtkButton *sect_gen_okay_button;
+GtkButton *semester_okay_button;
+GtkButton *semester_cancel_button;
 GtkSpinButton *spin_button;
 GtkSpinButton *spin_button1;
 
 GtkAdjustment *spin_adjust;
 GtkAdjustment *spin_adjust1;
+
+GtkComboBoxText *semester_combo;
 
 GtkTreeView *treeview;
 GtkTreeModel *model;
