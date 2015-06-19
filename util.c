@@ -84,8 +84,12 @@ int add_time(int x, int y)
 
 int get_current_year()
 {
-	struct tm *tm_struct = time(NULL);
-	return tm_struct->tm_hour;
+	time_t atime;
+	time(&atime);
+	struct tm *tm_struct = localtime(&atime);
+
+	//tm_year represents number of years since 1900, so we need to add 1900 to the return value.
+	return tm_struct->tm_year + 1900;
 }
 
 char *file_extension_correct(char *in)
