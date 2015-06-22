@@ -42,6 +42,7 @@ void paste_r();
 void set_semester();
 void show_semester();
 void hide_semester();
+void rename_semester();
 
 void key_handler();
 void quit_deans2();
@@ -50,8 +51,10 @@ int i = 0;
 int has_saved;
 int unsaved_changes;
 int school_year;
-char *school_period;
+char *school_season;
 char *filename;
+char new_name[15];
+char old_name[15];
 
 //Pseudo 'clipboard' variables
 

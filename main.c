@@ -114,6 +114,8 @@ int main(int argc, char *argv[])
 	has_saved = 0;
 	unsaved_changes = 0;
 
+	strcpy(old_name, "CoB_Sched");
+
 /**
 ***************************************************************************
 *							  Connect Signals						  	  *
@@ -295,10 +297,11 @@ void hide_semester()
 void set_semester()
 {
 	school_year = gtk_spin_button_get_value_as_int(spin_button1);
-	school_period = gtk_combo_box_text_get_active_text(semester_combo);
+	school_season = gtk_combo_box_text_get_active_text(semester_combo);
 
 	char title[150];
-	sprintf(title, "[%s %d] - deans2", school_period, school_year);
+	sprintf(title, "[%s %d] - deans2", school_season, school_year);
+	sprintf(new_name, "%s_%d", school_season, school_year);
 	gtk_window_set_title(GTK_WINDOW(window), title);
 
 	gtk_widget_hide(GTK_WIDGET(semester_dialog));
@@ -369,7 +372,8 @@ void save()
     if(has_saved)
     {
     	open_db(filename);
-    	char *statement = "delete from CoB_Sched;";
+    	char statement[30];
+    	sprintf(statement,"drop table %s;",old_name);
     	execute_sql(statement);
     	close_db();
     	write_to_db(filename);
@@ -454,7 +458,7 @@ void load_file()
 		}
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_dialog));
 		read_from_db(filename);
-		gtk_window_set_title(GTK_WINDOW(window), filename);
+		//gtk_window_set_title(GTK_WINDOW(window), filename);
 		has_saved = 1;
 	}
 
@@ -504,13 +508,15 @@ void prep_printer()
 void write_to_db(char *db_name)
 {
 	char *fullname = file_extension_correct(db_name);
-	create_db(fullname);
+	create_db(fullname, new_name);
 	gboolean more_list = 0;
 
 	char *dept, *num, *days, *bldg, *instr;
 	int start, end, sect, room;
 
 	more_list = gtk_tree_model_get_iter_first(model, &iter);
+
+	rename_semester();
 
 	while(more_list)
 	{
@@ -530,7 +536,7 @@ void write_to_db(char *db_name)
 		char statement[150];
 
 		//Generate dynamic SQL statement.
-		sprintf(statement,"insert into CoB_Sched values(\'%s\',\'%s\',%d,%d,\'%s\',%d,\'%s\',%d,\'%s\');",dept,num,start,end,days,sect,bldg,room,instr);
+		sprintf(statement,"insert into %s values(\'%s\',\'%s\',%d,%d,\'%s\',%d,\'%s\',%d,\'%s\');",new_name, dept,num,start,end,days,sect,bldg,room,instr);
 		printf("%s\n",statement);
 		execute_sql(statement);
 
@@ -547,9 +553,20 @@ void read_from_db(char *filename)
 	char **dept, **num, **days, **bldg, **instr;
 	int *start, *end, *sect, *room;
 	int i, size;
+	char statement[75];
 
 	printf("%s\n",open_db(filename));
-	execute_sql("select * from CoB_Sched;");
+
+	//get semester name
+	execute_sql("select name from main.sqlite_master where type='table';");
+	strcpy(old_name , get_name());
+
+	char title[150];
+	sprintf(title, "[%s] - deans2", old_name);
+	gtk_window_set_title(GTK_WINDOW(window), title);
+
+	sprintf(statement, "select * from %s;", old_name);
+	execute_sql(statement);
 
     dept = get_dept_vals();
     num = get_num_vals();
@@ -873,6 +890,19 @@ void cell_edited(GtkCellRendererText *renderer,
 	}
 
 
+}
+
+void rename_semester()
+{
+	if(!strcmp(old_name, new_name))
+	{
+		printf("renaming %s to %s.",old_name, new_name);
+		char rename[75];
+		sprintf(rename, "alter table %s rename to %s", old_name, new_name);
+		execute_sql(rename);
+		old_name[0] = '\0';
+		strcpy(old_name, new_name);
+	}
 }
 
 //Deletes course section from the semester.

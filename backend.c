@@ -20,6 +20,8 @@ int *get_room_vals();
 
 int get_size();
 
+char sem_name[15];
+
 char *dept_vals[MAX_ROWS];
 char *num_vals[MAX_ROWS];
 char *day_vals[MAX_ROWS];
@@ -36,6 +38,13 @@ sqlite3 *working_db;
 
 static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 {
+	if(argc == 1)
+	{
+		strcpy(sem_name, argv[0]);
+		return 0;
+	}
+
+
 	int i = 0;
 	while(i < argc)
 	{
@@ -66,20 +75,20 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 
 
 //NOT DONE
-char *create_db(char *name)
+char *create_db(char *name, char *table)
 {
 	printf("%s\n",name);
 
 	int error = sqlite3_open(name, &working_db);
 	char *message;
-	char *sql;
+	char sql[150];
 
 	if(error != SQLITE_OK)
 	{
 		return (char *) sqlite3_errmsg(working_db);
 	}
 
-	sql =	"CREATE TABLE CoB_Sched("\
+	sprintf(sql ,	"CREATE TABLE %s("\
 					"Dept varchar(3),"\
 					"Num varchar(4),"\
 					"Start smallint,"\
@@ -88,7 +97,7 @@ char *create_db(char *name)
 					"Sect tinyint,"\
 					"Bldg char(3),"\
 					"Room tinyint,"\
-					"Inst varchar(255));";
+					"Inst varchar(255));",table);
 
 	error = sqlite3_exec(working_db, sql, callback, 0, &message);
 
@@ -138,6 +147,8 @@ void free_back()
 }
 
 //Get values
+char *get_name(){return sem_name;}
+
 char **get_dept_vals(){return dept_vals;}
 char **get_num_vals(){return num_vals;}
 char **get_day_vals(){return day_vals;}
