@@ -566,6 +566,10 @@ void read_from_db(char *filename)
 	gtk_window_set_title(GTK_WINDOW(window), title);
 
 	sprintf(statement, "select * from %s;", old_name);
+
+	split_semester_name(old_name, &school_year, &school_season);
+	gtk_adjustment_set_value (spin_adjust1, (gdouble)school_year);
+
 	execute_sql(statement);
 
     dept = get_dept_vals();

@@ -8,7 +8,7 @@ int is_valid_course_num(const gchar *str);
 int add_time(int x, int y);
 int get_current_year();
 char *file_extension_correct(char *in);
-void free_util();
+void split_semester_name();
 
 const char *COURSE_NUMBER_ERROR = "The entry was invalid. A course number can be two or three didgets with an optional letter at the end.";
 const char *INVALID_TIME_ERROR = "The entry was invalid. A time must be an integer between ? and ?."; //FIXME
@@ -105,5 +105,25 @@ char *file_extension_correct(char *in)
 
 	free(name);
 	return in;
+
+}
+
+void split_semester_name(char *name, int *year, char **season)
+{
+	const char TERM_CHAR = '_';
+	char year_c[5];
+	char season_c[7];
+	int term_i = 0;
+	int size = sizeof(name)*sizeof(char);
+
+	while(term_i < size && name[term_i] != TERM_CHAR)
+		term_i++;
+
+	strncpy(season_c, name, term_i);
+	strncpy(year_c, name+term_i+1, size);
+
+	*year = atoi(year_c);
+	*season = season_c;
+
 
 }
