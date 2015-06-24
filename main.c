@@ -552,7 +552,7 @@ void read_from_db(char *filename)
 {
 	char **dept, **num, **days, **bldg, **instr;
 	int *start, *end, *sect, *room;
-	int i, size;
+	int i, size, season_num;
 	char statement[75];
 
 	printf("%s\n",open_db(filename));
@@ -569,6 +569,24 @@ void read_from_db(char *filename)
 
 	split_semester_name(old_name, &school_year, &school_season);
 	gtk_adjustment_set_value (spin_adjust1, (gdouble)school_year);
+
+	//Determine which season it is.
+	switch(school_season[1])
+	{
+		printf("%c\n",school_season[1]);
+		case 'p':
+			gtk_combo_box_set_active(GTK_COMBO_BOX(semester_combo),1);
+			break;
+		case 'u':
+			gtk_combo_box_set_active(GTK_COMBO_BOX(semester_combo),2);
+			break;
+		case 'a':
+			gtk_combo_box_set_active(GTK_COMBO_BOX(semester_combo),0);
+			break;
+		case 'i':
+			gtk_combo_box_set_active(GTK_COMBO_BOX(semester_combo),3);
+			break;
+	}
 
 	execute_sql(statement);
 

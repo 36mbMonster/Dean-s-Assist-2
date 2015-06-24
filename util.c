@@ -124,6 +124,7 @@ void split_semester_name(char *name, int *year, char **season)
 
 	*year = atoi(year_c);
 	*season = season_c;
+	printf("%s\n",*season);
 
 
 }
