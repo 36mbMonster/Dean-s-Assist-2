@@ -50,8 +50,6 @@ void quit_deans2();
 int i = 0;
 int has_saved;
 int unsaved_changes;
-int school_year;
-char *school_season;
 char *filename;
 char new_name[15];
 char old_name[15];

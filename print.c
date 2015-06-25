@@ -11,6 +11,9 @@ int lines;
 int height;
 int lines_per_page;
 
+int school_year;
+char *school_season;
+
 char *content[MAX_LINES]; //content in lines
 
 void start_printer();
@@ -160,8 +163,10 @@ void draw_page(GtkPrintOperation *operation,
     cairo_move_to(cr, (width - text_width)/2, current_y);
     pango_cairo_show_layout(cr, layout);
 
-	//**************FIXME***************
-	pango_layout_set_text(layout, "Fall/Spring <year>\r\n", -1);
+	//Print the semester and year.
+	char semester_header[15];
+	sprintf(semester_header, "%s %d\r\n",school_season, school_year);
+	pango_layout_set_text(layout, semester_header, -1);
 	pango_layout_get_pixel_size(layout, &text_width, &text_height);
 	cairo_move_to(cr, (width - text_width), 0);
 	pango_cairo_show_layout(cr, layout);

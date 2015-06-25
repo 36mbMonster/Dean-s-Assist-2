@@ -281,6 +281,7 @@ void quit_deans2()
 
 		gtk_widget_destroy(question_dialog);
 	}
+
 	free_back();
 
 	gtk_main_quit();
@@ -582,6 +583,7 @@ void read_from_db(char *filename)
 	split_semester_name(old_name, &school_year, &season_num);
 	gtk_adjustment_set_value (spin_adjust1, (gdouble)school_year);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(semester_combo),season_num);
+	school_season = gtk_combo_box_text_get_active_text(semester_combo);
 
 
 	execute_sql(statement);
