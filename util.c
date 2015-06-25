@@ -108,7 +108,7 @@ char *file_extension_correct(char *in)
 
 }
 
-void split_semester_name(char *name, int *year, char **season)
+void split_semester_name(char *name, int *year, int *season)
 {
 	const char TERM_CHAR = '_';
 	char year_c[5];
@@ -123,8 +123,24 @@ void split_semester_name(char *name, int *year, char **season)
 	strncpy(year_c, name+term_i+1, size);
 
 	*year = atoi(year_c);
-	*season = season_c;
-	printf("%s\n",*season);
+
+	//Determine which season it is.
+	switch(season_c[1])
+	{
+		case 'p':
+			*season = 1;
+			break;
+		case 'u':
+			*season = 2;
+			break;
+		case 'a':
+			*season = 0;
+			break;
+		case 'i':
+			*season = 3;
+			break;
+	}
+
 
 
 }

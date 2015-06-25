@@ -77,6 +77,8 @@ GtkButton *semester_okay_button;
 GtkButton *semester_cancel_button;
 GtkSpinButton *spin_button;
 GtkSpinButton *spin_button1;
+//Check buttons
+GtkToggleButton *buttons[5];
 
 GtkAdjustment *spin_adjust;
 GtkAdjustment *spin_adjust1;

@@ -91,7 +91,12 @@ int main(int argc, char *argv[])
 		gtk_tree_view_column_set_sort_column_id(columns[i-1], i-1);
 	}
 
-	//treeview = GTK_TREE_VIEW(gtk_tree_view_new_with_model(model));
+	//Initialize day check buttons.
+	buttons[0] = GTK_TOGGLE_BUTTON(monday);
+	buttons[1] = GTK_TOGGLE_BUTTON(tuesday);
+	buttons[2] = GTK_TOGGLE_BUTTON(wednesdy);
+	buttons[3] = GTK_TOGGLE_BUTTON(thursday);
+	buttons[4] = GTK_TOGGLE_BUTTON(friday);
 
 	//Put selector in single select mode
 	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
@@ -114,6 +119,8 @@ int main(int argc, char *argv[])
 	has_saved = 0;
 	unsaved_changes = 0;
 
+	//Hopefully, there will not be a situation where this is needed.
+	//I'm going to make it impossible to save without setting the semester info first.
 	strcpy(old_name, "CoB_Sched");
 
 /**
@@ -121,9 +128,13 @@ int main(int argc, char *argv[])
 *							  Connect Signals						  	  *
 ***************************************************************************
 */
+	//Connect window and dialog signals
+	g_signal_connect(window, "delete_event", G_CALLBACK(quit_deans2), NULL);
+	g_signal_connect(semester_dialog, "delete_event", G_CALLBACK(quit_deans2),NULL);
+	g_signal_connect(set_days_window, "delete_event", G_CALLBACK(gtk_widget_hide),NULL);
+	g_signal_connect(generate_sections_dialog, "delete_event", G_CALLBACK(gtk_widget_hide),NULL);
 
 	//Connect menu signals
-	g_signal_connect(window, "delete_event", G_CALLBACK(quit_deans2), NULL);
 	g_signal_connect(about_item, "activate", G_CALLBACK(show_about_dialog), NULL);
 	g_signal_connect(quit_item, "activate", G_CALLBACK(quit_deans2), NULL);
 	g_signal_connect(new_course_item, "activate", G_CALLBACK(new_row), NULL);
@@ -567,26 +578,11 @@ void read_from_db(char *filename)
 
 	sprintf(statement, "select * from %s;", old_name);
 
-	split_semester_name(old_name, &school_year, &school_season);
+	//Set semester dialog info to match what was in the saved db.
+	split_semester_name(old_name, &school_year, &season_num);
 	gtk_adjustment_set_value (spin_adjust1, (gdouble)school_year);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(semester_combo),season_num);
 
-	//Determine which season it is.
-	switch(school_season[1])
-	{
-		printf("%c\n",school_season[1]);
-		case 'p':
-			gtk_combo_box_set_active(GTK_COMBO_BOX(semester_combo),1);
-			break;
-		case 'u':
-			gtk_combo_box_set_active(GTK_COMBO_BOX(semester_combo),2);
-			break;
-		case 'a':
-			gtk_combo_box_set_active(GTK_COMBO_BOX(semester_combo),0);
-			break;
-		case 'i':
-			gtk_combo_box_set_active(GTK_COMBO_BOX(semester_combo),3);
-			break;
-	}
 
 	execute_sql(statement);
 
@@ -633,18 +629,13 @@ void hide_set_days_dialog()
 	const char *fr = "Fr";
 
 	const char *labels[5] = {mo, tu, we, th, fr};
-	GtkToggleButton *buttons[5] = {GTK_TOGGLE_BUTTON(monday), GTK_TOGGLE_BUTTON(tuesday), GTK_TOGGLE_BUTTON(wednesdy), GTK_TOGGLE_BUTTON(thursday), GTK_TOGGLE_BUTTON(friday)};
 	char out[11];
 	out[0] = '\0';
 
 	for(i = 0; i < 5; i++)
 	{
 		if(days[i] == 1)
-		{
 			strcat(out, labels[i]);
-			gtk_toggle_button_set_active(buttons[i], 0);
-		}
-		days[i] = 0;
 	}
 
 	gtk_list_store_set(store, &iter,
