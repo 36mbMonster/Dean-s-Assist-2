@@ -19,13 +19,15 @@ char *content[MAX_LINES]; //content in lines
 void start_printer();
 void begin_print();
 void draw_page();
-void end_print();
 void load_data();
+
+char *format_ident();
 
 GtkPrintSettings *print_settings;
 GtkTreeModel *model;
+GtkTreeView *view;
 
-void start_printer(GtkWidget *window, GtkTreeModel *amodel)
+void start_printer(GtkWidget *window, GtkTreeModel *amodel, GtkTreeView *aview)
 {
 	GError *error;
 	GtkPrintOperation *print_operation;
@@ -210,12 +212,6 @@ void draw_page(GtkPrintOperation *operation,
     g_object_unref(layout);
 }
 
-void end_print()
-{
-	//Do something here? Is this even needed?
-	printf("printing ended.\n");
-}
-
 void load_data()
 {
 	lines = 0;
@@ -265,8 +261,7 @@ void load_data()
             printf("%s\n",ident);*/
             lines++;
 		}
-		//else
-		//{
+
 			strncpy(ident," ",sizeof(ident));
 			int k;
 			for(k = 0; k < ident_size-1; k++)
@@ -286,9 +281,13 @@ void load_data()
             printf("%s\n",content[lines]);
             lines++;
 
-		//}
-
 	}
+
 	free(previous_cn);
+
+}
+
+char *format_ident()
+{
 
 }

@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
 	semester_okay_button = GTK_BUTTON(gtk_builder_get_object(builder,"semester_ok"));
 	semester_cancel_button = GTK_BUTTON(gtk_builder_get_object(builder,"semester_cancel"));
 
-	semester_combo = GTK_COMBO_BOX(gtk_builder_get_object(builder, "comboboxtext1"));
+	semester_combo = GTK_COMBO_BOX_TEXT(gtk_builder_get_object(builder, "comboboxtext1"));
 
 	//Load tree and list related structures.
 	treeview = GTK_TREE_VIEW(gtk_builder_get_object(builder, "treeview"));
@@ -514,7 +514,7 @@ void hide_adjust_columns_dialog()
 
 void prep_printer()
 {
-	start_printer(window,model);
+	start_printer(window,model,treeview);
 }
 
 void write_to_db(char *db_name)
