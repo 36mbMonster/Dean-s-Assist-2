@@ -93,7 +93,7 @@ void draw_page(GtkPrintOperation *operation,
 			gint page,
 			gpointer user_data)
 {
-	/*printf("draw\n");
+	printf("draw\n");
 
     int layout_height;
 	double width;
@@ -123,7 +123,7 @@ void draw_page(GtkPrintOperation *operation,
 	*							  Print the Header						  	  *
 	***************************************************************************
 	*/
-/*
+
 	struct tm *local;
 	char str_date[10];
 	char text[25];
@@ -183,7 +183,7 @@ void draw_page(GtkPrintOperation *operation,
 	***************************************************************************
 	*/
 
-/*
+
 	int line = page * lines_per_page;
 
 
@@ -211,7 +211,7 @@ void draw_page(GtkPrintOperation *operation,
 		line++;
 	}
 
-    g_object_unref(layout);*/
+    g_object_unref(layout);
 }
 
 void load_data()
@@ -266,7 +266,7 @@ void load_data()
             lines++;
 		}
 
-			strncpy(ident," ",sizeof(ident));
+			strncpy(ident," ",ident_size);
 			int k;
 			for(k = 0; k < ident_size-1; k++)
 				strcat(ident," ");
@@ -291,43 +291,41 @@ void load_data()
 
 }
 
-char *format_ident(char *dept, char *num, char *days,
-	char *bldg, char *instr, int start, int end,
-	int sect, int room)
+char *format_ident(char *dept, char *num, int start, int end,
+                   char *days, int sect, char *bldg, int room,
+                   char *instr)
 {
-	char ident[15];
+	char *ident = malloc(15*sizeof(char));
 	int col_id;
 
 	gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(store), &col_id, NULL);
-	printf("sortid: %d\n",col_id);
-	printf("HERE IT IS !!!!!!!!!!%d\n",COL_DEPT);
 
 	switch(col_id)
 	{
-		COL_DEPT:
-		COL_NUMBER:
+		case COL_DEPT:
+		case COL_NUMBER:
 			sprintf(ident,"**%-5s%-5s",dept,num);
 			break;
-		COL_START:
-			sprintf(ident,"**%-5d-%-ds",start,end);
+		case COL_START:
+			sprintf(ident,"**%-5d-%-5d",start,end);
 			break;
-		COL_END:
-			sprintf(ident,"**%-5d-%-ds",end,start);
+		case COL_END:
+			sprintf(ident,"**%-5d-%-5d",end,start);
 			break;
-		COL_DAYS:
+		case COL_DAYS:
 			sprintf(ident,"**%-5s",days);
 			break;
-		COL_SECT:
+		case COL_SECT:
 			sprintf(ident,"**%-5d",sect);
 			break;
-		COL_BLDG:
-		COL_ROOM:
+		case COL_BLDG:
+		case COL_ROOM:
 			sprintf(ident,"**%-5s%-5d",bldg,room);
 			break;
-		COL_INSTR:
+		case COL_INSTR:
 			sprintf(ident,"**%-5s",instr);
 			break;
 	}
-	printf("ident: %s\n",ident);
+
 	return ident;
 }
