@@ -23,6 +23,7 @@ void draw_page();
 void load_data();
 
 char *format_ident();
+char *format_line();
 
 GtkPrintSettings *print_settings;
 GtkTreeModel *model;
@@ -226,9 +227,11 @@ void load_data()
 	int start, end, sect, room;
 
 	char *previous_cn;
+	char *prime_col;
 	previous_cn = malloc(sizeof(char)*4);
 	previous_cn = "";
 	int ident_size = 0;
+	int col_id;
 
 	//Load the data from the model into the string buffer.
 	while(more_list)
@@ -245,10 +248,13 @@ void load_data()
 		COL_INSTR, &instr,
 		-1);
 
-		char text[150]; //row
+		char *text; //row
 		//char ident[12];
 		char *ident;
+		gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(store), &col_id, NULL); //You need to know the prime column
+		//printouts need to be relative to the prime column.
 
+		//FIX THIS NEXT!!!
 		if(strcmp(previous_cn,num) != 0)
 		{
 			//sprintf(ident,"**%-5s%-5s",dept,num);
@@ -271,7 +277,8 @@ void load_data()
 			for(k = 0; k < ident_size-1; k++)
 				strcat(ident," ");
 
-            sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
+			text = format_line(dept, num, start, end, days, sect, bldg, room, instr, ident);
+            //sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
             //sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,dept,num,start,"-",end,days,sect,bldg,room,instr);
             /*pango_layout_set_text(layout, text, -1);
             cairo_rel_move_to (cr, 0, FONT_SIZE);
@@ -328,4 +335,41 @@ char *format_ident(char *dept, char *num, int start, int end,
 	}
 
 	return ident;
+}
+
+char *format_line(char *dept, char *num, int start, int end,
+                   char *days, int sect, char *bldg, int room,
+                   char *instr, char *ident)
+{
+	char *text = malloc(150*sizeof(char));
+	int col_id;
+
+	gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(store), &col_id, NULL);
+
+	switch(col_id)
+	{
+		case COL_DEPT:
+		case COL_NUMBER:
+			sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
+			break;
+		case COL_START:
+		case COL_END:
+			sprintf(text,"%s%-6s%-6s%-12s%-4d%-5s%-5d%-20s\n",ident,dept,num,days,sect,bldg,room,instr);
+			break;
+		case COL_DAYS:
+			sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
+			break;
+		case COL_SECT:
+			sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
+			break;
+		case COL_BLDG:
+		case COL_ROOM:
+			sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
+			break;
+		case COL_INSTR:
+			sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
+			break;
+	}
+
+	return text;
 }
