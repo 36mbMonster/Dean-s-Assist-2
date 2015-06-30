@@ -1,3 +1,6 @@
+#ifndef _CONSTANTSH_
+#define _CONSTANTSH_
+
 #define MAX_ROWS  1024
 #define MAX_LINES MAX_ROWS * 2
 
@@ -30,3 +33,5 @@ enum
 	SORTID_ROOM,
 	SORTID_INSTR
 };
+
+#endif

@@ -514,7 +514,7 @@ void hide_adjust_columns_dialog()
 
 void prep_printer()
 {
-	start_printer(window,model,treeview);
+	start_printer(window,model,store);
 }
 
 void write_to_db(char *db_name)

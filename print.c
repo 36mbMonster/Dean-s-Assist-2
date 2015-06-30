@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <time.h>
 #include <math.h>
+#include "constants.h"
 
 #define GAP (2 * 12 * 72 / 25.4)
 
@@ -25,15 +26,16 @@ char *format_ident();
 
 GtkPrintSettings *print_settings;
 GtkTreeModel *model;
-GtkTreeView *view;
+GtkListStore *store;
 
-void start_printer(GtkWidget *window, GtkTreeModel *amodel, GtkTreeView *aview)
+void start_printer(GtkWidget *window, GtkTreeModel *amodel, GtkListStore *astore)
 {
 	GError *error;
 	GtkPrintOperation *print_operation;
 	print_settings = NULL;
 	print_operation = gtk_print_operation_new();
 	model = amodel;
+	store = astore;
 
 	if(print_settings != NULL)
 		gtk_print_operation_set_print_settings(print_operation, print_settings);
@@ -91,7 +93,7 @@ void draw_page(GtkPrintOperation *operation,
 			gint page,
 			gpointer user_data)
 {
-	printf("draw\n");
+	/*printf("draw\n");
 
     int layout_height;
 	double width;
@@ -121,7 +123,7 @@ void draw_page(GtkPrintOperation *operation,
 	*							  Print the Header						  	  *
 	***************************************************************************
 	*/
-
+/*
 	struct tm *local;
 	char str_date[10];
 	char text[25];
@@ -181,7 +183,7 @@ void draw_page(GtkPrintOperation *operation,
 	***************************************************************************
 	*/
 
-
+/*
 	int line = page * lines_per_page;
 
 
@@ -209,7 +211,7 @@ void draw_page(GtkPrintOperation *operation,
 		line++;
 	}
 
-    g_object_unref(layout);
+    g_object_unref(layout);*/
 }
 
 void load_data()
@@ -244,11 +246,13 @@ void load_data()
 		-1);
 
 		char text[150]; //row
-		char ident[12];
+		//char ident[12];
+		char *ident;
 
 		if(strcmp(previous_cn,num) != 0)
 		{
-			sprintf(ident,"**%-5s%-5s",dept,num);
+			//sprintf(ident,"**%-5s%-5s",dept,num);
+			ident = format_ident(dept, num, start, end, days, sect, bldg, room, instr);
 			ident_size = strlen(ident);
 
 			content[lines] = malloc(sizeof(char*)*ident_size);
@@ -287,7 +291,43 @@ void load_data()
 
 }
 
-char *format_ident()
+char *format_ident(char *dept, char *num, char *days,
+	char *bldg, char *instr, int start, int end,
+	int sect, int room)
 {
+	char ident[15];
+	int col_id;
 
+	gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(store), &col_id, NULL);
+	printf("sortid: %d\n",col_id);
+	printf("HERE IT IS !!!!!!!!!!%d\n",COL_DEPT);
+
+	switch(col_id)
+	{
+		COL_DEPT:
+		COL_NUMBER:
+			sprintf(ident,"**%-5s%-5s",dept,num);
+			break;
+		COL_START:
+			sprintf(ident,"**%-5d-%-ds",start,end);
+			break;
+		COL_END:
+			sprintf(ident,"**%-5d-%-ds",end,start);
+			break;
+		COL_DAYS:
+			sprintf(ident,"**%-5s",days);
+			break;
+		COL_SECT:
+			sprintf(ident,"**%-5d",sect);
+			break;
+		COL_BLDG:
+		COL_ROOM:
+			sprintf(ident,"**%-5s%-5d",bldg,room);
+			break;
+		COL_INSTR:
+			sprintf(ident,"**%-5s",instr);
+			break;
+	}
+	printf("ident: %s\n",ident);
+	return ident;
 }
