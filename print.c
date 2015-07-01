@@ -252,10 +252,12 @@ void load_data()
 		//char ident[12];
 		char *ident;
 		gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(store), &col_id, NULL); //You need to know the prime column
+
 		//printouts need to be relative to the prime column.
+		gtk_tree_model_get(model, &iter, col_id, &prime_col, -1);
 
 		//FIX THIS NEXT!!!
-		if(strcmp(previous_cn,num) != 0)
+		if(strcmp(previous_cn,prime_col) != 0)
 		{
 			//sprintf(ident,"**%-5s%-5s",dept,num);
 			ident = format_ident(dept, num, start, end, days, sect, bldg, room, instr);
@@ -285,7 +287,7 @@ void load_data()
             pango_cairo_show_layout(cr, layout);*/
 
             more_list = gtk_tree_model_iter_next(model, &iter);
-            previous_cn = num;
+            previous_cn = prime_col;
 
             content[lines] = malloc(sizeof(char*)*150);
             strcpy(content[lines],text);
