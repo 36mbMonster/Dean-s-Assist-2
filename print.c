@@ -228,8 +228,8 @@ void load_data()
 
 	char *previous_cn;
 	char *prime_col;
-	previous_cn = malloc(sizeof(char)*4);
-	previous_cn = "";
+	previous_cn = malloc(sizeof(char)*15);
+	prime_col= malloc(sizeof(char)*15);
 	int ident_size = 0;
 	int col_id;
 
@@ -254,7 +254,17 @@ void load_data()
 		gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(store), &col_id, NULL); //You need to know the prime column
 
 		//printouts need to be relative to the prime column.
-		gtk_tree_model_get(model, &iter, col_id, &prime_col, -1);
+		//If the prime column contains integers, they will need to be converted.
+		if(col_id == COL_START || col_id == COL_END || col_id == COL_SECT || col_id == COL_ROOM)
+		{
+			int int_prime_col;
+			gtk_tree_model_get(model, &iter, col_id, &int_prime_col, -1);
+			sprintf(prime_col, "%d", int_prime_col);
+		}
+		else
+			gtk_tree_model_get(model, &iter, col_id, &prime_col, -1);
+
+		printf("prime: %s previous %s\n",prime_col,previous_cn);
 
 		//FIX THIS NEXT!!!
 		if(strcmp(previous_cn,prime_col) != 0)
@@ -287,7 +297,10 @@ void load_data()
             pango_cairo_show_layout(cr, layout);*/
 
             more_list = gtk_tree_model_iter_next(model, &iter);
-            previous_cn = prime_col;
+            //previous_cn = prime_col;
+            printf("breaking here\n");
+            previous_cn[0] = '\0';
+            strcpy(previous_cn, prime_col);
 
             content[lines] = malloc(sizeof(char*)*150);
             strcpy(content[lines],text);
