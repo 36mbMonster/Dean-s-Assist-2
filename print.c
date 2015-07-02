@@ -191,9 +191,13 @@ void draw_page(GtkPrintOperation *operation,
 	//Print the column headers a lot farther down after the page header.
 	current_y += GAP;
 	cairo_move_to(cr, 0, current_y);
+
+	//*************Take care of this stuff in load_data*********************
 	char column_text[100];
 	//sprintf(column_text, "%-5s%-6s%-13s%-12s%-4s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
 	sprintf(column_text, "\t\t%-13s%-8s%-4s%-5s%-5s%-20s\r\n","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+
+
 	pango_layout_set_text(layout,column_text,-1);
 	pango_cairo_show_layout(cr, layout);
 
@@ -266,21 +270,17 @@ void load_data()
 
 		printf("prime: %s previous %s\n",prime_col,previous_cn);
 
-		//FIX THIS NEXT!!!
+		//Compare previous value of prime_col to the current one.
 		if(strcmp(previous_cn,prime_col) != 0)
 		{
-			//sprintf(ident,"**%-5s%-5s",dept,num);
+			//Format hanging ident if the value of prime_col has changed.
 			ident = format_ident(dept, num, start, end, days, sect, bldg, room, instr);
 			ident_size = strlen(ident);
 
 			content[lines] = malloc(sizeof(char*)*ident_size);
 			strcpy(content[lines],ident);
 			printf("%s\n",content[lines]);
-            /*pango_layout_set_text(layout, ident, -1);
-            cairo_rel_move_to (cr, 0, FONT_SIZE);
-            pango_cairo_show_layout(cr, layout);
 
-            printf("%s\n",ident);*/
             lines++;
 		}
 
@@ -297,8 +297,8 @@ void load_data()
             pango_cairo_show_layout(cr, layout);*/
 
             more_list = gtk_tree_model_iter_next(model, &iter);
-            //previous_cn = prime_col;
-            printf("breaking here\n");
+
+            //Nullify previous_cn and copy the contents of prime_col
             previous_cn[0] = '\0';
             strcpy(previous_cn, prime_col);
 
