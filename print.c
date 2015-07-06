@@ -14,6 +14,7 @@ int lines_per_page;
 
 int school_year;
 char *school_season;
+char *column_header;
 
 char *content[MAX_LINES]; //content in lines
 
@@ -24,6 +25,7 @@ void load_data();
 
 char *format_ident();
 char *format_line();
+char *format_header();
 
 GtkPrintSettings *print_settings;
 GtkTreeModel *model;
@@ -193,12 +195,12 @@ void draw_page(GtkPrintOperation *operation,
 	cairo_move_to(cr, 0, current_y);
 
 	//*************Take care of this stuff in load_data*********************
-	char column_text[100];
+	//char column_text[100];
 	//sprintf(column_text, "%-5s%-6s%-13s%-12s%-4s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
-	sprintf(column_text, "\t\t%-13s%-8s%-4s%-5s%-5s%-20s\r\n","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+	//sprintf(column_text, "\t\t%-13s%-8s%-4s%-5s%-5s%-20s\r\n","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
 
 
-	pango_layout_set_text(layout,column_text,-1);
+	pango_layout_set_text(layout,column_header,-1);
 	pango_cairo_show_layout(cr, layout);
 
 	//Start printing the data with a one row gap beneath the column headers.
@@ -236,6 +238,8 @@ void load_data()
 	prime_col= malloc(sizeof(char)*15);
 	int ident_size = 0;
 	int col_id;
+
+	column_header = format_header(dept, num, start, end, days, sect, bldg, room, instr);
 
 	//Load the data from the model into the string buffer.
 	while(more_list)
@@ -312,6 +316,44 @@ void load_data()
 	free(previous_cn);
 
 }
+char *format_header(char *dept, char *num, int start, int end,
+                   char *days, int sect, char *bldg, int room,
+                   char *instr)
+{
+	char *header = malloc(100*sizeof(char));
+	int col_id;
+
+	gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(store), &col_id, NULL);
+
+	//sprintf(column_text, "%-5s%-6s%-13s%-12s%-4s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+	switch(col_id)
+	{
+		case COL_DEPT:
+		case COL_NUMBER:
+			sprintf(header, "\t\t%-13s%-8s%-4s%-5s%-5s%-20s\r\n","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+			break;
+		case COL_START:
+		case COL_END:
+			sprintf(header, "\t\t%-5s%-6s%-12s%-4s%-5s%-5s%-20s\n","Dep","CN", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+			break;
+		case COL_DAYS:
+			sprintf(header, "\t\t%-5s%-6s%-13s%-4s%-5s%-5s%-20s\n","Dep","CN","Time", "Sec", "Bldg", "Room", "Instructor");
+			break;
+		case COL_SECT:
+			sprintf(header, "\t%-5s%-6s%-13s%-12s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Bldg", "Room", "Instructor");
+			break;
+		case COL_BLDG:
+		case COL_ROOM:
+			sprintf(header, "\t\t%-5s%-6s%-13s%-12s%-4s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Instructor");
+			break;
+		case COL_INSTR:
+			sprintf(header, "\t\t\t%-5s%-6s%-13s%-12s%-4s%-5s%-5s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room");
+			break;
+	}
+
+	return header;
+}
+
 
 char *format_ident(char *dept, char *num, int start, int end,
                    char *days, int sect, char *bldg, int room,
@@ -361,6 +403,7 @@ char *format_line(char *dept, char *num, int start, int end,
 
 	gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(store), &col_id, NULL);
 
+	//something is messed up here
 	switch(col_id)
 	{
 		case COL_DEPT:
@@ -371,6 +414,7 @@ char *format_line(char *dept, char *num, int start, int end,
 		case COL_END:
 			sprintf(text,"%s%-6s%-6s%-12s%-4d%-5s%-5d%-20s\n",ident,dept,num,days,sect,bldg,room,instr);
 			break;
+		//FIX everything is the same from below this point.
 		case COL_DAYS:
 			sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
 			break;
