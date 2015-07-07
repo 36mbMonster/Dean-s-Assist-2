@@ -195,12 +195,6 @@ void draw_page(GtkPrintOperation *operation,
 	current_y += GAP;
 	cairo_move_to(cr, 0, current_y);
 
-	//*************Take care of this stuff in load_data*********************
-	//char column_text[100];
-	//sprintf(column_text, "%-5s%-6s%-13s%-12s%-4s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
-	//sprintf(column_text, "\t\t%-13s%-8s%-4s%-5s%-5s%-20s\r\n","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
-
-
 	pango_layout_set_text(layout,column_header,-1);
 	pango_cairo_show_layout(cr, layout);
 
@@ -222,6 +216,7 @@ void draw_page(GtkPrintOperation *operation,
     g_object_unref(layout);
 }
 
+//load the data into a char array and format it.
 void load_data()
 {
 	lines = 0;
@@ -256,7 +251,6 @@ void load_data()
 		-1);
 
 		char *text; //row
-		//char ident[12];
 
 		gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(store), &col_id, NULL); //You need to know the prime column
 
@@ -293,11 +287,6 @@ void load_data()
 				strcat(ident," ");
 
 			text = format_line(dept, num, start, end, days, sect, bldg, room, instr, ident);
-            //sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
-            //sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,dept,num,start,"-",end,days,sect,bldg,room,instr);
-            /*pango_layout_set_text(layout, text, -1);
-            cairo_rel_move_to (cr, 0, FONT_SIZE);
-            pango_cairo_show_layout(cr, layout);*/
 
             more_list = gtk_tree_model_iter_next(model, &iter);
 
@@ -403,7 +392,6 @@ char *format_line(char *dept, char *num, int start, int end,
 
 	gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(store), &col_id, NULL);
 
-	//something is messed up here
 	switch(col_id)
 	{
 		case COL_DEPT:
@@ -428,7 +416,6 @@ char *format_line(char *dept, char *num, int start, int end,
 			sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d\n",ident,dept,num,start,"-",end,days,sect,bldg,room);
 			break;
 	}
-	//sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,dept,num,start,"-",end,days,sect,bldg,room,instr);
 
 	return text;
 }
