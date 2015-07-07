@@ -15,6 +15,7 @@ int lines_per_page;
 int school_year;
 char *school_season;
 char *column_header;
+char *ident; //line indentation
 
 char *content[MAX_LINES]; //content in lines
 
@@ -239,8 +240,6 @@ void load_data()
 	int ident_size = 0;
 	int col_id;
 
-	column_header = format_header(dept, num, start, end, days, sect, bldg, room, instr);
-
 	//Load the data from the model into the string buffer.
 	while(more_list)
 	{
@@ -258,7 +257,7 @@ void load_data()
 
 		char *text; //row
 		//char ident[12];
-		char *ident;
+
 		gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(store), &col_id, NULL); //You need to know the prime column
 
 		//printouts need to be relative to the prime column.
@@ -313,6 +312,8 @@ void load_data()
 
 	}
 
+	column_header = format_header(dept, num, start, end, days, sect, bldg, room, instr);
+
 	free(previous_cn);
 
 }
@@ -325,29 +326,28 @@ char *format_header(char *dept, char *num, int start, int end,
 
 	gtk_tree_sortable_get_sort_column_id(GTK_TREE_SORTABLE(store), &col_id, NULL);
 
-	//sprintf(column_text, "%-5s%-6s%-13s%-12s%-4s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
 	switch(col_id)
 	{
 		case COL_DEPT:
 		case COL_NUMBER:
-			sprintf(header, "\t\t%-13s%-8s%-4s%-5s%-5s%-20s\r\n","Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+			sprintf(header, "%s%-13s%-8s%-4s%-5s%-5s%-20s\r\n",ident, "Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
 			break;
 		case COL_START:
 		case COL_END:
-			sprintf(header, "\t\t%-5s%-6s%-12s%-4s%-5s%-5s%-20s\n","Dep","CN", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+			sprintf(header, "%s%-5s%-6s%-12s%-4s%-5s%-5s%-20s\n",ident, "Dep","CN", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
 			break;
 		case COL_DAYS:
-			sprintf(header, "\t\t%-5s%-6s%-13s%-4s%-5s%-5s%-20s\n","Dep","CN","Time", "Sec", "Bldg", "Room", "Instructor");
+			sprintf(header, "%s%-5s%-6s%-13s%-4s%-5s%-5s%-20s\n",ident, "Dep","CN","Time", "Sec", "Bldg", "Room", "Instructor");
 			break;
 		case COL_SECT:
-			sprintf(header, "\t%-5s%-6s%-13s%-12s%-5s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Bldg", "Room", "Instructor");
+			sprintf(header, "%s%-5s%-6s%-13s%-12s%-5s%-5s%-20s\n",ident, "Dep","CN","Time", "Day(s)", "Bldg", "Room", "Instructor");
 			break;
 		case COL_BLDG:
 		case COL_ROOM:
-			sprintf(header, "\t\t%-5s%-6s%-13s%-12s%-4s%-5s%-20s\n","Dep","CN","Time", "Day(s)", "Sec", "Instructor");
+			sprintf(header, "%s%-5s%-6s%-13s%-12s%-4s%-20s\n",ident, "Dep","CN","Time", "Day(s)", "Sec", "Instructor");
 			break;
 		case COL_INSTR:
-			sprintf(header, "\t\t\t%-5s%-6s%-13s%-12s%-4s%-5s%-5s\n","Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room");
+			sprintf(header, "%s%-5s%-6s%-13s%-12s%-4s%-5s%-5s\n",ident, "Dep","CN","Time", "Day(s)", "Sec", "Bldg", "Room");
 			break;
 	}
 
@@ -414,21 +414,21 @@ char *format_line(char *dept, char *num, int start, int end,
 		case COL_END:
 			sprintf(text,"%s%-6s%-6s%-12s%-4d%-5s%-5d%-20s\n",ident,dept,num,days,sect,bldg,room,instr);
 			break;
-		//FIX everything is the same from below this point.
 		case COL_DAYS:
-			sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
+			sprintf("%s%-5s%-6s%-6d%s%-6d%-4d%-5s%-5d%-20s\n",ident,dept,num,start,"-",end,sect,bldg,room,instr);
 			break;
 		case COL_SECT:
-			sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
+			sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-5s%-5d%-20s\n",ident,dept,num,start,"-",end,days,bldg,room,instr);
 			break;
 		case COL_BLDG:
 		case COL_ROOM:
-			sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
+			sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-4d%-20s\n",ident,dept,num,start,"-",end,days,sect,instr);
 			break;
 		case COL_INSTR:
-			sprintf(text,"%s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\r\n",ident,start,"-",end,days,sect,bldg,room,instr);
+			sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d\n",ident,dept,num,start,"-",end,days,sect,bldg,room);
 			break;
 	}
+	//sprintf(text,"%s%-5s%-6s%-6d%s%-6d%-12s%-4d%-5s%-5d%-20s\n",ident,dept,num,start,"-",end,days,sect,bldg,room,instr);
 
 	return text;
 }
