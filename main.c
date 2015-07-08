@@ -189,6 +189,14 @@ int main(int argc, char *argv[])
 	g_object_set_data (G_OBJECT (room_text), "column", GINT_TO_POINTER (COL_ROOM));
 	g_object_set_data (G_OBJECT (instructor_text), "column", GINT_TO_POINTER (COL_INSTR));
 
+	//test
+	/*
+	GtkAccelGroup *accel_group = NULL;
+	accel_group = gtk_accel_group_new();
+  	gtk_window_add_accel_group(GTK_WINDOW(window), accel_group);
+  	quit_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, accel_group);
+	gtk_widget_add_accelerator(GTK_WIDGET(quit_item), "activate", accel_group, GDK_KEY_q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);*/
+
 	//Show the window and start gtk.
 	gtk_window_set_default_size(GTK_WINDOW(window), 800, 600); //fix magic number
     gtk_widget_show(window);
@@ -303,7 +311,7 @@ void show_semester()
 
 void hide_semester()
 {
-	gtk_widget_hide(GTK_WIDGET(show_hide_columns_window));
+	gtk_widget_hide(GTK_WIDGET(semester_dialog));
 }
 
 void set_semester()
@@ -319,43 +327,6 @@ void set_semester()
 	gtk_widget_hide(GTK_WIDGET(semester_dialog));
 
 }
-/*
-void cut()
-{
-    //copy();
-    //delete here
-}
-
-//Copy one row.
-void copy()
-{
-    //Copy row data into temporary variables.
-
-	GtkTreeModel *model2;
-    GtkTreeIter iter2;
-
-    model2 = gtk_tree_view_get_model(treeview);
-    gtk_tree_selection_get_selected(selector, &model2, &iter2);
-
-    char *dept, *num, *days, *bldg, *instr;
-	int start, end, sect, room;
-
-	gtk_tree_model_get (model2, &iter2, COL_DEPT, &dept, -1);
-	gtk_tree_model_get (model2, &iter2, COL_NUMBER, &num, -1);
-	gtk_tree_model_get (model2, &iter2, COL_DAYS, &days, -1);
-	gtk_tree_model_get (model2, &iter2, COL_BLDG, &bldg, -1);
-	gtk_tree_model_get (model2, &iter2, COL_INSTR, &instr, -1);
-	gtk_tree_model_get (model2, &iter2, COL_START, &start, -1);
-	gtk_tree_model_get (model2, &iter2, COL_END, &end, -1);
-	gtk_tree_model_get (model2, &iter2, COL_SECT, &sect, -1);
-	gtk_tree_model_get (model2, &iter2, COL_ROOM, &room, -1);
-}
-
-void paste()
-{
-    //insert row
-    //clear 'clipboard'
-}*/
 
 void new_semester()
 {
@@ -958,13 +929,4 @@ void new_row()
 
 	//Increment the iterator. If this is not done, the program will crash upon certain instructions.
 	gtk_tree_model_iter_next(model, &iter);
-}
-
-int check_section_conflict()
-{
-	GtkTreeModel *model2;
-    GtkTreeIter iter2;
-
-    model2 = gtk_tree_view_get_model(treeview);
-	selector = gtk_tree_view_get_selection(treeview);
 }
