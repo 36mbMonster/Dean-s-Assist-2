@@ -319,7 +319,7 @@ void set_semester()
 	gtk_widget_hide(GTK_WIDGET(semester_dialog));
 
 }
-
+/*
 void cut()
 {
     //copy();
@@ -355,7 +355,7 @@ void paste()
 {
     //insert row
     //clear 'clipboard'
-}
+}*/
 
 void new_semester()
 {
@@ -697,7 +697,7 @@ void generate_sections()
 			COL_START, add_time(p_end,gap),
 			COL_END, add_time(p_end,add_time(gap,diff)),
 			COL_DAYS, days,
-			COL_SECT, i+2,
+			COL_SECT, ++sect,
 			COL_BLDG, bldg,
 			COL_ROOM, room,
 			COL_INSTR, instr,
@@ -723,7 +723,7 @@ void generate_sections()
 			COL_START, start,
 			COL_END, end,
 			COL_DAYS, days,
-			COL_SECT, i+2,
+			COL_SECT, ++sect,
 			COL_BLDG, bldg,
 			COL_ROOM, room,
 			COL_INSTR, instr,
@@ -958,4 +958,13 @@ void new_row()
 
 	//Increment the iterator. If this is not done, the program will crash upon certain instructions.
 	gtk_tree_model_iter_next(model, &iter);
+}
+
+int check_section_conflict()
+{
+	GtkTreeModel *model2;
+    GtkTreeIter iter2;
+
+    model2 = gtk_tree_view_get_model(treeview);
+	selector = gtk_tree_view_get_selection(treeview);
 }
