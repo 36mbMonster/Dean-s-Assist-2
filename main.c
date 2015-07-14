@@ -549,6 +549,7 @@ void read_from_db(char *filename)
 	gtk_window_set_title(GTK_WINDOW(window), title);
 
 	sprintf(statement, "select * from %s;", old_name);
+	sprintf(statement, "select * from %s;", new_name);
 
 	//Set semester dialog info to match what was in the saved db.
 	split_semester_name(old_name, &school_year, &season_num);
