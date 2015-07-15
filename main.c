@@ -664,6 +664,9 @@ void generate_sections()
 	char *dept, *num, *days, *bldg, *instr;
 	int start, end, sect, room;
 
+	selector = gtk_tree_view_get_selection(treeview);
+    gtk_tree_selection_get_selected(selector, &model, &iter);
+
 	gtk_tree_model_get(model, &iter,
 	COL_DEPT, &dept,
 	COL_NUMBER, &num,
@@ -956,6 +959,10 @@ void new_row()
 	COL_ROOM, 0,
 	COL_INSTR, "",
 	-1);
+
+	//select the new row immediately.
+	selector = gtk_tree_view_get_selection(treeview);
+    gtk_tree_selection_select_iter(selector, &iter);
 
 	//Increment the iterator. If this is not done, the program will crash upon certain instructions.
 	gtk_tree_model_iter_next(model, &iter);
