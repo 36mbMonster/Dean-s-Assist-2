@@ -66,6 +66,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 		room_vals[idx] = atoi(argv[i++]);
 		instr_vals[idx] = malloc(sizeof(char*)*sizeof(argv[i]));
 		strcpy(instr_vals[idx],argv[i++]);
+		printf("%s",instr_vals[idx]);
 
 		idx++;
 
@@ -114,7 +115,7 @@ char *execute_sql(char *statement)
 	idx = 0;
 	int error = sqlite3_exec(working_db, statement, callback, 0, &message);
 
-	printf("error: %d\n",error);
+	printf("error %d: %s\n",error,message);
 	return message;
 }
 
