@@ -518,6 +518,35 @@ void write_to_db(char *db_name)
 
 		char statement[150];
 
+		//Check for apostrophes in instructor column
+		int i;
+		char *half1;
+		char *half2;
+		for(i = 0; i < sizeof(instr); i++)
+		{
+				if(instr[i] == '\'')
+				{
+					//C substring sorcery
+					half1 = malloc(sizeof(char*)*75);
+					half2 = malloc(sizeof(char*)*75);
+					strncpy(half1, instr, i);
+
+					//getting garbage without manually ending string.
+					half1[i] = '\0';
+					strcpy(half2, instr+i+1);
+
+					//reusing the same variable to store the new value
+					//because, why not?
+					instr = malloc(sizeof(char*)*150);
+
+					//In SQL, an apostrophe string literal is two single quotes.
+					sprintf(instr,"%s%s%s",half1, "''", half2);
+					printf("%s\n",instr);
+					break;
+
+				}
+		}
+
 		//Generate dynamic SQL statement.
 		sprintf(statement,"insert into %s values(\'%s\',\'%s\',%d,%d,\'%s\',%d,\'%s\',%d,\'%s\');",new_name, dept,num,start,end,days,sect,bldg,room,instr);
 		printf("%s\n",statement);
@@ -869,6 +898,7 @@ void cell_edited(GtkCellRendererText *renderer,
 		break;
         case COL_INSTR:
 		{
+
                 gtk_list_store_set(store, &iter,
 								COL_INSTR, new_text,
 								-1);
