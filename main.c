@@ -121,7 +121,8 @@ int main(int argc, char *argv[])
 
 	//Hopefully, there will not be a situation where this is needed.
 	//I'm going to make it impossible to save without setting the semester info first.
-	strcpy(old_name, "CoB_Sched");
+	//strcpy(old_name, "CoB_Sched");
+	table_name[0] = '\0';
 
 /**
 ***************************************************************************
@@ -321,8 +322,24 @@ void set_semester()
 
 	char title[150];
 	sprintf(title, "[%s %d] - deans2", school_season, school_year);
-	sprintf(new_name, "%s_%d", school_season, school_year);
 	gtk_window_set_title(GTK_WINDOW(window), title);
+
+	//If the table already has a name, store the old name and set the new one.
+	if(table_name[0] != '\0')
+	{
+		strcpy(drop_name, table_name);
+		table_name[0] = '\0';
+		sprintf(table_name, "%s_%d", school_season, school_year);
+
+		//perform rename
+		printf("renaming %s to %s.\n",drop_name, table_name);
+		char rename[75];
+		sprintf(rename, "alter table %s rename to %s", drop_name, table_name);
+		execute_sql(rename);
+		drop_name[0] = '\0';
+	}
+	else
+		sprintf(table_name, "%s_%d", school_season, school_year);
 
 	gtk_widget_hide(GTK_WIDGET(semester_dialog));
 
@@ -352,11 +369,26 @@ void new_semester()
 
 void save()
 {
+	if(table_name[0] == '\0')
+	{
+		GtkWidget *dialog;
+		dialog = gtk_message_dialog_new(GTK_WINDOW (window), GTK_DIALOG_MODAL, GTK_MESSAGE_ERROR, GTK_BUTTONS_OK,
+			"Cannot save to file without setting the semester first.");
+
+		int res = gtk_dialog_run(GTK_DIALOG(dialog));
+
+		if(res == GTK_RESPONSE_OK)
+		{
+			gtk_widget_destroy(dialog);
+		}
+
+		return;
+	}
     if(has_saved)
     {
     	open_db(filename);
     	char statement[30];
-    	sprintf(statement,"drop table %s;",old_name);
+    	sprintf(statement,"drop table %s;",drop_name);
     	execute_sql(statement);
     	close_db();
     	write_to_db(filename);
@@ -491,15 +523,13 @@ void prep_printer()
 void write_to_db(char *db_name)
 {
 	char *fullname = file_extension_correct(db_name);
-	create_db(fullname, new_name);
+	create_db(fullname, table_name);
 	gboolean more_list = 0;
 
 	char *dept, *num, *days, *bldg, *instr;
 	int start, end, sect, room;
 
 	more_list = gtk_tree_model_get_iter_first(model, &iter);
-
-	rename_semester();
 
 	while(more_list)
 	{
@@ -548,7 +578,7 @@ void write_to_db(char *db_name)
 		}
 
 		//Generate dynamic SQL statement.
-		sprintf(statement,"insert into %s values(\'%s\',\'%s\',%d,%d,\'%s\',%d,\'%s\',%d,\'%s\');",new_name, dept,num,start,end,days,sect,bldg,room,instr);
+		sprintf(statement,"insert into %s values(\'%s\',\'%s\',%d,%d,\'%s\',%d,\'%s\',%d,\'%s\');",table_name, dept,num,start,end,days,sect,bldg,room,instr);
 		printf("%s\n",statement);
 		execute_sql(statement);
 
@@ -571,16 +601,16 @@ void read_from_db(char *filename)
 
 	//get semester name
 	execute_sql("select name from main.sqlite_master where type='table';");
-	strcpy(old_name , get_name());
+	strcpy(table_name, get_name());
 
 	char title[150];
-	sprintf(title, "[%s] - deans2", old_name);
+	sprintf(title, "[%s] - deans2", table_name);
 	gtk_window_set_title(GTK_WINDOW(window), title);
 
-	sprintf(statement, "select * from %s;", old_name);
+	sprintf(statement, "select * from %s;", table_name);
 
 	//Set semester dialog info to match what was in the saved db.
-	split_semester_name(old_name, &school_year, &season_num);
+	split_semester_name(table_name, &school_year, &season_num);
 	gtk_adjustment_set_value (spin_adjust1, (gdouble)school_year);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(semester_combo),season_num);
 	school_season = gtk_combo_box_text_get_active_text(semester_combo);
@@ -909,19 +939,6 @@ void cell_edited(GtkCellRendererText *renderer,
 	}
 
 
-}
-
-void rename_semester()
-{
-	if(!strcmp(old_name, new_name))
-	{
-		printf("renaming %s to %s.",old_name, new_name);
-		char rename[75];
-		sprintf(rename, "alter table %s rename to %s", old_name, new_name);
-		execute_sql(rename);
-		old_name[0] = '\0';
-		strcpy(old_name, new_name);
-	}
 }
 
 //Deletes course section from the semester.

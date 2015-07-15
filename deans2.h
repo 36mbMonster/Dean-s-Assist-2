@@ -48,8 +48,8 @@ int i = 0;
 int has_saved;
 int unsaved_changes;
 char *filename;
-char new_name[15];
-char old_name[15];
+char table_name[15];
+char drop_name[15];
 
 //Pseudo 'clipboard' variables
 

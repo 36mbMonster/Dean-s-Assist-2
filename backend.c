@@ -66,7 +66,6 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 		room_vals[idx] = atoi(argv[i++]);
 		instr_vals[idx] = malloc(sizeof(char*)*sizeof(argv[i]));
 		strcpy(instr_vals[idx],argv[i++]);
-		printf("%s",instr_vals[idx]);
 
 		idx++;
 
