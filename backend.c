@@ -114,7 +114,8 @@ char *execute_sql(char *statement)
 	idx = 0;
 	int error = sqlite3_exec(working_db, statement, callback, 0, &message);
 
-	printf("error %d: %s\n",error,message);
+	if(error != 0)
+		printf("Could not execute \"%s\" error %d: %s\n",statement,error,message);
 	return message;
 }
 

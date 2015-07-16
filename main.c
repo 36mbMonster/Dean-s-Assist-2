@@ -123,6 +123,7 @@ int main(int argc, char *argv[])
 	//I'm going to make it impossible to save without setting the semester info first.
 	//strcpy(old_name, "CoB_Sched");
 	table_name[0] = '\0';
+	drop_name[0] = '\0';
 
 /**
 ***************************************************************************
@@ -331,12 +332,20 @@ void set_semester()
 		table_name[0] = '\0';
 		sprintf(table_name, "%s_%d", school_season, school_year);
 
-		//perform rename
-		printf("renaming %s to %s.\n",drop_name, table_name);
-		char rename[75];
-		sprintf(rename, "alter table %s rename to %s", drop_name, table_name);
-		execute_sql(rename);
-		drop_name[0] = '\0';
+		//db must exist already before performing rename.
+		//If it doesn't exist, no worries. it will be created
+		//later with the new name when the user saves.
+		if(has_saved)
+		{
+			//perform rename
+			open_db(filename);
+			printf("renaming %s to %s.\n",drop_name, table_name);
+			char rename[75];
+			sprintf(rename, "alter table %s rename to %s", drop_name, table_name);
+			execute_sql(rename);
+			drop_name[0] = '\0';
+			close_db();
+		}
 	}
 	else
 		sprintf(table_name, "%s_%d", school_season, school_year);
@@ -388,7 +397,7 @@ void save()
     {
     	open_db(filename);
     	char statement[30];
-    	sprintf(statement,"drop table %s;",drop_name);
+    	sprintf(statement,"drop table %s;",table_name);
     	execute_sql(statement);
     	close_db();
     	write_to_db(filename);
