@@ -426,7 +426,10 @@ void save_as()
 
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(file_dialog));
 		write_to_db(filename);
-		gtk_window_set_title(GTK_WINDOW(window), filename);
+
+		char title[150];
+		sprintf(title, "[%s %d] - deans2", school_season, school_year);
+		gtk_window_set_title(GTK_WINDOW(window), title);
 
 		//set flags
 		has_saved = 1;

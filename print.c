@@ -4,6 +4,7 @@
 #include "constants.h"
 
 #define GAP (2 * 12 * 72 / 25.4)
+#define HEADER_HEIGHT (6 * 12 * 72 / 25.4)
 
 const int FONT_SIZE = 12;
 
@@ -79,7 +80,7 @@ void begin_print(GtkPrintOperation *operation,
 {
 	printf("begin\n");
 
-	height = gtk_print_context_get_height(context);
+	height = gtk_print_context_get_height(context) - GAP - HEADER_HEIGHT;
 	lines_per_page = floor(height/FONT_SIZE);
 
 	//Calculate the number of lines and load the semester data into an array.
