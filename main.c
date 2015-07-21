@@ -91,6 +91,13 @@ int main(int argc, char *argv[])
 		gtk_tree_view_column_set_sort_column_id(columns[i-1], i-1);
 	}
 
+	//Sort by course number by default.
+	//gtk_tree_view_column_set_sort_indicator(columns[1], TRUE);
+	//gtk_tree_view_column_set_sort_order(columns[1], GTK_SORT_ASCENDING);
+
+	gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(store), SORTID_NUMBER, sort_course_nums,
+                                    GINT_TO_POINTER(SORTID_NUMBER), NULL);
+
 	//Initialize day check buttons.
 	buttons[0] = GTK_TOGGLE_BUTTON(monday);
 	buttons[1] = GTK_TOGGLE_BUTTON(tuesday);
@@ -303,6 +310,45 @@ void show_about_dialog()
 	//gtk_widget_show_all( about_dialog );
 	gtk_dialog_run(GTK_DIALOG(about_dialog));
 	gtk_widget_hide(GTK_WIDGET(about_dialog));
+}
+
+//Sorting routine to get the class numbers sorted correctly.
+gint sort_course_nums(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer userdata)
+{
+	gint sortcol = GPOINTER_TO_INT(userdata);
+	gint out = 0;
+
+	if(sortcol == SORTID_NUMBER)
+	{
+		char *num1, *num2;
+
+		gtk_tree_model_get(amodel, a, COL_NUMBER, &num1, -1);
+		gtk_tree_model_get(amodel, b, COL_NUMBER, &num2, -1);
+
+		//Comparing the initial number is primary priority
+		if(strcmp(num1, num2) != 0)
+		{
+			int inum1 = atoi(num1);
+			int inum2 = atoi(num2);
+
+			if(inum1 > inum2)
+				out = 1;
+			else if(inum2 > inum1)
+				out = -1;
+			else
+			{
+				//compare end char if initial numbers are the same
+				char cnum1, cnum2;
+				cnum1 = num1[strlen(num1)-1];
+				cnum2 = num2[strlen(num2)-1];
+
+				out = (cnum1 > cnum2) ? 1 : -1;
+			}
+		}
+		else
+			g_return_val_if_reached(0);
+	}
+	return out;
 }
 
 void show_semester()

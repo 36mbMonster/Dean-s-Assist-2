@@ -44,6 +44,8 @@ void rename_semester();
 void key_handler();
 void quit_deans2();
 
+gint sort_course_nums();
+
 int i = 0;
 int has_saved;
 int unsaved_changes;
