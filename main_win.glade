@@ -202,6 +202,16 @@
       </object>
     </child>
   </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-select-font</property>
+  </object>
+  <object class="GtkImage" id="image9">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">x-office-calendar</property>
+  </object>
   <object class="GtkMessageDialog" id="error_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -372,10 +382,95 @@
     <property name="stock">gtk-print</property>
     <property name="icon-size">1</property>
   </object>
-  <object class="GtkImage" id="image9">
-    <property name="visible">True</property>
+  <object class="GtkFontSelectionDialog" id="fontselectiondialog">
     <property name="can_focus">False</property>
-    <property name="icon_name">x-office-calendar</property>
+    <property name="border_width">5</property>
+    <property name="type_hint">dialog</property>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="fontselectiondialog-vbox1">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="fontselectiondialog-action_area1">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child internal-child="cancel_button">
+              <object class="GtkButton" id="fontselectiondialog-cancel_button">
+                <property name="label">gtk-cancel</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="pack_type">end</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child internal-child="apply_button">
+              <object class="GtkButton" id="fontselectiondialog-apply_button">
+                <property name="label">gtk-apply</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="pack_type">end</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child internal-child="ok_button">
+              <object class="GtkButton" id="fontselectiondialog-ok_button">
+                <property name="label">gtk-ok</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_underline">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="pack_type">end</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child internal-child="font_selection">
+          <object class="GtkFontSelection" id="fontselectiondialog-font_selection1">
+            <property name="can_focus">False</property>
+            <property name="border_width">5</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">fontselectiondialog-cancel_button</action-widget>
+      <action-widget response="0">fontselectiondialog-apply_button</action-widget>
+      <action-widget response="0">fontselectiondialog-ok_button</action-widget>
+    </action-widgets>
   </object>
   <object class="GtkListStore" id="liststore">
     <columns>
@@ -780,6 +875,17 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="image">image9</property>
+                        <property name="use_stock">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="set_font">
+                        <property name="label" translatable="yes">Set _Font</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="image">image2</property>
                         <property name="use_stock">False</property>
                       </object>
                     </child>

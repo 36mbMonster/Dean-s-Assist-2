@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 	error_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder,"error_dialog"));
 	generate_sections_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder, "gensect_dialog"));
 	semester_dialog = GTK_DIALOG(gtk_builder_get_object(builder, "semester_dialog"));
+	font_dialog = GTK_FONT_SELECTION_DIALOG(gtk_builder_get_object(builder, "fontselectiondialog"));
 
 	//Load menu items
 	about_item = gtk_builder_get_object(builder, "about");
@@ -36,6 +37,7 @@ int main(int argc, char *argv[])
 	print_item = gtk_builder_get_object(builder, "print");
 	new_semester_item = gtk_builder_get_object(builder, "new_semester");
 	set_semester_item = gtk_builder_get_object(builder, "meta");
+	set_font_item = gtk_builder_get_object(builder, "set_font");
 
     //Load check boxes
     monday = GTK_CHECK_BUTTON(gtk_builder_get_object(builder, "mo"));
@@ -157,6 +159,7 @@ int main(int argc, char *argv[])
 	g_signal_connect(print_item, "activate", G_CALLBACK(prep_printer), NULL);
 	g_signal_connect(new_semester_item, "activate", G_CALLBACK(new_semester),NULL);
 	g_signal_connect(set_semester_item, "activate", G_CALLBACK(show_semester), NULL);
+	g_signal_connect(set_font_item, "activate", G_CALLBACK(show_font_dialog),NULL);
 
 	//Connect button signals
 	g_signal_connect(error_okay_button, "clicked", G_CALLBACK(hide_error_dialog), NULL);
@@ -313,6 +316,11 @@ void show_about_dialog()
 	gtk_widget_hide(GTK_WIDGET(about_dialog));
 }
 
+void show_font_dialog()
+{
+	gtk_dialog_run(GTK_DIALOG(font_dialog));
+}
+
 //Sorting routine to get the class numbers sorted correctly.
 gint sort_course_nums(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpointer userdata)
 {
@@ -346,8 +354,6 @@ gint sort_course_nums(GtkTreeModel *amodel, GtkTreeIter *a, GtkTreeIter *b, gpoi
 				out = (cnum1 > cnum2) ? 1 : -1;
 			}
 		}
-		else
-			g_return_val_if_reached(0);
 	}
 	return out;
 }
@@ -706,6 +712,13 @@ void read_from_db(char *filename)
 
         gtk_tree_model_iter_next(model, &iter);
     }
+
+    //Resort
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), SORTID_SECT, GTK_SORT_ASCENDING);
+	gtk_tree_view_column_set_sort_indicator(columns[COL_SECT], TRUE);
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), SORTID_NUMBER, GTK_SORT_ASCENDING);
+	gtk_tree_view_column_set_sort_indicator(columns[COL_NUMBER], TRUE);
+
     close_db();
     gtk_widget_hide(GTK_WIDGET(file_dialog));
     unsaved_changes = 0;
