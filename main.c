@@ -91,12 +91,13 @@ int main(int argc, char *argv[])
 		gtk_tree_view_column_set_sort_column_id(columns[i-1], i-1);
 	}
 
-	//Sort by course number by default.
-	//gtk_tree_view_column_set_sort_indicator(columns[1], TRUE);
-	//gtk_tree_view_column_set_sort_order(columns[1], GTK_SORT_ASCENDING);
-
+	//Use a custom sorting routine to sort the course number column.
 	gtk_tree_sortable_set_sort_func(GTK_TREE_SORTABLE(store), SORTID_NUMBER, sort_course_nums,
                                     GINT_TO_POINTER(SORTID_NUMBER), NULL);
+
+	//Sort by course number by default.
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store), SORTID_NUMBER, GTK_SORT_ASCENDING);
+	gtk_tree_view_column_set_sort_indicator(columns[COL_NUMBER], TRUE);
 
 	//Initialize day check buttons.
 	buttons[0] = GTK_TOGGLE_BUTTON(monday);
