@@ -51,6 +51,7 @@ int i = 0;
 int has_saved;
 int unsaved_changes;
 char *filename;
+char *font;
 char table_name[15];
 char drop_name[15];
 

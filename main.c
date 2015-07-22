@@ -112,11 +112,14 @@ int main(int argc, char *argv[])
 	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(treeview));
 	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);
 
-	//Make the font bigger
+	//Define default font
+	font = malloc(sizeof(char)*50);
+	sprintf(font, "Arial 14");
+
 	//If you don't use a generated font description, the text won't render.
-	PangoFontDescription *font;
-	font = pango_font_description_from_string("Arial 14");
-	gtk_widget_override_font (GTK_WIDGET(window), font);
+	PangoFontDescription *font_desc;
+	font_desc = pango_font_description_from_string(font);
+	gtk_widget_override_font (GTK_WIDGET(window), font_desc);
 
 	spin_adjust = gtk_adjustment_new(0, 0, MAX_GEN_SECTIONS, 1, 2, 0);
 	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
@@ -304,6 +307,7 @@ void quit_deans2()
 	}
 
 	free_back();
+	free(font);
 
 	gtk_main_quit();
 
@@ -318,7 +322,24 @@ void show_about_dialog()
 
 void show_font_dialog()
 {
-	gtk_dialog_run(GTK_DIALOG(font_dialog));
+	//font_dialog = gtk_font_selection_dialog_new("test");
+	GtkFontChooserDialog *font_chooser = GTK_FONT_CHOOSER_DIALOG(gtk_font_chooser_dialog_new("test",GTK_WINDOW(window)));
+	int res = gtk_dialog_run(GTK_DIALOG(font_chooser));
+
+	printf("res %d\n",res);
+
+	if(res == GTK_RESPONSE_OK)
+	{
+		printf("%s\n",gtk_font_chooser_get_font(GTK_FONT_CHOOSER(font_chooser)));
+		font[0] = '\0';
+		sprintf(font, gtk_font_chooser_get_font(GTK_FONT_CHOOSER(font_chooser)));
+
+		//Create new font description
+		PangoFontDescription *font_desc;
+		font_desc = pango_font_description_from_string(font);
+		gtk_widget_override_font (GTK_WIDGET(window), font_desc);
+	}
+	gtk_widget_hide(GTK_WIDGET(font_chooser));
 }
 
 //Sorting routine to get the class numbers sorted correctly.
