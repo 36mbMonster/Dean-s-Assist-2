@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 	//If you don't use a generated font description, the text won't render.
 	PangoFontDescription *font_desc;
 	font_desc = pango_font_description_from_string(font);
-	gtk_widget_override_font (GTK_WIDGET(window), font_desc);
+	gtk_widget_override_font (GTK_WIDGET(treeview), font_desc);
 
 	spin_adjust = gtk_adjustment_new(0, 0, MAX_GEN_SECTIONS, 1, 2, 0);
 	gtk_spin_button_set_adjustment(spin_button, spin_adjust);
@@ -337,7 +337,7 @@ void show_font_dialog()
 		//Create new font description
 		PangoFontDescription *font_desc;
 		font_desc = pango_font_description_from_string(font);
-		gtk_widget_override_font (GTK_WIDGET(window), font_desc);
+		gtk_widget_override_font (GTK_WIDGET(treeview), font_desc);
 	}
 	gtk_widget_hide(GTK_WIDGET(font_chooser));
 }
