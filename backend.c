@@ -33,6 +33,7 @@ int sect_vals[MAX_ROWS];
 int room_vals[MAX_ROWS];
 
 int idx;
+int rows;
 
 sqlite3 *working_db;
 
@@ -46,6 +47,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 
 
 	int i = 0;
+	rows = 0;
 	while(i < argc)
 	{
 		dept_vals[idx] = malloc(sizeof(char*)*sizeof(argv[i]));
@@ -68,6 +70,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName)
 		strcpy(instr_vals[idx],argv[i++]);
 
 		idx++;
+		rows++;
 
 	}
 	return 0;
@@ -137,7 +140,7 @@ void close_db()
 void free_back()
 {
     int i;
-    for(i = 0; i < idx; i++)
+    for(i = 0; i < rows; i++)
     {
         free(dept_vals[i]);
         free(num_vals[i]);
