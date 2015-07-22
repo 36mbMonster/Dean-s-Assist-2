@@ -929,14 +929,22 @@ void cell_edited(GtkCellRendererText *renderer,
 	{
 		case COL_DEPT:
 		{
-			gchar *old_entry;
+			if(contains_apostrophe(new_text))
+			{
+		    	gtk_message_dialog_format_secondary_markup(error_dialog, "%s", APOSTROPHE_ERROR);
+				gtk_dialog_run(GTK_DIALOG(error_dialog));
+			}
+			else
+			{
+				gchar *old_entry;
 
-			gtk_tree_model_get(model, &iter, column, &old_entry, -1);
-			g_free(old_entry);
+				gtk_tree_model_get(model, &iter, column, &old_entry, -1);
+				g_free(old_entry);
 
-			gtk_list_store_set(store, &iter,
-								COL_DEPT, new_text,
-								-1);
+				gtk_list_store_set(store, &iter,
+									COL_DEPT, new_text,
+									-1);
+			}
 
 		}
 		break;
@@ -999,9 +1007,17 @@ void cell_edited(GtkCellRendererText *renderer,
         break;
 		case COL_BLDG:
         {
+			if(contains_apostrophe(new_text))
+			{
+		    	gtk_message_dialog_format_secondary_markup(error_dialog, "%s", APOSTROPHE_ERROR);
+				gtk_dialog_run(GTK_DIALOG(error_dialog));
+			}
+			else
+			{
                 gtk_list_store_set(store, &iter,
 								COL_BLDG, new_text,
 								-1);
+			}
         }
         break;
 		case COL_ROOM:

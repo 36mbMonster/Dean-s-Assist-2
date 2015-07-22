@@ -7,10 +7,12 @@ int is_int(const gchar *str);
 int is_valid_course_num(const gchar *str);
 int add_time(int x, int y);
 int get_current_year();
+int contains_apostrophe();
 char *file_extension_correct(char *in);
 void split_semester_name();
 
 const char *COURSE_NUMBER_ERROR = "The entry was invalid. A course number can be two or three didgets with an optional letter at the end.";
+const char *APOSTROPHE_ERROR = "The \' is an invalid character for this column.";
 const char *INVALID_TIME_ERROR = "The entry was invalid. A time must be an integer between ? and ?."; //FIXME
 const char *INVALID_ROOM_ERROR = "The entry was invalid. A room number must be an integer greater than -1.";
 
@@ -90,6 +92,17 @@ int get_current_year()
 
 	//tm_year represents number of years since 1900, so we need to add 1900 to the return value.
 	return tm_struct->tm_year + 1900;
+}
+
+int contains_apostrophe(const char *str)
+{
+	int i;
+	for(i = 0; i < strlen(str); i++)
+	{
+		if(str[i] == '\'')
+			return 1;
+	}
+	return 0;
 }
 
 char *file_extension_correct(char *in)
