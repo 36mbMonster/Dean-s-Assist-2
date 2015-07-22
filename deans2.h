@@ -63,7 +63,6 @@ GtkWidget *window;
 GtkWidget *show_hide_columns_window;
 GtkWidget *set_days_window;
 GtkFileChooserDialog *file_dialog;
-GtkFontSelectionDialog *font_dialog;
 GtkDialog *semester_dialog;
 GtkAboutDialog *about_dialog;
 GtkMessageDialog *error_dialog;

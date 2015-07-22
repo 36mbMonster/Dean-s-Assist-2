@@ -22,7 +22,6 @@ int main(int argc, char *argv[])
 	error_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder,"error_dialog"));
 	generate_sections_dialog = GTK_MESSAGE_DIALOG(gtk_builder_get_object(builder, "gensect_dialog"));
 	semester_dialog = GTK_DIALOG(gtk_builder_get_object(builder, "semester_dialog"));
-	font_dialog = GTK_FONT_SELECTION_DIALOG(gtk_builder_get_object(builder, "fontselectiondialog"));
 
 	//Load menu items
 	about_item = gtk_builder_get_object(builder, "about");
