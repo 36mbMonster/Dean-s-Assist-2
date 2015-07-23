@@ -320,7 +320,7 @@ char *format_header(char *dept, char *num, int start, int end,
 	{
 		case COL_DEPT:
 		case COL_NUMBER:
-			sprintf(header, "%s%-13s%-8s%-4s%-5s%-5s%-20s\r\n",ident, "Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
+			sprintf(header, "%s%-13s%-12s%-4s%-5s%-5s%-20s\r\n",ident, "Time", "Day(s)", "Sec", "Bldg", "Room", "Instructor");
 			break;
 		case COL_START:
 		case COL_END:
