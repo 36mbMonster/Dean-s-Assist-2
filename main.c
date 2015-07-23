@@ -228,16 +228,62 @@ int main(int argc, char *argv[])
 //Hot key event handling
 void key_handler(GtkWidget *win, GdkEventKey *event, gpointer data)
 {
-	//printf("%s\n",gdk_keyval_name(event->keyval));
 	switch(event -> keyval)
 	{
+		case GDK_KEY_e:
+		case GDK_KEY_E:
+			if(event->state & GDK_MOD1_MASK)
+			{
+				gtk_menu_popup (GTK_MENU(gtk_builder_get_object(builder, "edit_menu")),
+                GTK_WIDGET(gtk_builder_get_object(builder, "edit")),
+                NULL,
+                NULL,
+                NULL,
+                0,
+                gtk_get_current_event_time());
+			}
+			break;
+		case GDK_KEY_f:
+		case GDK_KEY_F:
+			if(event->state & GDK_MOD1_MASK)
+			{
+				gtk_menu_popup (GTK_MENU(gtk_builder_get_object(builder, "file_menu")),
+                GTK_WIDGET(gtk_builder_get_object(builder, "file")),
+                NULL,
+                NULL,
+                NULL,
+                0,
+                gtk_get_current_event_time());
+			}
+			break;
 		case GDK_KEY_g:
 			if(event->state & GDK_CONTROL_MASK)
 			{
 				show_generate_sections();
 				break;
 			}
+		case GDK_KEY_h:
+		case GDK_KEY_H:
+			if(event->state & GDK_MOD1_MASK)
+			{
+				gtk_menu_popup (GTK_MENU(gtk_builder_get_object(builder, "help_menu")),
+                GTK_WIDGET(gtk_builder_get_object(builder, "help")),
+                NULL,
+                NULL,
+                NULL,
+                0,
+                gtk_get_current_event_time());
+			}
+			break;
+		case GDK_KEY_n:
+		case GDK_KEY_N:
+			if(event->state & GDK_CONTROL_MASK)
+			{
+				new_semester();
+				break;
+			}
 		case GDK_KEY_o:
+		case GDK_KEY_O:
 			if(event->state & GDK_CONTROL_MASK)
 			{
 				load_file();
@@ -247,6 +293,13 @@ void key_handler(GtkWidget *win, GdkEventKey *event, gpointer data)
 			if(event->state & GDK_CONTROL_MASK)
 			{
 				prep_printer();
+				break;
+			}
+		case GDK_KEY_q:
+		case GDK_KEY_Q:
+			if(event->state & GDK_CONTROL_MASK)
+			{
+				quit_deans2();
 				break;
 			}
 		case GDK_KEY_s:
@@ -267,6 +320,9 @@ void key_handler(GtkWidget *win, GdkEventKey *event, gpointer data)
 				quit_deans2();
 				break;
 			}
+		case GDK_KEY_Delete:
+			delete_row();
+			break;
 		case GDK_KEY_plus:
 		case GDK_KEY_KP_Add:
 			if(event->state & GDK_CONTROL_MASK)
