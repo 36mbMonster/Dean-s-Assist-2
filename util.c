@@ -127,7 +127,7 @@ void split_semester_name(char *name, int *year, int *season)
 	char year_c[5];
 	char season_c[7];
 	int term_i = 0;
-	int size = sizeof(name)*sizeof(char);
+	int size = strlen(name);
 
 	while(term_i < size && name[term_i] != TERM_CHAR)
 		term_i++;

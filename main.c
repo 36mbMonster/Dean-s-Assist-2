@@ -337,7 +337,6 @@ void key_handler(GtkWidget *win, GdkEventKey *event, gpointer data)
 
 void quit_deans2()
 {
-	printf("%d\n",unsaved_changes);
 	if(unsaved_changes)
 	{
 		GtkWidget *question_dialog;
@@ -381,11 +380,8 @@ void show_font_dialog()
 	GtkFontChooserDialog *font_chooser = GTK_FONT_CHOOSER_DIALOG(gtk_font_chooser_dialog_new("test",GTK_WINDOW(window)));
 	int res = gtk_dialog_run(GTK_DIALOG(font_chooser));
 
-	printf("res %d\n",res);
-
 	if(res == GTK_RESPONSE_OK)
 	{
-		printf("%s\n",gtk_font_chooser_get_font(GTK_FONT_CHOOSER(font_chooser)));
 		font[0] = '\0';
 		sprintf(font, gtk_font_chooser_get_font(GTK_FONT_CHOOSER(font_chooser)));
 

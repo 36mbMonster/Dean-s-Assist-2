@@ -266,8 +266,6 @@ void load_data()
 		else
 			gtk_tree_model_get(model, &iter, col_id, &prime_col, -1);
 
-		printf("prime: %s previous %s\n",prime_col,previous_cn);
-
 		//Compare previous value of prime_col to the current one.
 		if(strcmp(previous_cn,prime_col) != 0)
 		{
@@ -358,26 +356,26 @@ char *format_ident(char *dept, char *num, int start, int end,
 	{
 		case COL_DEPT:
 		case COL_NUMBER:
-			sprintf(ident,"**%-5s%-5s",dept,num);
+			sprintf(ident,"**  %-5s%-5s",dept,num);
 			break;
 		case COL_START:
-			sprintf(ident,"**%-5d-%-5d",start,end);
+			sprintf(ident,"**  %-5d-%-5d",start,end);
 			break;
 		case COL_END:
-			sprintf(ident,"**%-5d-%-5d",end,start);
+			sprintf(ident,"**  %-5d-%-5d",end,start);
 			break;
 		case COL_DAYS:
-			sprintf(ident,"**%-5s",days);
+			sprintf(ident,"**  %-5s",days);
 			break;
 		case COL_SECT:
-			sprintf(ident,"**%-5d",sect);
+			sprintf(ident,"**  %-5d",sect);
 			break;
 		case COL_BLDG:
 		case COL_ROOM:
-			sprintf(ident,"**%-5s%-5d",bldg,room);
+			sprintf(ident,"**  %-5s%-5d",bldg,room);
 			break;
 		case COL_INSTR:
-			sprintf(ident,"**%-5s",instr);
+			sprintf(ident,"**  %-5s",instr);
 			break;
 	}
 
