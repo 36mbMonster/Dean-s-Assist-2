@@ -81,14 +81,14 @@ int main(int argc, char *argv[])
 	//This makes it easy to load them all through a loop.
 	for(i = 1; i < 10; i++)
 	{
-		char test[20] = "treeviewcolumn";
+		char cols[20] = "treeviewcolumn";
 		char buffer[2];
 
 		//Append the column's number to the end of the string.
 		sprintf(buffer, "%d", i);
-		strcat(test,buffer);
+		strcat(cols,buffer);
 
-		columns[i-1] = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(builder, test));
+		columns[i-1] = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(builder, cols));
 		gtk_tree_view_column_set_sort_column_id(columns[i-1], i-1);
 	}
 
@@ -203,14 +203,6 @@ int main(int argc, char *argv[])
 	g_object_set_data (G_OBJECT (bldg_text), "column", GINT_TO_POINTER (COL_BLDG));
 	g_object_set_data (G_OBJECT (room_text), "column", GINT_TO_POINTER (COL_ROOM));
 	g_object_set_data (G_OBJECT (instructor_text), "column", GINT_TO_POINTER (COL_INSTR));
-
-	//test
-	/*
-	GtkAccelGroup *accel_group = NULL;
-	accel_group = gtk_accel_group_new();
-  	gtk_window_add_accel_group(GTK_WINDOW(window), accel_group);
-  	quit_item = gtk_image_menu_item_new_from_stock (GTK_STOCK_QUIT, accel_group);
-	gtk_widget_add_accelerator(GTK_WIDGET(quit_item), "activate", accel_group, GDK_KEY_q, GDK_CONTROL_MASK, GTK_ACCEL_VISIBLE);*/
 
 	//Show the window and start gtk.
 	gtk_window_set_default_size(GTK_WINDOW(window), 800, 600); //fix magic number
@@ -376,8 +368,7 @@ void show_about_dialog()
 
 void show_font_dialog()
 {
-	//font_dialog = gtk_font_selection_dialog_new("test");
-	GtkFontChooserDialog *font_chooser = GTK_FONT_CHOOSER_DIALOG(gtk_font_chooser_dialog_new("test",GTK_WINDOW(window)));
+	GtkFontChooserDialog *font_chooser = GTK_FONT_CHOOSER_DIALOG(gtk_font_chooser_dialog_new("Font Chooser",GTK_WINDOW(window)));
 	int res = gtk_dialog_run(GTK_DIALOG(font_chooser));
 
 	if(res == GTK_RESPONSE_OK)
