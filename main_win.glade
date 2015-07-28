@@ -7,7 +7,11 @@
     <property name="type_hint">dialog</property>
     <property name="program_name">Deans2</property>
     <property name="version">Release Candidate 1</property>
-    <property name="copyright" translatable="yes">(C) Jonathan Vaccaro 2014 - 2015</property>
+    <property name="copyright" translatable="yes">Copyright © Jonathan Vaccaro 2014 - 2015
+Copyright © SJSU Lucas College of Business</property>
+    <property name="website">https://github.com/36mbMonster/Dean-s-Assist-2</property>
+    <property name="website_label" translatable="yes">Project Page</property>
+    <property name="logo">sjsu_mark.png</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="aboutdialog-vbox1">
         <property name="can_focus">False</property>
@@ -26,22 +30,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLinkButton" id="linkbutton1">
-            <property name="label" translatable="yes">Project Page</property>
-            <property name="use_action_appearance">False</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="has_tooltip">True</property>
-            <property name="use_action_appearance">False</property>
-            <property name="relief">none</property>
-            <property name="uri">https://github.com/36mbMonster/Dean-s-Assist-2</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
+          <placeholder/>
         </child>
       </object>
     </child>
@@ -262,12 +251,6 @@
       <action-widget response="0">error_dialog_okay</action-widget>
     </action-widgets>
   </object>
-  <object class="GtkImage" id="image10">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-copy</property>
-    <property name="icon-size">1</property>
-  </object>
   <object class="GtkMessageDialog" id="gensect_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -355,6 +338,12 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-add</property>
+    <property name="icon-size">1</property>
+  </object>
+  <object class="GtkImage" id="image10">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-copy</property>
     <property name="icon-size">1</property>
   </object>
   <object class="GtkImage" id="image2">
