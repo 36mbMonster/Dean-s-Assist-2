@@ -249,6 +249,7 @@ void key_handler(GtkWidget *win, GdkEventKey *event, gpointer data)
 			}
 			break;
 		case GDK_KEY_g:
+		case GDK_KEY_G:
 			if(event->state & GDK_CONTROL_MASK)
 			{
 				show_generate_sections();
@@ -297,15 +298,10 @@ void key_handler(GtkWidget *win, GdkEventKey *event, gpointer data)
 		case GDK_KEY_s:
 		case GDK_KEY_S:
 			if(event->state & GDK_CONTROL_MASK)
-			{
 				save();
-				break;
-			}
 			else if(event->state & GDK_CONTROL_MASK & GDK_SHIFT_MASK)
-			{
 				save_as();
-				break;
-			}
+			break;
 		case GDK_KEY_F4:
 			if(event->state & GDK_MOD1_MASK)
 			{
