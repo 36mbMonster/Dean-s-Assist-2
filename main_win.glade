@@ -6,7 +6,7 @@
     <property name="border_width">5</property>
     <property name="type_hint">dialog</property>
     <property name="program_name">Deans2</property>
-    <property name="version">Release Candidate 1</property>
+    <property name="version">1.0</property>
     <property name="copyright" translatable="yes">Copyright © Jonathan Vaccaro 2014 - 2015
 Copyright © SJSU Lucas College of Business</property>
     <property name="website">https://github.com/36mbMonster/Dean-s-Assist-2</property>
@@ -658,7 +658,6 @@ Copyright © SJSU Lucas College of Business</property>
                         <property name="use_underline">True</property>
                         <property name="image">image3</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="n" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -670,7 +669,6 @@ Copyright © SJSU Lucas College of Business</property>
                         <property name="use_underline">True</property>
                         <property name="image">image4</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="o" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -689,7 +687,6 @@ Copyright © SJSU Lucas College of Business</property>
                         <property name="use_underline">True</property>
                         <property name="image">image1</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="KP_Add" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -708,7 +705,6 @@ Copyright © SJSU Lucas College of Business</property>
                         <property name="use_underline">True</property>
                         <property name="image">image5</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="s" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -731,7 +727,6 @@ Copyright © SJSU Lucas College of Business</property>
                         <property name="use_underline">True</property>
                         <property name="image">image7</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="p" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                     <child>
@@ -749,7 +744,6 @@ Copyright © SJSU Lucas College of Business</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <accelerator key="q" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                       </object>
                     </child>
                   </object>
@@ -785,7 +779,6 @@ Copyright © SJSU Lucas College of Business</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <accelerator key="Delete" signal="activate"/>
                       </object>
                     </child>
                     <child>
